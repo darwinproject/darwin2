@@ -1,0 +1,3 @@
+[submodule "MITgcm"]
+	path = MITgcm
+	url = git://grass.mit.edu/MITgcm.git
