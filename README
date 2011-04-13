@@ -1,0 +1,34 @@
+This is version 2 of the darwin package for MITgcm
+
+o Directories
+
+  pkg/darwin    top-level darwin package code
+  pkg/monod     monod sub-package code
+  pkg/quota     quota sub-package code
+  pkg/radtrans  modified radtrans package code
+  verification/ standard reference/test experiments
+
+  The gchem package from MITgcm no longer needs to be modified
+
+o To check out
+
+[cnh@localhost]$ cvs co -d foo MITgcm
+[cnh@localhost]$ cd foo/pkg
+[cnh@localhost]$ cvs co -d darwin MITgcm_contrib/darwin2/pkg/darwin
+[cnh@localhost]$ cvs co -d monod MITgcm_contrib/darwin2/pkg/monod
+[cnh@localhost]$ cvs co -d quota MITgcm_contrib/darwin2/pkg/quota
+[cnh@localhost]$ cvs co -d radtrans MITgcm_contrib/darwin2/pkg/radtrans
+
+  and if you want verification experiments:
+
+[cnh@localhost]$ cd ../verification
+[cnh@localhost]$ cvs co -d monod_1d_carbon MITgcm_contrib/darwin2/verification/monod_1d_carbon
+[cnh@localhost]$ cvs co -d monod_1d_geider MITgcm_contrib/darwin2/verification/monod_1d_geider
+[cnh@localhost]$ cvs co -d monod_1d_radtrans MITgcm_contrib/darwin2/verification/monod_1d_radtrans
+[cnh@localhost]$ cvs co -d monod_1d_twospecies MITgcm_contrib/darwin2/verification/monod_1d_twospecies
+[cnh@localhost]$ cvs co -d monod_1d_wavebands MITgcm_contrib/darwin2/verification/monod_1d_wavebands
+[cnh@localhost]$ cvs co -d monod_global_128x64x15 MITgcm_contrib/darwin2/verification/monod_global_128x64x15
+[cnh@localhost]$ cvs co -d monod_baltic_76x72x24 MITgcm_contrib/darwin2/verification/monod_baltic_76x72x24
+[cnh@localhost]$ cvs co -d quota_1d MITgcm_contrib/darwin2/verification/quota_1d
+
+

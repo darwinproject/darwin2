@@ -1,0 +1,4 @@
+mkdir input
+cd input
+ln -s ../../input/input/* .
+

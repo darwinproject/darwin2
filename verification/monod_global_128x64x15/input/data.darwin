@@ -1,0 +1,6 @@
+ &DARWIN_FORCING
+ darwin_iceFile='../input/input_ocmip/fice.bin',
+ darwin_ironFile='../input/input_ocmip/mah_flux_smooth.bin',
+ darwin_PARFile='../input/input_ocmip/par_ocmip.bin_mth-2d.bin',
+ darwin_seed=801,
+ /

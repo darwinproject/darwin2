@@ -1,0 +1,698 @@
+ &PTRACERS_PARM01
+ PTRACERS_numInUse=99,
+# 366 days == 19930101 060000
+ PTRACERS_Iter0= 26352,
+# tracer 1 - phosphate
+ PTRACERS_names(1)='PO4',
+ PTRACERS_units(1)='mmol P/m^3',
+ PTRACERS_advScheme(1)=33,
+ PTRACERS_diffKh(1)=0.E3,
+ PTRACERS_diffKr(1)=1.E-6,
+ PTRACERS_useKPP(1)=.TRUE. ,
+# tracer 2 - nitrate
+ PTRACERS_names(2)='NO3',
+ PTRACERS_units(2)='mmol N/m^3',
+ PTRACERS_advScheme(2)=33,
+ PTRACERS_diffKh(2)=0.E3,
+ PTRACERS_diffKr(2)=1.E-6,
+ PTRACERS_useKPP(2)=.TRUE. ,
+# tracer 3 - dissolved iron
+ PTRACERS_names(3)='FeT',
+ PTRACERS_units(3)='mmol Fe/m^3',
+ PTRACERS_advScheme(3)=33,
+ PTRACERS_diffKh(3)=0.E3,
+ PTRACERS_diffKr(3)=1.E-6,
+ PTRACERS_useKPP(3)=.TRUE. ,
+# tracer 4 - silicic acid
+ PTRACERS_names(4)='SiO2',
+ PTRACERS_units(4)='mmol Si/m^3',
+ PTRACERS_advScheme(4)=33,
+ PTRACERS_diffKh(4)=0.E3,
+ PTRACERS_diffKr(4)=1.E-6,
+ PTRACERS_useKPP(4)=.TRUE. ,
+# tracer 5 - DOP 
+ PTRACERS_names(5)='DOP',
+ PTRACERS_units(5)='mmol P/m^3',
+ PTRACERS_advScheme(5)=33,
+ PTRACERS_diffKh(5)=0.E3,
+ PTRACERS_diffKr(5)=1.E-6,
+ PTRACERS_useKPP(5)=.TRUE.  ,
+# tracer 6 - DON
+ PTRACERS_names(6)='DON',
+ PTRACERS_units(6)='mmol N/m^3',
+ PTRACERS_advScheme(6)=33,
+ PTRACERS_diffKh(6)=0.E3,
+ PTRACERS_diffKr(6)=1.E-6,
+ PTRACERS_useKPP(6)=.TRUE.  ,
+# tracer 7 - DOFe
+ PTRACERS_names(7)='DOFe',
+ PTRACERS_units(7)='mmol Fe/m^3',
+ PTRACERS_advScheme(7)=33,
+ PTRACERS_diffKh(7)=0.E3,
+ PTRACERS_diffKr(7)=1.E-6,
+ PTRACERS_useKPP(7)=.TRUE.  ,
+# tracer 8 - ZOO1P
+ PTRACERS_names(8)='ZOO1P',
+ PTRACERS_units(8)='mmol P/m^3',
+ PTRACERS_advScheme(8)=33,
+ PTRACERS_diffKh(8)=0.E3,
+ PTRACERS_diffKr(8)=1.E-6,
+ PTRACERS_useKPP(8)=.TRUE.  ,
+# tracer 9 - ZOO1N
+ PTRACERS_names(9)='ZOO1N',
+ PTRACERS_units(9)='mmol N/m^3'
+ PTRACERS_advScheme(9)=33,
+ PTRACERS_diffKh(9)=0.E3,
+ PTRACERS_diffKr(9)=1.E-6,
+ PTRACERS_useKPP(9)=.TRUE.  ,
+# tracer 10 - ZOO1Fe
+ PTRACERS_names(10)='ZOO1Fe',
+ PTRACERS_units(10)='mmol Fe/m^3'
+ PTRACERS_advScheme(10)=33,
+ PTRACERS_diffKh(10)=0.E3,
+ PTRACERS_diffKr(10)=1.E-6,
+ PTRACERS_useKPP(10)=.TRUE.  ,
+# tracer 11 - ZOO1Si
+ PTRACERS_names(11)='ZOO1Si',
+ PTRACERS_units(11)='mmol Si/m^3'
+ PTRACERS_advScheme(11)=33,
+ PTRACERS_diffKh(11)=0.E3,
+ PTRACERS_diffKr(11)=1.E-6,
+ PTRACERS_useKPP(11)=.TRUE.  ,
+# tracer 12 - ZOO2P
+ PTRACERS_names(12)='ZOO2P',
+ PTRACERS_units(12)='mmol P/m^3',
+ PTRACERS_advScheme(12)=33,
+ PTRACERS_diffKh(12)=0.E3,
+ PTRACERS_diffKr(12)=1.E-6,
+ PTRACERS_useKPP(12)=.TRUE.  ,
+# tracer 13 - ZOO2N 
+ PTRACERS_names(13)='ZOO2N',
+ PTRACERS_units(13)='mmol N/m^3'
+ PTRACERS_advScheme(13)=33,
+ PTRACERS_diffKh(13)=0.E3,
+ PTRACERS_diffKr(13)=1.E-6,
+ PTRACERS_useKPP(13)=.TRUE.  ,
+# tracer 14 - ZOO2Fe
+ PTRACERS_names(14)='ZOO2Fe',
+ PTRACERS_units(14)='mmol Fe/m^3'
+ PTRACERS_advScheme(14)=33,
+ PTRACERS_diffKh(14)=0.E3,
+ PTRACERS_diffKr(14)=1.E-6,
+ PTRACERS_useKPP(14)=.TRUE.  ,
+# tracer 15 - ZOO2Si
+ PTRACERS_names(15)='ZOO2Si',
+ PTRACERS_units(15)='mmol Si/m^3'
+ PTRACERS_advScheme(15)=33,
+ PTRACERS_diffKh(15)=0.E3,
+ PTRACERS_diffKr(15)=1.E-6,
+ PTRACERS_useKPP(15)=.TRUE.  ,
+# tracer 16 - POP
+ PTRACERS_names(16)='POP',
+ PTRACERS_units(16)='mmol P/m^3',
+ PTRACERS_advScheme(16)=33,
+ PTRACERS_diffKh(16)=0.E3,
+ PTRACERS_diffKr(16)=1.E-6,
+ PTRACERS_useKPP(16)=.TRUE.  ,
+# tracer 17 - PON   
+ PTRACERS_names(17)='PON',
+ PTRACERS_units(17)='mmol N/m^3',
+ PTRACERS_advScheme(17)=33,
+ PTRACERS_diffKh(17)=0.E3,
+ PTRACERS_diffKr(17)=1.E-6,
+ PTRACERS_useKPP(17)=.TRUE.  ,
+# tracer 18 - POFe
+ PTRACERS_names(18)='POFe',
+ PTRACERS_units(18)='mmol Fe/m^3'
+ PTRACERS_advScheme(18)=33,
+ PTRACERS_diffKh(18)=0.E3,
+ PTRACERS_diffKr(18)=1.E-6,
+ PTRACERS_useKPP(18)=.TRUE.  ,
+# tracer 19 - POSi   
+ PTRACERS_names(19)='POSi',
+ PTRACERS_units(19)='mmol Si/m^3'
+ PTRACERS_advScheme(19)=33,
+ PTRACERS_diffKh(19)=0.E3,
+ PTRACERS_diffKr(19)=1.E-6,
+ PTRACERS_useKPP(19)=.TRUE.  ,
+# tracer 20 - NH4      
+ PTRACERS_names(20)='NH4',
+ PTRACERS_units(20)='mmol N/m^3'
+ PTRACERS_advScheme(20)=33,
+ PTRACERS_diffKh(20)=0.E3,
+ PTRACERS_diffKr(20)=1.E-6,
+ PTRACERS_useKPP(20)=.TRUE.  ,
+# tracer 21 - NO2
+ PTRACERS_names(21)='NO2',
+ PTRACERS_units(21)='mmol N/m^3'
+ PTRACERS_advScheme(21)=33,
+ PTRACERS_diffKh(21)=0.E3,
+ PTRACERS_diffKr(21)=1.E-6,
+ PTRACERS_useKPP(21)=.TRUE.  ,
+# tracer 22 - PHYT01
+ PTRACERS_names(22)='Phy01',
+ PTRACERS_units(22)='mmol P/m^3'
+ PTRACERS_advScheme(22)=33,
+ PTRACERS_diffKh(22)=0.E3,
+ PTRACERS_diffKr(22)=1.E-6,
+ PTRACERS_useKPP(22)=.TRUE.  ,
+# tracer 23 - PHYT02
+ PTRACERS_names(23)='Phy02',
+ PTRACERS_units(23)='mmol P/m^3'
+ PTRACERS_advScheme(23)=33,
+ PTRACERS_diffKh(23)=0.E3,
+ PTRACERS_diffKr(23)=1.E-6,
+ PTRACERS_useKPP(23)=.TRUE.  ,
+# tracer 24 - PHYT03
+ PTRACERS_names(24)='Phy03',
+ PTRACERS_units(24)='mmol P/m^3'
+ PTRACERS_advScheme(24)=33,
+ PTRACERS_diffKh(24)=0.E3,
+ PTRACERS_diffKr(24)=1.E-6,
+ PTRACERS_useKPP(24)=.TRUE.  ,
+# tracer 25 - PHYT04
+ PTRACERS_names(25)='Phy04',
+ PTRACERS_units(25)='mmol P/m^3'
+ PTRACERS_advScheme(25)=33,
+ PTRACERS_diffKh(25)=0.E3,
+ PTRACERS_diffKr(25)=1.E-6,
+ PTRACERS_useKPP(25)=.TRUE.  ,
+# tracer 26 - PHYT05
+ PTRACERS_names(26)='Phy05',
+ PTRACERS_units(26)='mmol P/m^3'
+ PTRACERS_advScheme(26)=33,
+ PTRACERS_diffKh(26)=0.E3,
+ PTRACERS_diffKr(26)=1.E-6,
+ PTRACERS_useKPP(26)=.TRUE.  ,
+# tracer 27 - PHYT06
+ PTRACERS_names(27)='Phy06',
+ PTRACERS_units(27)='mmol P/m^3'
+ PTRACERS_advScheme(27)=33,
+ PTRACERS_diffKh(27)=0.E3,
+ PTRACERS_diffKr(27)=1.E-6,
+ PTRACERS_useKPP(27)=.TRUE.  ,
+# tracer 28 - PHYT07
+ PTRACERS_names(28)='Phy07',
+ PTRACERS_units(28)='mmol P/m^3'
+ PTRACERS_advScheme(28)=33,
+ PTRACERS_diffKh(28)=0.E3,
+ PTRACERS_diffKr(28)=1.E-6,
+ PTRACERS_useKPP(28)=.TRUE.  ,
+# tracer 29 - PHYT08
+ PTRACERS_names(29)='Phy08',
+ PTRACERS_units(29)='mmol P/m^3'
+ PTRACERS_advScheme(29)=33,
+ PTRACERS_diffKh(29)=0.E3,
+ PTRACERS_diffKr(29)=1.E-6,
+ PTRACERS_useKPP(29)=.TRUE.  ,
+# tracer 30 - PHYT09
+ PTRACERS_names(30)='Phy09',
+ PTRACERS_units(30)='mmol P/m^3'
+ PTRACERS_advScheme(30)=33,
+ PTRACERS_diffKh(30)=0.E3,
+ PTRACERS_diffKr(30)=1.E-6,
+ PTRACERS_useKPP(30)=.TRUE.  ,
+# tracer 31 - PHYT10
+ PTRACERS_names(31)='Phy10',
+ PTRACERS_units(31)='mmol P/m^3'
+ PTRACERS_advScheme(31)=33,
+ PTRACERS_diffKh(31)=0.E3,
+ PTRACERS_diffKr(31)=1.E-6,
+ PTRACERS_useKPP(31)=.TRUE.  ,
+# tracer 32 - PHYT11
+ PTRACERS_names(32)='Phy11',
+ PTRACERS_units(32)='mmol P/m^3'
+ PTRACERS_advScheme(32)=33,
+ PTRACERS_diffKh(32)=0.E3,
+ PTRACERS_diffKr(32)=1.E-6,
+ PTRACERS_useKPP(32)=.TRUE.  ,
+# tracer 33 - PHYT12
+ PTRACERS_names(33)='Phy12',
+ PTRACERS_units(33)='mmol P/m^3'
+ PTRACERS_advScheme(33)=33,
+ PTRACERS_diffKh(33)=0.E3,
+ PTRACERS_diffKr(33)=1.E-6,
+ PTRACERS_useKPP(33)=.TRUE.  ,
+# tracer 34 - PHYT13
+ PTRACERS_names(34)='Phy13',
+ PTRACERS_units(34)='mmol P/m^3'
+ PTRACERS_advScheme(34)=33,
+ PTRACERS_diffKh(34)=0.E3,
+ PTRACERS_diffKr(34)=1.E-6,
+ PTRACERS_useKPP(34)=.TRUE.  ,
+# tracer 35 - PHYT14
+ PTRACERS_names(35)='Phy14',
+ PTRACERS_units(35)='mmol P/m^3'
+ PTRACERS_advScheme(35)=33,
+ PTRACERS_diffKh(35)=0.E3,
+ PTRACERS_diffKr(35)=1.E-6,
+ PTRACERS_useKPP(35)=.TRUE.  ,
+# tracer 36 - PHYT15
+ PTRACERS_names(36)='Phy15',
+ PTRACERS_units(36)='mmol P/m^3'
+ PTRACERS_advScheme(36)=33,
+ PTRACERS_diffKh(36)=0.E3,
+ PTRACERS_diffKr(36)=1.E-6,
+ PTRACERS_useKPP(36)=.TRUE.  ,
+# tracer 37 - PHYT16
+ PTRACERS_names(37)='Phy16',
+ PTRACERS_units(37)='mmol P/m^3'
+ PTRACERS_advScheme(37)=33,
+ PTRACERS_diffKh(37)=0.E3,
+ PTRACERS_diffKr(37)=1.E-6,
+ PTRACERS_useKPP(37)=.TRUE.  ,
+# tracer 38 - PHYT17
+ PTRACERS_names(38)='Phy17',
+ PTRACERS_units(38)='mmol P/m^3'
+ PTRACERS_advScheme(38)=33,
+ PTRACERS_diffKh(38)=0.E3,
+ PTRACERS_diffKr(38)=1.E-6,
+ PTRACERS_useKPP(38)=.TRUE.  ,
+# tracer 39 - PHYT18
+ PTRACERS_names(39)='Phy18',
+ PTRACERS_units(39)='mmol P/m^3'
+ PTRACERS_advScheme(39)=33,
+ PTRACERS_diffKh(39)=0.E3,
+ PTRACERS_diffKr(39)=1.E-6,
+ PTRACERS_useKPP(39)=.TRUE.  ,
+# tracer 40 - PHYT19
+ PTRACERS_names(40)='Phy19',
+ PTRACERS_units(40)='mmol P/m^3'
+ PTRACERS_advScheme(40)=33,
+ PTRACERS_diffKh(40)=0.E3,
+ PTRACERS_diffKr(40)=1.E-6,
+ PTRACERS_useKPP(40)=.TRUE.  ,
+# tracer 41 - PHYT20
+ PTRACERS_names(41)='Phy20',
+ PTRACERS_units(41)='mmol P/m^3'
+ PTRACERS_advScheme(41)=33,
+ PTRACERS_diffKh(41)=0.E3,
+ PTRACERS_diffKr(41)=1.E-6,
+ PTRACERS_useKPP(41)=.TRUE.  ,
+# tracer 42 - PHYT21
+ PTRACERS_names(42)='Phy21',
+ PTRACERS_units(42)='mmol P/m^3'
+ PTRACERS_advScheme(42)=33,
+ PTRACERS_diffKh(42)=0.E3,
+ PTRACERS_diffKr(42)=1.E-6,
+ PTRACERS_useKPP(42)=.TRUE.  ,
+# tracer 43 - PHYT22
+ PTRACERS_names(43)='Phy22',
+ PTRACERS_units(43)='mmol P/m^3'
+ PTRACERS_advScheme(43)=33,
+ PTRACERS_diffKh(43)=0.E3,
+ PTRACERS_diffKr(43)=1.E-6,
+ PTRACERS_useKPP(43)=.TRUE.  ,
+# tracer 44 - PHYT23
+ PTRACERS_names(44)='Phy23',
+ PTRACERS_units(44)='mmol P/m^3'
+ PTRACERS_advScheme(44)=33,
+ PTRACERS_diffKh(44)=0.E3,
+ PTRACERS_diffKr(44)=1.E-6,
+ PTRACERS_useKPP(44)=.TRUE.  ,
+# tracer 45 - PHYT24
+ PTRACERS_names(45)='Phy24',
+ PTRACERS_units(45)='mmol P/m^3'
+ PTRACERS_advScheme(45)=33,
+ PTRACERS_diffKh(45)=0.E3,
+ PTRACERS_diffKr(45)=1.E-6,
+ PTRACERS_useKPP(45)=.TRUE.  ,
+# tracer 46 - PHYT25
+ PTRACERS_names(46)='Phy25',
+ PTRACERS_units(46)='mmol P/m^3'
+ PTRACERS_advScheme(46)=33,
+ PTRACERS_diffKh(46)=0.E3,
+ PTRACERS_diffKr(46)=1.E-6,
+ PTRACERS_useKPP(46)=.TRUE.  ,
+# tracer 47 - PHYT26
+ PTRACERS_names(47)='Phy26',
+ PTRACERS_units(47)='mmol P/m^3'
+ PTRACERS_advScheme(47)=33,
+ PTRACERS_diffKh(47)=0.E3,
+ PTRACERS_diffKr(47)=1.E-6,
+ PTRACERS_useKPP(47)=.TRUE.  ,
+# tracer 48 - PHYT27
+ PTRACERS_names(48)='Phy27',
+ PTRACERS_units(48)='mmol P/m^3'
+ PTRACERS_advScheme(48)=33,
+ PTRACERS_diffKh(48)=0.E3,
+ PTRACERS_diffKr(48)=1.E-6,
+ PTRACERS_useKPP(48)=.TRUE.  ,
+# tracer 49 - PHYT28
+ PTRACERS_names(49)='Phy28',
+ PTRACERS_units(49)='mmol P/m^3'
+ PTRACERS_advScheme(49)=33,
+ PTRACERS_diffKh(49)=0.E3,
+ PTRACERS_diffKr(49)=1.E-6,
+ PTRACERS_useKPP(49)=.TRUE.  ,
+# tracer 50 - PHYT29
+ PTRACERS_names(50)='Phy29',
+ PTRACERS_units(50)='mmol P/m^3'
+ PTRACERS_advScheme(50)=33,
+ PTRACERS_diffKh(50)=0.E3,
+ PTRACERS_diffKr(50)=1.E-6,
+ PTRACERS_useKPP(50)=.TRUE.  ,
+# tracer 51 - PHY30
+ PTRACERS_names(51)='Phy30',
+ PTRACERS_units(51)='mmol P/m^3'
+ PTRACERS_advScheme(51)=33,
+ PTRACERS_diffKh(51)=0.E3,
+ PTRACERS_diffKr(51)=1.E-6,
+ PTRACERS_useKPP(51)=.TRUE.  ,
+# tracer 52 - PHY31
+ PTRACERS_names(52)='Phy31',
+ PTRACERS_units(52)='mmol P/m^3'
+ PTRACERS_advScheme(52)=33,
+ PTRACERS_diffKh(52)=0.E3,
+ PTRACERS_diffKr(52)=1.E-6,
+ PTRACERS_useKPP(52)=.TRUE.  ,
+# tracer 53 - PHY32
+ PTRACERS_names(53)='Phy32',
+ PTRACERS_units(53)='mmol P/m^3'
+ PTRACERS_advScheme(53)=33,
+ PTRACERS_diffKh(53)=0.E3,
+ PTRACERS_diffKr(53)=1.E-6,
+ PTRACERS_useKPP(53)=.TRUE.  ,
+# tracer 54 - PHY33
+ PTRACERS_names(54)='Phy33',
+ PTRACERS_units(54)='mmol P/m^3'
+ PTRACERS_advScheme(54)=33,
+ PTRACERS_diffKh(54)=0.E3,
+ PTRACERS_diffKr(54)=1.E-6,
+ PTRACERS_useKPP(54)=.TRUE.  ,
+# tracer 55 - PHY34
+ PTRACERS_names(55)='Phy34',
+ PTRACERS_units(55)='mmol P/m^3'
+ PTRACERS_advScheme(55)=33,
+ PTRACERS_diffKh(55)=0.E3,
+ PTRACERS_diffKr(55)=1.E-6,
+ PTRACERS_useKPP(55)=.TRUE.  ,
+# tracer 56 - PHY35
+ PTRACERS_names(56)='Phy35',
+ PTRACERS_units(56)='mmol P/m^3'
+ PTRACERS_advScheme(56)=33,
+ PTRACERS_diffKh(56)=0.E3,
+ PTRACERS_diffKr(56)=1.E-6,
+ PTRACERS_useKPP(56)=.TRUE.  ,
+# tracer 57 - PHY36
+ PTRACERS_names(57)='Phy36',
+ PTRACERS_units(57)='mmol P/m^3'
+ PTRACERS_advScheme(57)=33,
+ PTRACERS_diffKh(57)=0.E3,
+ PTRACERS_diffKr(57)=1.E-6,
+ PTRACERS_useKPP(57)=.TRUE.  ,
+# tracer 58 - PHY37
+ PTRACERS_names(58)='Phy37',
+ PTRACERS_units(58)='mmol P/m^3'
+ PTRACERS_advScheme(58)=33,
+ PTRACERS_diffKh(58)=0.E3,
+ PTRACERS_diffKr(58)=1.E-6,
+ PTRACERS_useKPP(58)=.TRUE.  ,
+# tracer 59 - PHY38
+ PTRACERS_names(59)='Phy38',
+ PTRACERS_units(59)='mmol P/m^3'
+ PTRACERS_advScheme(59)=33,
+ PTRACERS_diffKh(59)=0.E3,
+ PTRACERS_diffKr(59)=1.E-6,
+ PTRACERS_useKPP(59)=.TRUE.  ,
+# tracer 60 - PHY39
+ PTRACERS_names(60)='Phy39',
+ PTRACERS_units(60)='mmol P/m^3'
+ PTRACERS_advScheme(60)=33,
+ PTRACERS_diffKh(60)=0.E3,
+ PTRACERS_diffKr(60)=1.E-6,
+ PTRACERS_useKPP(60)=.TRUE.  ,
+# tracer 61 - PHY40
+ PTRACERS_names(61)='Phy40',
+ PTRACERS_units(61)='mmol P/m^3'
+ PTRACERS_advScheme(61)=33,
+ PTRACERS_diffKh(61)=0.E3,
+ PTRACERS_diffKr(61)=1.E-6,
+ PTRACERS_useKPP(61)=.TRUE.  ,
+# tracer 62 - PHY41
+ PTRACERS_names(62)='Phy41',
+ PTRACERS_units(62)='mmol P/m^3'
+ PTRACERS_advScheme(62)=33,
+ PTRACERS_diffKh(62)=0.E3,
+ PTRACERS_diffKr(62)=1.E-6,
+ PTRACERS_useKPP(62)=.TRUE.  ,
+# tracer 63 - PHY42
+ PTRACERS_names(63)='Phy42',
+ PTRACERS_units(63)='mmol P/m^3'
+ PTRACERS_advScheme(63)=33,
+ PTRACERS_diffKh(63)=0.E3,
+ PTRACERS_diffKr(63)=1.E-6,
+ PTRACERS_useKPP(63)=.TRUE.  ,
+# tracer 64 - PHY43
+ PTRACERS_names(64)='Phy43',
+ PTRACERS_units(64)='mmol P/m^3'
+ PTRACERS_advScheme(64)=33,
+ PTRACERS_diffKh(64)=0.E3,
+ PTRACERS_diffKr(64)=1.E-6,
+ PTRACERS_useKPP(64)=.TRUE.  ,
+# tracer 65 - PHY44
+ PTRACERS_names(65)='Phy44',
+ PTRACERS_units(65)='mmol P/m^3'
+ PTRACERS_advScheme(65)=33,
+ PTRACERS_diffKh(65)=0.E3,
+ PTRACERS_diffKr(65)=1.E-6,
+ PTRACERS_useKPP(65)=.TRUE.  ,
+# tracer 66 - PHY45
+ PTRACERS_names(66)='Phy45',
+ PTRACERS_units(66)='mmol P/m^3'
+ PTRACERS_advScheme(66)=33,
+ PTRACERS_diffKh(66)=0.E3,
+ PTRACERS_diffKr(66)=1.E-6,
+ PTRACERS_useKPP(66)=.TRUE.  ,
+# tracer 67 - PHY46
+ PTRACERS_names(67)='Phy46',
+ PTRACERS_units(67)='mmol P/m^3'
+ PTRACERS_advScheme(67)=33,
+ PTRACERS_diffKh(67)=0.E3,
+ PTRACERS_diffKr(67)=1.E-6,
+ PTRACERS_useKPP(67)=.TRUE.  ,
+# tracer 68 - PHY47
+ PTRACERS_names(68)='Phy47',
+ PTRACERS_units(68)='mmol P/m^3'
+ PTRACERS_advScheme(68)=33,
+ PTRACERS_diffKh(68)=0.E3,
+ PTRACERS_diffKr(68)=1.E-6,
+ PTRACERS_useKPP(68)=.TRUE.  ,
+# tracer 69 - PHY48
+ PTRACERS_names(69)='Phy48',
+ PTRACERS_units(69)='mmol P/m^3'
+ PTRACERS_advScheme(69)=33,
+ PTRACERS_diffKh(69)=0.E3,
+ PTRACERS_diffKr(69)=1.E-6,
+ PTRACERS_useKPP(69)=.TRUE.  ,
+# tracer 70 - PHY49
+ PTRACERS_names(70)='Phy49',
+ PTRACERS_units(70)='mmol P/m^3'
+ PTRACERS_advScheme(70)=33,
+ PTRACERS_diffKh(70)=0.E3,
+ PTRACERS_diffKr(70)=1.E-6,
+ PTRACERS_useKPP(70)=.TRUE.  ,
+# tracer 71 - PHY50
+ PTRACERS_names(71)='Phy50',
+ PTRACERS_units(71)='mmol P/m^3'
+ PTRACERS_advScheme(71)=33,
+ PTRACERS_diffKh(71)=0.E3,
+ PTRACERS_diffKr(71)=1.E-6,
+ PTRACERS_useKPP(71)=.TRUE.  ,
+# tracer 72 - PHY51
+ PTRACERS_names(72)='Phy51',
+ PTRACERS_units(72)='mmol P/m^3'
+ PTRACERS_advScheme(72)=33,
+ PTRACERS_diffKh(72)=0.E3,
+ PTRACERS_diffKr(72)=1.E-6,
+ PTRACERS_useKPP(72)=.TRUE.  ,
+# tracer 73 - PHY52
+ PTRACERS_names(73)='Phy52',
+ PTRACERS_units(73)='mmol P/m^3'
+ PTRACERS_advScheme(73)=33,
+ PTRACERS_diffKh(73)=0.E3,
+ PTRACERS_diffKr(73)=1.E-6,
+ PTRACERS_useKPP(73)=.TRUE.  ,
+# tracer 74 - PHY53
+ PTRACERS_names(74)='Phy53',
+ PTRACERS_units(74)='mmol P/m^3'
+ PTRACERS_advScheme(74)=33,
+ PTRACERS_diffKh(74)=0.E3,
+ PTRACERS_diffKr(74)=1.E-6,
+ PTRACERS_useKPP(74)=.TRUE.  ,
+# tracer 75 - PHY54
+ PTRACERS_names(75)='Phy54',
+ PTRACERS_units(75)='mmol P/m^3'
+ PTRACERS_advScheme(75)=33,
+ PTRACERS_diffKh(75)=0.E3,
+ PTRACERS_diffKr(75)=1.E-6,
+ PTRACERS_useKPP(75)=.TRUE.  ,
+# tracer 76 - PHY55
+ PTRACERS_names(76)='Phy55',
+ PTRACERS_units(76)='mmol P/m^3'
+ PTRACERS_advScheme(76)=33,
+ PTRACERS_diffKh(76)=0.E3,
+ PTRACERS_diffKr(76)=1.E-6,
+ PTRACERS_useKPP(76)=.TRUE.  ,
+# tracer 77 - PHY56
+ PTRACERS_names(77)='Phy56',
+ PTRACERS_units(77)='mmol P/m^3'
+ PTRACERS_advScheme(77)=33,
+ PTRACERS_diffKh(77)=0.E3,
+ PTRACERS_diffKr(77)=1.E-6,
+ PTRACERS_useKPP(77)=.TRUE.  ,
+# tracer 78 - PHY57
+ PTRACERS_names(78)='Phy57',
+ PTRACERS_units(78)='mmol P/m^3'
+ PTRACERS_advScheme(78)=33,
+ PTRACERS_diffKh(78)=0.E3,
+ PTRACERS_diffKr(78)=1.E-6,
+ PTRACERS_useKPP(78)=.TRUE.  ,
+# tracer 79 - PHY58
+ PTRACERS_names(79)='Phy58',
+ PTRACERS_units(79)='mmol P/m^3'
+ PTRACERS_advScheme(79)=33,
+ PTRACERS_diffKh(79)=0.E3,
+ PTRACERS_diffKr(79)=1.E-6,
+ PTRACERS_useKPP(79)=.TRUE.  ,
+# tracer 80 - PHY59
+ PTRACERS_names(80)='Phy59',
+ PTRACERS_units(80)='mmol P/m^3'
+ PTRACERS_advScheme(80)=33,
+ PTRACERS_diffKh(80)=0.E3,
+ PTRACERS_diffKr(80)=1.E-6,
+ PTRACERS_useKPP(80)=.TRUE.  ,
+# tracer 81 - PHY60
+ PTRACERS_names(81)='Phy60',
+ PTRACERS_units(81)='mmol P/m^3'
+ PTRACERS_advScheme(81)=33,
+ PTRACERS_diffKh(81)=0.E3,
+ PTRACERS_diffKr(81)=1.E-6,
+ PTRACERS_useKPP(81)=.TRUE.  ,
+# tracer 82 - PHY61
+ PTRACERS_names(82)='Phy61',
+ PTRACERS_units(82)='mmol P/m^3'
+ PTRACERS_advScheme(82)=33,
+ PTRACERS_diffKh(82)=0.E3,
+ PTRACERS_diffKr(82)=1.E-6,
+ PTRACERS_useKPP(82)=.TRUE.  ,
+# tracer 83 - PHY62
+ PTRACERS_names(83)='Phy62',
+ PTRACERS_units(83)='mmol P/m^3'
+ PTRACERS_advScheme(83)=33,
+ PTRACERS_diffKh(83)=0.E3,
+ PTRACERS_diffKr(83)=1.E-6,
+ PTRACERS_useKPP(83)=.TRUE.  ,
+# tracer 84 - PHY63
+ PTRACERS_names(84)='Phy63',
+ PTRACERS_units(84)='mmol P/m^3'
+ PTRACERS_advScheme(84)=33,
+ PTRACERS_diffKh(84)=0.E3,
+ PTRACERS_diffKr(84)=1.E-6,
+ PTRACERS_useKPP(84)=.TRUE.  ,
+# tracer 85 - PHY64
+ PTRACERS_names(85)='Phy64',
+ PTRACERS_units(85)='mmol P/m^3'
+ PTRACERS_advScheme(85)=33,
+ PTRACERS_diffKh(85)=0.E3,
+ PTRACERS_diffKr(85)=1.E-6,
+ PTRACERS_useKPP(85)=.TRUE.  ,
+# tracer 86 - PHY65
+ PTRACERS_names(86)='Phy65',
+ PTRACERS_units(86)='mmol P/m^3'
+ PTRACERS_advScheme(86)=33,
+ PTRACERS_diffKh(86)=0.E3,
+ PTRACERS_diffKr(86)=1.E-6,
+ PTRACERS_useKPP(86)=.TRUE.  ,
+# tracer 87 - PHY66
+ PTRACERS_names(87)='Phy66',
+ PTRACERS_units(87)='mmol P/m^3'
+ PTRACERS_advScheme(87)=33,
+ PTRACERS_diffKh(87)=0.E3,
+ PTRACERS_diffKr(87)=1.E-6,
+ PTRACERS_useKPP(87)=.TRUE.  ,
+# tracer 88 - PHY67
+ PTRACERS_names(88)='Phy67',
+ PTRACERS_units(88)='mmol P/m^3'
+ PTRACERS_advScheme(88)=33,
+ PTRACERS_diffKh(88)=0.E3,
+ PTRACERS_diffKr(88)=1.E-6,
+ PTRACERS_useKPP(88)=.TRUE.  ,
+# tracer 89 - PHY68
+ PTRACERS_names(89)='Phy68',
+ PTRACERS_units(89)='mmol P/m^3'
+ PTRACERS_advScheme(89)=33,
+ PTRACERS_diffKh(89)=0.E3,
+ PTRACERS_diffKr(89)=1.E-6,
+ PTRACERS_useKPP(89)=.TRUE.  ,
+# tracer 90 - PHY69
+ PTRACERS_names(90)='Phy69',
+ PTRACERS_units(90)='mmol P/m^3'
+ PTRACERS_advScheme(90)=33,
+ PTRACERS_diffKh(90)=0.E3,
+ PTRACERS_diffKr(90)=1.E-6,
+ PTRACERS_useKPP(90)=.TRUE.  ,
+# tracer 91 - PHY70
+ PTRACERS_names(91)='Phy70',
+ PTRACERS_units(91)='mmol P/m^3'
+ PTRACERS_advScheme(91)=33,
+ PTRACERS_diffKh(91)=0.E3,
+ PTRACERS_diffKr(91)=1.E-6,
+ PTRACERS_useKPP(91)=.TRUE.  ,
+# tracer 92 - PHY71
+ PTRACERS_names(92)='Phy71',
+ PTRACERS_units(92)='mmol P/m^3'
+ PTRACERS_advScheme(92)=33,
+ PTRACERS_diffKh(92)=0.E3,
+ PTRACERS_diffKr(92)=1.E-6,
+ PTRACERS_useKPP(92)=.TRUE.  ,
+# tracer 93 - PHY72
+ PTRACERS_names(93)='Phy72',
+ PTRACERS_units(93)='mmol P/m^3'
+ PTRACERS_advScheme(93)=33,
+ PTRACERS_diffKh(93)=0.E3,
+ PTRACERS_diffKr(93)=1.E-6,
+ PTRACERS_useKPP(93)=.TRUE.  ,
+# tracer 94 - PHY73
+ PTRACERS_names(94)='Phy73',
+ PTRACERS_units(94)='mmol P/m^3'
+ PTRACERS_advScheme(94)=33,
+ PTRACERS_diffKh(94)=0.E3,
+ PTRACERS_diffKr(94)=1.E-6,
+ PTRACERS_useKPP(94)=.TRUE.  ,
+# tracer 95 - PHY74
+ PTRACERS_names(95)='Phy74',
+ PTRACERS_units(95)='mmol P/m^3'
+ PTRACERS_advScheme(95)=33,
+ PTRACERS_diffKh(95)=0.E3,
+ PTRACERS_diffKr(95)=1.E-6,
+ PTRACERS_useKPP(95)=.TRUE.  ,
+# tracer 96 - PHY75
+ PTRACERS_names(96)='Phy75',
+ PTRACERS_units(96)='mmol P/m^3'
+ PTRACERS_advScheme(96)=33,
+ PTRACERS_diffKh(96)=0.E3,
+ PTRACERS_diffKr(96)=1.E-6,
+ PTRACERS_useKPP(96)=.TRUE.  ,
+# tracer 97 - PHY76
+ PTRACERS_names(97)='Phy76',
+ PTRACERS_units(97)='mmol P/m^3'
+ PTRACERS_advScheme(97)=33,
+ PTRACERS_diffKh(97)=0.E3,
+ PTRACERS_diffKr(97)=1.E-6,
+ PTRACERS_useKPP(97)=.TRUE.  ,
+# tracer 98 - PHY77
+ PTRACERS_names(98)='Phy77',
+ PTRACERS_units(98)='mmol P/m^3'
+ PTRACERS_advScheme(98)=33,
+ PTRACERS_diffKh(98)=0.E3,
+ PTRACERS_diffKr(98)=1.E-6,
+ PTRACERS_useKPP(98)=.TRUE.  ,
+# tracer 99 - PHY78
+ PTRACERS_names(99)='Phy78',
+ PTRACERS_units(99)='mmol P/m^3'
+ PTRACERS_advScheme(99)=33,
+ PTRACERS_diffKh(99)=0.E3,
+ PTRACERS_diffKr(99)=1.E-6,
+ PTRACERS_useKPP(99)=.TRUE.  ,
+ &

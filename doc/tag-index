@@ -1,0 +1,231 @@
+$Header$
+$Name$
+
+    Notes on tags used in darwin
+    ============================
+
+o darwin2:
+  separate out monod subpackage and add quota subpackage
+o clean up headers (add SPECTRAL_SIZE.h, DARWIN_FIELDS.h)
+
+ctrb_darwin_ckpt62v_20110406
+o add explicit denitrification (and tidy up flx arrays)
+
+ctrb_darwin_ckpt62u_20110405
+o fix restart from pickup_dic with mdsioLocalDir in darwin
+
+ctrb_darwin_ckpt62t_20110305
+
+ctrb_darwin_ckpt62s_20110217
+
+ctrb_darwin_ckpt62r_20110124
+
+ctrb_darwin_ckpt62q_20110124
+o add particle absorption and scattering based on POP
+
+ctrb_darwin_ckpt62p_20101217
+o phyto spectra now include backscattering coefficients.
+  To revert to previous behaviour and use darwin_bbphy,
+  #define DAR_NONSPECTRAL_BACKSCATTERING_RATIO
+o new verification experiment darwin_1d_radtrans
+o new output for darwin_baltic_76x72x24 after seaice changes
+
+ctrb_darwin_ckpt62o_20101125
+
+ctrb_darwin_ckpt62n_20101109
+
+ctrb_darwin_ckpt62m_20101024
+o update darwin_baltic_76x72x24 results after seaice_growth changes
+
+ctrb_darwin_ckpt62l_20101006
+
+ctrb_darwin_ckpt62k_20101005
+
+ctrb_darwin_ckpt62j_20100901
+
+ctrb_darwin_ckpt62i_20100729
+o dynamic Chlorophyll works
+
+ctrb_darwin_ckpt62h_20100707
+o add full radiative transfer code
+
+ctrb_darwin_ckpt62g_20100609
+o change default inhibcoef_geid_val back to zero
+
+ctrb_darwin_ckpt62f_20100522
+o add aCDOM diagnostic: #define DAR_DIAG_ACDOM (available with WAVEBANDS)
+  parameters in data.darwin:
+  - darwin_diag_acdom_ilam :: waveband index (or wavelength) to diagnose
+o add option to compute aCDOM from Chlorophyll: #define DAR_CALC_ACDOM
+  parameters in data.darwin:
+  - darwin_Sdom :: spectral slope for wavelength dependence of aCDOM
+o fix reading of OASIM data (#define OASIM) regardless WAVEBANDS;
+  parameters in data.darwin:
+  - darwin_oasim_edFile, darwin_oasim_esFile :: file names
+  - darwin_oasim_waves :: band center wavelengths in nm
+                          (when used without WAVEBANDS)
+  units are W/m2 per waveband
+o add carbon diagnostics
+
+ctrb_darwin_ckpt62e_20100417
+
+ctrb_darwin_ckpt62d_20100417
+
+ctrb_darwin_ckpt62c_20100303
+
+ctrb_darwin_ckpt62b_20100201
+
+ctrb_darwin_ckpt62a_20100117
+o replace DIAGNOSTICS_ADD2LIST by DIAGNOSTICS_ADDTOLIST
+
+ctrb_darwin_ckpt62_20091227
+
+ctrb_darwin_ckpt61z_20091207
+
+ctrb_darwin_ckpt61y_20091120
+o darwin_baltic_76x72x24: set SEAICE_clipVelocities = .FALSE.
+
+ctrb_darwin_ckpt61x_20091024
+
+ctrb_darwin_ckpt61w_20091024
+
+ctrb_darwin_ckpt61v_20091024
+o changes so will work with either old model or quota model
+o set default to old version of temperature function
+o seperate temperature function into seperate subroutine   
+  add new version of temperature function: pseudo-Arrhenius function,
+  and include this for zooplankton and remineralization
+o add iron sedimentary source that is function of sinking POC
+  (based on Elrod et al, GRL 2004)
+o tidy up NFixP diagnostics
+o include denitrification and additional N-fix code (from Fanny Monteiro)
+o add iron sedimentation flux and particle dependent iron scavenging
+
+ctrb_darwin_ckpt61u_20090825
+o upgrade to checkpoint61u of MITgcm
+o add ability to read OASIM spectral data. add placeholder for SPECTRAL.h
+
+ctrb_darwin_ckpt61t_20090820
+o upgrade to checkpoint61t of MITgcm
+
+ctrb_darwin_ckpt61s_20090630
+o upgrade to checkpoint61s of MITgcm
+o add package longstep
+
+ctrb_darwin_ckpt61r_20090626
+o upgrade to checkpoint61r of MITgcm
+
+ctrb_darwin_ckpt61q_20090626
+o upgrade to checkpoint61q of MITgcm
+
+ctrb_darwin_ckpt61p_20090610
+o upgrade to checkpoint61p of MITgcm
+
+ctrb_darwin_ckpt61o_20090610
+o two-species setup (no random choices): one big, one small
+  use #define TWO_SPECIES_SETUP
+o new files and modifications for air-sea exchange of CO2 and O2
+  (still in development)
+
+ctrb_darwin_ckpt61o_20090527
+o upgrade to checkpoint61o of MITgcm
+
+ctrb_darwin_ckpt61n_20090519
+o add PIC cycling to carbon part.
+o add possiblity of coccolithophores
+o adding carbon/o2/alkalinity (only soft tissue at this stage)
+
+ctrb_darwin_ckpt61n_20090513
+o upgrade to checkpoint61n of MITgcm
+
+ctrb_darwin_ckpt61m_20090430
+o upgrade to checkpoint61m of MITgcm
+  - change macros *_R4 -> *_RS and *_R8 -> *_RL
+
+ctrb_darwin_ckpt61l_20090408
+o upgrade to checkpoint61l of MITgcm
+  - darwin_baltic_76x72x23 uses new finite-volue seaice solver
+  - gfortran tests trap floating point exceptions
+
+ctrb_darwin_ckpt61k_20090312
+o upgrade to checkpoint61k of MITgcm
+
+ctrb_darwin_ckpt61i_20090312
+o add chlorophyll diagnostics (Geider, Doney, Cloern)
+o add daily-averaged and stored PAR (ALLOW_PAR_DAY)
+o move darwin options to new header DARWIN_OPTIONS.h
+
+ctrb_darwin_ckpt61i_20090224
+o upgrade to checkpoint61i of MITgcm
+
+ctrb_darwin_ckpt61h_20090224
+o upgrade to checkpoint61h of MITgcm
+  - rename thetaMin,phiMin -> xgOrigin,ygOrigin
+
+ctrb_darwin_ckpt61d_20081212
+o add new code to allow for a flux of nutrients to be read in from files;
+  this is especially for a 1-D setup
+
+ctrb_darwin_ckpt61d_20081013
+o upgrade to checkpoint61d of MITgcm
+o DAR_cons_unit[1-4] get separate common block
+
+ctrb_darwin_ckpt61b_20080822
+o upgrade to checkpoint61b of MITgcm
+
+ctrb_darwin_ckpt61_20080822
+o add code to relax nutrients (needed for 1-D version)
+o add waveband dependence of light attenuation and absorption,
+  - NOTE: need to have geider turned on too
+o add geider chl:c ratio and growth rate dependence,
+  - no photo-inhibition at this point
+o make number of phytoplankton species flexible (at compile time)
+  - DARWIN_SIZE defines location of darwin fields in Ptracer
+
+ctrb_darwin_ckpt61_20080624
+o upgrade to checkpoint61 of MITgcm
+
+ctrb_darwin_ckpt60_20080619
+o upgrade to checkpoint60 of MITgcm
+
+ctrb_darwin_ckpt59r_20080606
+o upgrade to checkpoint59r of MITgcm
+
+ctrb_darwin_ckpt59q_20080605
+o upgrade to checkpoint59q of MITgcm
+  - verification/darwin_baltic_76x72x24: fix topography for obcs
+
+ctrb_darwin_ckpt59p_20080604
+o upgrade to checkpoint59p of MITgcm
+  - introduces data.darwin; the following parameters have been moved
+    from data.gchem to data.darwin:
+      iceFile -> darwin_iceFile
+      IronFile -> darwin_ironFile
+      Filename1 -> darwin_PARFile
+      Filename2 -> darwin_nutWVelFile
+      gchem_int1 -> darwin_seed
+      gchem_ForcingPeriod -> darwinForcingPeriod
+      gchem_ForcingCycle -> gchem_ForcingCycle
+
+ctrb_darwin_ckpt59o_20080602
+o upgrade to checkpoint59o of MITgcm
+
+ctrb_darwin_ckpt59n_20080424
+o verification/darwin_baltic_76x72x24: change from OLDSEED to PORT_RAND
+o upgrade to checkpoint59n of MITgcm
+  - introduces PTRACERS_PARAMS.h and PTRACERS_FIELDS.h
+  - changes in obcs and seaice
+  - pickupStriclyMatch
+
+ctrb_darwin_ckpt59i_20080226
+o load forcing fields if gchem_ForcingPeriod.NE.0 (instead of periodicExternalForcing)
+
+cp59i_noironwithexf
+o add darwin global verification experiment
+o change default phymin to 1e-20
+o change floating point constants to _d
+o portable random number generator
+
+cp59i
+o initial checkin.  Works with MITgcm checkpoint59i
+ 

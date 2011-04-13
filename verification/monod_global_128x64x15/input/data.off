@@ -1,0 +1,23 @@
+ &OFFLINE_PARM01
+  UvelFile= '/home/stephd/ECCO/iter177/Dynvars2_ave/DDuvel',
+  VvelFile= '/home/stephd/ECCO/iter177/Dynvars2_ave/DDvvel',
+  WvelFile= '/home/stephd/ECCO/iter177/Dynvars2_ave/DDwvel',
+  GMwxFile= '/home/stephd/ECCO/iter177/Gm2_ave/DGMkwx',
+  GMwyFile= '/home/stephd/ECCO/iter177/Gm2_ave/DGMkwy',
+  GMwzFile= '/home/stephd/ECCO/iter177/Gm2_ave/DGMkwz',
+# ConvFile= 'input_off/Convtave',
+  SaltFile= '/home/stephd/ECCO/iter177/Dynvars2_ave/DDsalt',
+  ThetFile= '/home/stephd/ECCO/iter177/Dynvars2_ave/DDtheta',
+  SFluxFile='/home/stephd/ECCO/iter177/Forcing2_ave/DFOsflux',
+# HFluxFile=' ',
+  KPP_DiffSFile='/home/stephd/ECCO/iter177/Kpp2_ave/DKPPdifs',
+# KPP_ghatFile=' ',
+ &end
+
+ &OFFLINE_PARM02
+  offlineIter0=0,
+  deltaToffline=3600.,
+  offlineForcingPeriod=2592000.,
+  offlineForcingCycle=31104000.,
+ &end
+

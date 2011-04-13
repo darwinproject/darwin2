@@ -1,0 +1,8 @@
+*.log
+*.data
+*.meta
+*.nc
+STD*
+*.txt
+*.dat
+ocmip_darwin_*

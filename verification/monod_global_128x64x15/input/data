@@ -1,0 +1,95 @@
+# ====================
+# | Model parameters |
+# ====================
+#
+# Continuous equation parameters
+ &PARM01
+ tRef=15*20.,
+ sRef=15*35.,
+ viscA4=0.,
+ viscAh=5.E5,
+ diffKhT=0.E3,
+ diffKhS=0.E3,
+ viscAz=1.E-3,
+ diffKzT=5.E-5,
+ diffKzS=5.E-5,
+ beta=1.E-11,
+ f0=1.e-4,
+ tAlpha=2.E-4,
+ sBeta =7.4E-4,
+ gravity=9.81,
+ gBaro=9.81,
+ rhonil=1035.,
+ rigidLid=.FALSE.,
+ implicitFreeSurface=.TRUE.,
+ eosType='POLY3',
+ implicitDiffusion=.TRUE.,
+ implicitViscosity=.TRUE.,
+ ivdc_kappa=100.,
+ tempAdvScheme       = 2
+ saltAdvScheme       = 2
+ tempStepping        = .TRUE.
+ saltStepping        = .TRUE.
+ multiDimAdvection   = .FALSE.
+ allowFreezing=.TRUE.,
+ useCDscheme=.TRUE.,
+#usePickupBeforeC54=.TRUE.,
+ &
+
+# Elliptic solver parameters
+ &PARM02
+ cg2dMaxIters=1000,
+ cg2dTargetResidual=1.E-13,
+ &
+
+# Time stepping parameters
+ &PARM03
+ nIter0=5644800,
+ nTimeSteps = 4,
+#nTimeSteps = 7200,
+ deltaTmom = 900.0,
+ tauCD =     321428.,
+ deltaTtracer= 43200.0,
+ deltaTClock = 43200.0,
+ abEps = 0.1,
+ pickupStrictlyMatch=.FALSE.,
+ pChkptFreq=311040000.,
+ chkptFreq= 311040000.,
+ dumpFreq=  31104000.,
+ taveFreq=  2592000.,
+#taveFreq=  31104000.,
+#monitorFreq= 31104000.,
+ monitorFreq= 43200.0,
+#monitorFreq= 2592000.,
+ tauThetaClimRelax = 5184000.0,
+ tauSaltClimRelax =  7776000.0,
+ periodicExternalForcing=.TRUE.,
+ externForcingPeriod=2592000.,
+ externForcingCycle=31104000.,
+ &
+
+# Gridding parameters
+ &PARM04
+ usingCartesianGrid=.FALSE.,
+ usingSphericalPolarGrid=.TRUE.,
+ delZ= 50., 70., 100., 140., 190., 
+       240., 290., 340., 390., 440., 
+       490., 540., 590., 640., 690.,
+ ygOrigin=-90.,
+ delX=128*2.8125,
+ delY=64*2.8125,
+ &
+
+# Input datasets
+ &PARM05
+ bathyFile=      '../input/input_ocmip/depth_g77.bin',
+ hydrogThetaFile='../input/input_ocmip/lev_clim_temp.bin',
+ hydrogSaltFile= '../input/input_ocmip/lev_clim_salt.bin',
+ zonalWindFile=  '../input/input_ocmip/tren_taux.bin',
+ meridWindFile=  '../input/input_ocmip/tren_tauy.bin',
+ thetaClimFile=  '../input/input_ocmip/lev_monthly_temp.bin',
+ saltClimFile=   '../input/input_ocmip/lev_monthly_salt.bin',
+ surfQFile=      '../input/input_ocmip/shi_qnet.bin',
+ EmPmRFile=      '../input/input_ocmip/shi_empmr_year.bin',
+ the_run_name=   'Darwin12',
+ &
