@@ -1,0 +1,20 @@
+This can have 6 lines of text as a header.
+This CDOM is from VassKitidis2006
+relates to AMT. Uses coefs
+S_250_650 = 0.026 nm-1
+a_cdom_300 = 0.35 m-1
+format: f10.4
+0.0260
+0.0136
+0.0071
+0.0037
+0.0019
+0.0010
+0.0005
+0.0003
+0.0001
+0.0001
+0
+0
+0
+

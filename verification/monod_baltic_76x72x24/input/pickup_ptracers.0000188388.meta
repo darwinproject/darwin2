@@ -1,0 +1,18 @@
+ nDims = [   3 ];
+ dimList = [
+    76,    1,   76,
+    72,    1,   72,
+    24,    1,   24
+ ];
+ dataprec = [ 'float64' ];
+ nrecords = [    99 ];
+ timeStepNumber = [     188388 ];
+ /* modelTime = [  2.260656000000E+08 ];*/
+ nFlds = [   99 ];
+ fldList = {
+ 'pTr01   ' 'pTr02   ' 'pTr03   ' 'pTr04   ' 'pTr05   ' 'pTr06   ' 'pTr07   ' 'pTr08   ' 'pTr09   ' 'pTr10   ' 'pTr11   ' 'pTr12   ' 'pTr13   ' 'pTr14   ' 'pTr15   ' 'pTr16   ' 'pTr17   ' 'pTr18   ' 'pTr19   ' 'pTr20   '
+ 'pTr21   ' 'pTr22   ' 'pTr23   ' 'pTr24   ' 'pTr25   ' 'pTr26   ' 'pTr27   ' 'pTr28   ' 'pTr29   ' 'pTr30   ' 'pTr31   ' 'pTr32   ' 'pTr33   ' 'pTr34   ' 'pTr35   ' 'pTr36   ' 'pTr37   ' 'pTr38   ' 'pTr39   ' 'pTr40   '
+ 'pTr41   ' 'pTr42   ' 'pTr43   ' 'pTr44   ' 'pTr45   ' 'pTr46   ' 'pTr47   ' 'pTr48   ' 'pTr49   ' 'pTr50   ' 'pTr51   ' 'pTr52   ' 'pTr53   ' 'pTr54   ' 'pTr55   ' 'pTr56   ' 'pTr57   ' 'pTr58   ' 'pTr59   ' 'pTr60   '
+ 'pTr61   ' 'pTr62   ' 'pTr63   ' 'pTr64   ' 'pTr65   ' 'pTr66   ' 'pTr67   ' 'pTr68   ' 'pTr69   ' 'pTr70   ' 'pTr71   ' 'pTr72   ' 'pTr73   ' 'pTr74   ' 'pTr75   ' 'pTr76   ' 'pTr77   ' 'pTr78   ' 'pTr79   ' 'pTr80   '
+ 'pTr81   ' 'pTr82   ' 'pTr83   ' 'pTr84   ' 'pTr85   ' 'pTr86   ' 'pTr87   ' 'pTr88   ' 'pTr89   ' 'pTr90   ' 'pTr91   ' 'pTr92   ' 'pTr93   ' 'pTr94   ' 'pTr95   ' 'pTr96   ' 'pTr97   ' 'pTr98   ' 'pTr99   '
+ };

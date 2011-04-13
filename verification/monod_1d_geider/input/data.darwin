@@ -1,0 +1,5 @@
+ &DARWIN_FORCING
+ darwin_ironFile='../input/input/loc1_FeFlux_monsurf.bin',
+ darwin_PARFile='../input/input/loc1_PAR_monsurf.bin',
+ darwin_seed=11231,
+ /

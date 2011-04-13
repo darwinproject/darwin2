@@ -1,0 +1,9 @@
+ &DARWIN_FORCING
+#darwin_iceFile='darwin/nasa_icefraction_mth-2d.bin',
+ darwin_ironFile='Fe_const_76x72_12.bin',
+#darwin_PARFile='darwin/par_ecco.bin_mth-2d.bin',
+#darwin_nutWVelFile='',
+ darwin_forcingPeriod=2592000.,
+ darwin_forcingCycle=31104000.,
+ darwin_seed=11231,
+ /

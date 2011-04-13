@@ -1,0 +1,19 @@
+ &DARWIN_FORCING
+ darwin_ironFile='../input/input/loc1_FeFlux_monsurf.bin',
+#darwin_PARFile='../input/input/loc1_PAR_monsurf.bin',
+ darwin_oasim_edFile='../input/input/loc1_oasim_edp_below.bin',
+ darwin_oasim_esFile='../input/input/loc1_oasim_esp_below.bin',
+ darwin_seed=11231,
+#darwin_waterabsorbFile='abw_13wg.dat',
+ darwin_waterabsorbFile='abw25par.dat',
+#darwin_phytoabsorbFile='a1_psc_13.dat',
+ darwin_phytoabsorbFile='phyto_optics_1bb.txt',
+ darwin_particleabsorbFile='optics_detritus_3bb.txt',
+#darwin_surfacespecFile='surfspec_13amt6.dat',
+#darwin_acdomFile='aCDOM13amtVK2006.dat',
+ /
+ &DARWIN_SPECTRAL_PARM
+#darwin_bbphy=0.0029, 0.0032, 0.00559, 0.00559,
+ darwin_radtrans_kmax=22,
+ darwin_radtrans_niter=2,
+ /

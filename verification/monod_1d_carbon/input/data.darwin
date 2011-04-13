@@ -1,0 +1,13 @@
+ &DARWIN_FORCING
+ darwin_ironFile='../input/input/loc1_FeFlux_monsurf.bin',
+ darwin_PARFile='../input/input/loc1_owsm_PAR_monsurf.bin',
+ darwin_ForcingPeriod=2592000.,
+ darwin_ForcingCycle=31104000.,
+ darwin_seed=11231,
+ /
+
+ &DIC_FORCING
+ DIC_windFile  = ' ',
+#DIC_atmospFile= ' ',
+ dic_int1 =0,
+ /

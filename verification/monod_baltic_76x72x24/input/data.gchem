@@ -1,0 +1,7 @@
+ &GCHEM_PARM01
+ useDARWIN=.TRUE.,
+ nsubtime=1,
+# now set in data.darwin
+#gchem_ForcingPeriod=2592000.,
+#gchem_ForcingCycle=31104000.,
+ /

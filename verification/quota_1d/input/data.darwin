@@ -1,0 +1,10 @@
+ &DARWIN_FORCING
+ darwin_ironFile='../input/input/loc1_FeFlux_monsurf.bin',
+ darwin_PARFile='../input/input/loc1_PAR_monsurf.bin',
+ darwin_ForcingPeriod=2592000.,
+ darwin_ForcingCycle=31104000.,
+#darwin_PO4_fluxFile='../input/input/ann_nphos_flux.bin',
+#darwin_NO3_fluxFile='../input/input/ann_nnitr_flux.bin',
+#darwin_Si_fluxFile='../input/input/ann_nsil_flux.bin',
+ darwin_seed=11231,
+ /

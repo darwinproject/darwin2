@@ -1,0 +1,20 @@
+ TAKEN FROM WG. Spectral seawater absorption and 
+ scattering coefficients in units of /m.
+ Derived from Smith and Baker 1981 (200-370 nm),
+ and (730-800 nm), Pope and Fry 1997 (380-720)
+ Circio and Petty 1951 (800nm-2.5um), and 
+ and Maul 1985 (2.5-4um).  Format i5,f15.4,f10.4
+  400         0.0063    0.0000
+  425         0.0051    0.0000
+  450         0.0083    0.0000
+  475         0.0119    0.0000
+  500         0.0215    0.0000
+  525         0.0407    0.0000
+  550         0.0550    0.0000
+  575         0.0849    0.0000
+  600         0.1995    0.0000
+  625         0.2850    0.0000
+  650         0.3512    0.0000
+  675         0.4559    0.0000
+  700         0.6433    0.0000
+
