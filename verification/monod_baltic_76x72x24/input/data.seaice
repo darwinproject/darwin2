@@ -19,7 +19,7 @@
       SEAICEadvAge       = .FALSE.,
       SEAICEadvSnow      = .TRUE.,
       SEAICEuseFlooding  = .TRUE.,
-      SEAICE_salinity    = 10.,
+      SIsalFrac          = 0.3,
       ICE2WATR           = 0.92,
 #      SEAICE_deltaTevp   = 1.,
 #      SEAICE_evpTauRelax = 3600.,
