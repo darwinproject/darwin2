@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_vari.F,v 1.1 2011/04/13 18:56:25 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_vari.F,v 1.2 2011/05/02 17:55:00 stephd Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -163,11 +163,22 @@ c find mean
 #endif
 #ifdef DYNAMIC_CHL
 c check Chl fields are reasonable
+#ifndef WAVEBANDS
+         do np = 1,npmax
+c C:CHl minimum: chosen to be Chl:C at high light (2000uEin/m2/s) and
+c  no temp/nutrient limitation
+          chl2cmin(np)=chl2cmax(np)/
+     &            (1+(chl2cmax(np)*alphachl(np)*2000. _d 0)/
+     &               (2*pcmax(np)))
+          chl2cmin(np)=0. _d 0
+         enddo
+#else
            do np=1,npmax
              chl2cmin(np)=chl2cmax(np)/
      &            (1+(chl2cmax(np)* alpha_mean(np) *2000. _d 0)/
      &               (2*pcmax(np)))
            enddo
+#endif
            call MONOD_CHECK_CHL(myThid)
 #endif
 #endif
