@@ -45,11 +45,11 @@ c seed randomization
 
 #ifdef CALC_RATE_TOTALS
 c find unused units for darwin_rate output
-        CALL MDSFINDUNIT( DAR_ratetot_unit, mythid )
-        open(DAR_ratetot_unit,file='darwin_ratetot.txt',status='unknown')
+      CALL MDSFINDUNIT( DAR_ratetot_unit, mythid )
+      open(DAR_ratetot_unit,file='darwin_ratetot.txt',status='unknown')
 #ifdef ALLOW_CARBON
-        CALL MDSFINDUNIT( DAR_fluxtot_unit, mythid )
-        open(DAR_fluxtot_unit,file='darwin_fluxtot.txt',status='unknown')
+      CALL MDSFINDUNIT( DAR_fluxtot_unit, mythid )
+      open(DAR_fluxtot_unit,file='darwin_fluxtot.txt',status='unknown')
 #endif
 #endif
 
