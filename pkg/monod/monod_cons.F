@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_cons.F,v 1.1 2011/04/13 18:56:25 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_cons.F,v 1.2 2011/05/11 17:36:09 stephd Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -13,7 +13,7 @@ c subroutine MONOD_cons
 c check conservation in the model
 C==============================================================
          SUBROUTINE MONOD_CONS(
-     &                  myIter,myTime,myThid)
+     &                  myTime,myIter,myThid)
 #include "SIZE.h"
 #include "EEPARAMS.h"
 #include "PARAMS.h"
