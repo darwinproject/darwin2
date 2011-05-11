@@ -186,6 +186,13 @@ c ANNA end TAVE
        INTEGER DAR_cons_unit7
 #endif
 
+#ifdef CALC_RATE_TOTALS
+      COMMON /DARWIN_RATE_TOT/
+     &      DAR_ratetot_unit, DAR_fluxtot_unit
+       INTEGER DAR_ratetot_unit
+       INTEGER DAR_fluxtot_unit
+#endif
+
 #ifdef ALLOW_PAR_DAY
 C     PARday    :: array for accumulating/storing daily-averaged PAR
       COMMON /DARWIN_PAR_DAY/ PARday,
