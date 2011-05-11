@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_diags.F,v 1.1 2011/04/13 18:56:24 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_diags.F,v 1.2 2011/05/11 18:11:56 stephd Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -199,9 +199,7 @@ c
      &             Denitave, nR, Denittot, myThid )
        Denittot=Denittot*14. _d 0 *1. _d -3* 31536000. _d 0
      &                      *1 _d -12
-       write(30,*) 'PPtot', PPtot
-       write(30,*) 'Nfixtot', Nfixtot
-       write(30,*) 'Denittot', Denittot
+       write(dar_ratetot_unit,*) myIter, PPtot, Nfixtot, Denittot
 #endif
 
        

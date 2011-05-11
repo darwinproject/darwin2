@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/DARWIN_IO.h,v 1.1 2011/04/13 18:56:23 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/DARWIN_IO.h,v 1.2 2011/05/11 18:11:56 stephd Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -184,6 +184,13 @@ c ANNA end TAVE
        INTEGER DAR_cons_unit5
        INTEGER DAR_cons_unit6
        INTEGER DAR_cons_unit7
+#endif
+
+#ifdef CALC_RATE_TOTALS
+      COMMON /DARWIN_RATE_TOT/
+     &      DAR_ratetot_unit, DAR_fluxtot_unit
+       INTEGER DAR_ratetot_unit
+       INTEGER DAR_fluxtot_unit
 #endif
 
 #ifdef ALLOW_PAR_DAY

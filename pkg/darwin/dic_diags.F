@@ -22,6 +22,7 @@ C     === Global variables ===
 #include "EEPARAMS.h"
 #include "PARAMS.h"
 #include "DARWIN_FLUX.h"
+#include "DARWIN_IO.h"
 #include "PTRACERS_SIZE.h"
 #include "PTRACERS_PARAMS.h"
 C     == Routine arguments ==
@@ -37,6 +38,7 @@ CEndOfInterface
 C     == Local variables ==
       LOGICAL  DIFFERENT_MULTIPLE
       EXTERNAL DIFFERENT_MULTIPLE
+      _RL  co2fluxtot
       INTEGER bi, bj, k
       CHARACTER*(MAX_LEN_MBUF) suff
       CHARACTER*(1) pf
@@ -68,6 +70,16 @@ C      Normalize by integrated time
      &                 bi,bj,myThid)
         ENDDO
        ENDDO
+
+#ifdef CALC_RATE_TOTALS
+       call tracer_sumarea(
+     &             SURCave, co2fluxtot, myThid )
+c mmol/s to GtC/y
+       co2fluxtot=co2fluxtot* 12. _d 0* 1. _d -3* 31536000. _d 0
+     &                      *1. _d-15
+       write(dar_fluxtot_unit,*) myIter, co2fluxtot
+#endif
+
 
        IF ( PTRACERS_timeave_mdsio )  THEN
          WRITE(suff,'(I10.10)') myIter
