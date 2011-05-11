@@ -13,7 +13,7 @@ c subroutine MONOD_cons
 c check conservation in the model
 C==============================================================
          SUBROUTINE MONOD_CONS(
-     &                  myIter,myTime,myThid)
+     &                  myTime,myIter,myThid)
 #include "SIZE.h"
 #include "EEPARAMS.h"
 #include "PARAMS.h"
