@@ -4,6 +4,13 @@ $Name$
     Notes on tags used in darwin
     ============================
 
+ctrb_darwin2_ckpt62x_20110513
+o change monod_baltic_76x72x24 output after obcs changes
+o tidy up how total rate (PP, Nfix, Denit) are written out, and add new file
+      for writing out global total of CO2 flux
+o add extra bounds to dic/temp/salt so pH solver doesn't blow up
+o fix, so DYNCHL can work without WAVEBAND
+
 ctrb_darwin2_ckpt62w_20110426
 o add fix to two bugs in handling water vapour pressure in carbonate chemisty
   and air-sea fluxes. Found by Val Bennington and Galen McKinley.
