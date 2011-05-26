@@ -4,6 +4,8 @@ $Name$
     Notes on tags used in darwin
     ============================
 
+ctrb_darwin2_ckpt62y_20110526
+
 ctrb_darwin2_ckpt62x_20110513
 o change monod_baltic_76x72x24 output after obcs changes
 o tidy up how total rate (PP, Nfix, Denit) are written out, and add new file
