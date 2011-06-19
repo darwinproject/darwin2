@@ -26,7 +26,9 @@
 #      SEAICE_evpDampC    = 615.,
 # for backward compatibility only:
  SEAICE_cpAir       = 1.0039560439560439e+03,
- SEAICE_lhSublim    = 2.8340219780219775e+06,
+# SEAICE_lhSublim    = 2.8340219780219775e+06,
+ SEAICE_lhEvap      = 2.5000000000000000e+06,
+ SEAICE_lhFusion    =  3.340219780219775e+05,
  SEAICE_rhoAir      = 1.3E0,
       SEAICEuseFluxForm  = .FALSE.,
       DIFF1 = 0.004,
