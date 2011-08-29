@@ -68,6 +68,7 @@
 ./pkg/icefront
 ./pkg/sbo
 ./pkg/mdsio
+./pkg/bbl
 ./pkg/regrid
 ./pkg/cheapaml
 ./model
