@@ -485,11 +485,12 @@ c convert to mmol/m2/s
            ELSE
             inputFe(i,j,bi,bj)  = 0. _d 0
            ENDIF
-c light (load as Ein/m2/d; convert to uEin/m2/s)
+c light
            IF ( darwin_PARFile .NE. ' '  ) THEN
             sur_par(i,j,bi,bj)   = bWght*sur_par0(i,j,bi,bj)
      &                         +aWght*sur_par1(i,j,bi,bj)
-            sur_par(i,j,bi,bj) = sur_par(i,j,bi,bj)*1. _d 6/86400. _d 0
+c convert to uEin/m2/s
+            sur_par(i,j,bi,bj) = sur_par(i,j,bi,bj)*darwin_PARFileConv
            ELSE
             sur_par(i,j,bi,bj)  =  200. _d 0*maskC(i,j,1,bi,bj)
            ENDIF
