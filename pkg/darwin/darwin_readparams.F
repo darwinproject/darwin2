@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_readparams.F,v 1.1 2011/04/13 18:56:24 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_readparams.F,v 1.2 2011/09/22 19:18:37 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -64,6 +64,7 @@ CEOP
 #endif
      &           darwin_relaxscale,
      &           darwin_ForcingPeriod, darwin_ForcingCycle,
+     &           darwin_PARunits, darwin_W_to_uEins,
 #ifdef ALLOW_PAR_DAY
      &           darwin_PARavPeriod,
 #endif
@@ -131,6 +132,8 @@ C Set defaults values for parameters in DARWIN_IO.h
       darwin_acdomFile=' '
       darwin_oasim_edFile=' '
       darwin_oasim_esFile=' '
+      darwin_PARunits='Ein/m2/d        '
+      darwin_W_to_uEins=1. _d 0/0.2174 _d 0
       darwin_relaxscale=0. _d 0
       darwin_seed=0
 c default periodic forcing to same as for GCHEM
@@ -211,6 +214,19 @@ C Open and read the data.darwin file
 #ifdef ALLOW_PAR_DAY
       darwin_PARnav = NINT(darwin_PARavPeriod*nsubtime/dTtracerLev(1))
 #endif
+C factor for conversion to uEin/m2/s
+      IF ( darwin_PARunits(1:16) .EQ. 'uEin/m2/s       ' ) THEN
+        darwin_PARFileConv = 1. _d 0
+      ELSEIF ( darwin_PARunits(1:16) .EQ. 'Ein/m2/d        ' ) THEN
+        darwin_PARFileConv = 1. _d 6/86400. _d 0
+      ELSEIF ( darwin_PARunits(1:16) .EQ. 'W/m2            ' ) THEN
+        darwin_PARFileConv = darwin_W_to_uEins
+      ELSE
+        WRITE(msgBuf,'(2A)') 'S/R DARWIN_READPARMS:',
+     &    'darwin_PARunits must be one of Ein/m2/d, uEin/m2/s, W/m2'
+        CALL PRINT_ERROR( msgBuf , 1)
+        STOP 'unknown darwin_PARunits'
+      ENDIF
 
 #ifdef DAR_DIAG_CHL
 C default values
