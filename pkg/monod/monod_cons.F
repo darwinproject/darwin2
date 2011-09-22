@@ -163,6 +163,9 @@ c       print*,'tmptotA',tmptotA
 c       print*,'tmptotO',tmptotO
 #endif
 
+      _END_MASTER(myThid)
+
+       IF ( myProcId.EQ.0 .AND. myThid.EQ.1 ) THEN
         write(DAR_cons_unit1,*), myIter, tmptotP, tmptotP/voltot
         write(DAR_cons_unit2,*), myIter, tmptotN, tmptotN/voltot
         write(DAR_cons_unit3,*), myIter, tmptotFe, tmptotFe/voltot
@@ -172,8 +175,7 @@ c       print*,'tmptotO',tmptotO
         write(DAR_cons_unit6,*), myIter, tmptotA, tmptotA/voltot
         write(DAR_cons_unit7,*), myIter, tmptotO, tmptotO/voltot
 #endif
-
-      _END_MASTER(myThid)
+      ENDIF
 
 C--   Everyone else must wait
       _BARRIER
