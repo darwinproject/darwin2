@@ -481,7 +481,7 @@ c or use offline fields if provided
             inputFe(i,j,bi,bj)   = bWght*featmos0(i,j,bi,bj)
      &                            +aWght*featmos1(i,j,bi,bj)
 c convert to mmol/m2/s
-            inputFe(i,j,bi,bj)   = 1000.d0*inputFe(i,j,bi,bj)
+            inputFe(i,j,bi,bj) = inputFe(i,j,bi,bj)*darwin_ironFileConv
            ELSE
             inputFe(i,j,bi,bj)  = 0. _d 0
            ENDIF

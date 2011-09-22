@@ -23,6 +23,8 @@ C  darwin_acdomFile          :: file name of CDOM absorption spectrum
 C  darwin_PARunits      :: units of data in PAR file; one of Ein/m2/d, uEin/m2/s, W/m2
 C  darwin_PARFileConv   :: conversion factor from PAR file units to uEin/m2/s
 C  darwin_W_to_uEins    :: conversion factor from W to uEin/s
+C  darwin_ironUnits     :: units of data in iron file; one of mol Fe/m2/s, kg dust/m2/s
+C  darwin_dustFrac      :: fraction of dust by weight that is iron
 C  darwin_forcingPeriod :: perioDARWIN forcing parameter specific for DARWIN (seconds)
 C  darwin_forcingCycle  :: perioDARWIN forcing parameter specific for DARWIN (seconds)
 C  darwin_seed          :: seed for the random number generator
@@ -41,7 +43,9 @@ C  darwin_seed          :: seed for the random number generator
      &        darwin_waterabsorbFile, darwin_phytoabsorbFile,
      &        darwin_surfacespecFile, darwin_acdomFile,
      &        darwin_particleabsorbFile,
-     &        darwin_PARunits, darwin_PARFileConv,
+     &        darwin_PARunits, darwin_ironUnits,
+     &        darwin_PARFileConv, darwin_ironFileConv,
+     &        darwin_dustFrac,
      &        darwin_W_to_uEins,
      &        darwin_forcingPeriod, darwin_forcingCycle,
      &        darwin_seed
@@ -66,12 +70,15 @@ C  darwin_seed          :: seed for the random number generator
       CHARACTER*(MAX_LEN_FNAM) darwin_surfacespecFile
       CHARACTER*(MAX_LEN_FNAM) darwin_acdomFile
       CHARACTER*(MAX_LEN_FNAM) darwin_PARunits
+      CHARACTER*(MAX_LEN_FNAM) darwin_ironUnits
 
       _RL darwin_relaxscale
       _RL     darwin_forcingPeriod
       _RL     darwin_forcingCycle
       _RL darwin_PARFileConv
       _RL darwin_W_to_uEins
+      _RL darwin_ironFileConv
+      _RL darwin_dustFrac
       INTEGER darwin_seed
 
 c INPUT:
