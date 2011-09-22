@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_fields_load.F,v 1.2 2011/09/22 19:18:37 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_fields_load.F,v 1.3 2011/09/22 19:23:31 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -481,7 +481,7 @@ c or use offline fields if provided
             inputFe(i,j,bi,bj)   = bWght*featmos0(i,j,bi,bj)
      &                            +aWght*featmos1(i,j,bi,bj)
 c convert to mmol/m2/s
-            inputFe(i,j,bi,bj)   = 1000.d0*inputFe(i,j,bi,bj)
+            inputFe(i,j,bi,bj) = inputFe(i,j,bi,bj)*darwin_ironFileConv
            ELSE
             inputFe(i,j,bi,bj)  = 0. _d 0
            ENDIF

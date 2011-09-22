@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_readparams.F,v 1.2 2011/09/22 19:18:37 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_readparams.F,v 1.3 2011/09/22 19:23:31 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -65,6 +65,8 @@ CEOP
      &           darwin_relaxscale,
      &           darwin_ForcingPeriod, darwin_ForcingCycle,
      &           darwin_PARunits, darwin_W_to_uEins,
+     &           darwin_ironUnits,
+     &           darwin_dustFrac,
 #ifdef ALLOW_PAR_DAY
      &           darwin_PARavPeriod,
 #endif
@@ -134,6 +136,8 @@ C Set defaults values for parameters in DARWIN_IO.h
       darwin_oasim_esFile=' '
       darwin_PARunits='Ein/m2/d        '
       darwin_W_to_uEins=1. _d 0/0.2174 _d 0
+      darwin_ironUnits='mol Fe/m2/s     '
+      darwin_dustFrac=0.035 _d 0
       darwin_relaxscale=0. _d 0
       darwin_seed=0
 c default periodic forcing to same as for GCHEM
@@ -226,6 +230,18 @@ C factor for conversion to uEin/m2/s
      &    'darwin_PARunits must be one of Ein/m2/d, uEin/m2/s, W/m2'
         CALL PRINT_ERROR( msgBuf , 1)
         STOP 'unknown darwin_PARunits'
+      ENDIF
+
+C factor for conversion to mmol Fe/m2/s (bioavailable fraction is done later)
+      IF ( darwin_ironUnits(1:16) .EQ. 'mol Fe/m2/s     ' ) THEN
+        darwin_ironFileConv = 1000. _d 0
+      ELSEIF ( darwin_ironUnits(1:16) .EQ. 'kg dust/m2/s    ' ) THEN
+        darwin_ironFileConv = 1000.*darwin_dustFrac*1000./55.845 _d 0
+      ELSE
+        WRITE(msgBuf,'(2A)') 'S/R DARWIN_READPARMS:',
+     &    'darwin_ironUnits must be one of mol Fe/m2/s, kg dust/m2/s'
+        CALL PRINT_ERROR( msgBuf , 1)
+        STOP 'unknown darwin_Feunits'
       ENDIF
 
 #ifdef DAR_DIAG_CHL
