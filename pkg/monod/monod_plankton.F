@@ -955,8 +955,8 @@ c sum all palatability*phyto and find phyto specific grazing rate
             tmpz=max(0. _d 0,(allphyto(nz)-phygrazmin) )
             grazphy(np,nz)=grazemax(nz)*
      &           (palat(np,nz)*phyto(np)/allphyto(nz))*
-     &           ( tmpz/
-     &             (tmpz+kgrazesat) )
+     &           ( tmpz**hollexp/
+     &             (tmpz**hollexp+kgrazesat**hollexp) )
            enddo
           enddo
           if (debug.eq.2) print*,'allphyto',allphyto
