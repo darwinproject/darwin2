@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/MONOD.h,v 1.1 2011/04/13 18:56:25 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/MONOD.h,v 1.2 2011/10/05 20:37:22 stephd Exp $
 C $Name:  $
 
 c MONOD.h
@@ -72,6 +72,7 @@ c           have been tried
      &          phygrazmin,
      &          ExportFracGraz,
      &          ExGrazfracbig, ExGrazfracsmall,
+     &          hollexp,
 #endif
      &          ZoomortSmall, ZoomortBig, ZooexfacSmall, ZooexfacBig,
      &          val_R_SiP_diatom, val_R_NP_diaz, val_RFeP_diaz,
@@ -163,6 +164,7 @@ c           have been tried
          _RL phygrazmin
          _RL ExportFracGraz(nzmax)
          _RL ExGrazfracbig, ExGrazfracsmall
+         _RL hollexp
 #endif
          _RL ZoomortSmall, ZoomortBig, ZooexfacSmall, ZooexfacBig
          _RL val_R_SiP_diatom, val_R_NP_diaz, val_RFeP_diaz,
