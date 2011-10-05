@@ -62,6 +62,8 @@ C ======================================================================
 #undef TWO_SPECIES_SETUP
 #undef NINE_SPECIES_SETUP
 
+#undef SER_GRAZ
+
 #undef  GEIDER
 #undef  OASIM
 #undef  WAVEBANDS

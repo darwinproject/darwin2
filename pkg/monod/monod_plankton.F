@@ -280,6 +280,7 @@ c  variables for zooplankton grazing rates
 c  variables for zooplankton grazing rates
          _RL zooTempFunction(nzmax)
          _RL allphyto(nzmax)
+         _RL denphyto(nzmax)
          _RL grazphy(npmax,nzmax)
          _RL sumgrazphy(npmax)
          _RL sumgrazzoo(nzmax)
@@ -951,10 +952,25 @@ c sum all palatability*phyto and find phyto specific grazing rate
             allphyto(nz)=allphyto(nz)+palat(np,nz)*phyto(np)
            enddo
            if (allphyto(nz).le.0. _d 0) allphyto(nz)=phygrazmin
+#ifdef SER_GRAZ
+           denphyto(nz)=0. _d 0
+           do np=1,npmax
+            denphyto(nz)=denphyto(nz)+
+     &            (palat(np,nz)*phyto(np)/allphyto(nz))*phyto(np)
+           enddo
+           if (denphyto(nz).le.0. _d 0) denphyto(nz)=phygrazmin
+#endif
            do np=1,npmax
             tmpz=max(0. _d 0,(allphyto(nz)-phygrazmin) )
             grazphy(np,nz)=grazemax(nz)*
+#ifdef SER_GRAZ
+c as in Vallina et al, 2011
+     &          (((palat(np,nz)*phyto(np)/allphyto(nz))*phyto(np))/
+     &           denphyto(nz)) *
+#else
+c as in Dutkiewicz et al, GBC, 2009
      &           (palat(np,nz)*phyto(np)/allphyto(nz))*
+#endif
      &           ( tmpz**hollexp/
      &             (tmpz**hollexp+kgrazesat**hollexp) )
            enddo
