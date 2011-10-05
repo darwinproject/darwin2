@@ -263,6 +263,8 @@ c set palatibilty diatom factor
 c set faction graz to POM
        ExGrazfracbig = 0.6 _d 0
        ExGrazfracsmall = 0.3 _d 0
+c grazing exponential 1= holling 2, 2=holling 3
+       hollexp=1.0 _d 0
 #endif
 c set zoo mortality
        ZoomortSmall = 1.0 _d 0/(30.0 _d 0*pday)
