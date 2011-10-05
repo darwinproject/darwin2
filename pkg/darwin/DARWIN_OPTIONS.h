@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/DARWIN_OPTIONS.h,v 1.1 2011/04/13 18:56:23 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/DARWIN_OPTIONS.h,v 1.2 2011/10/05 20:43:25 stephd Exp $
 C $Name:  $
 
 #ifndef DARWIN_OPTIONS_H
@@ -61,6 +61,8 @@ C ======================================================================
 
 #undef TWO_SPECIES_SETUP
 #undef NINE_SPECIES_SETUP
+
+#undef SER_GRAZ
 
 #undef  GEIDER
 #undef  OASIM
