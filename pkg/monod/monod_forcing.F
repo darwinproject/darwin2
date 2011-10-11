@@ -931,7 +931,7 @@ c            endif
 c
 #ifdef IRON_SED_SOURCE
 c only above minimum depth (continental shelf)
-             if (rF(k).lt.depthfesed) then
+             if (rF(k).gt.-depthfesed) then
 c only if bottom layer
                if (bottom.eq.1.0 _d 0) then
 #ifdef IRON_SED_SOURCE_VARIABLE
