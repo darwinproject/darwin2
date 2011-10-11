@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_forcing.F,v 1.2 2011/09/22 15:56:30 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_forcing.F,v 1.3 2011/10/11 18:10:55 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -931,7 +931,7 @@ c            endif
 c
 #ifdef IRON_SED_SOURCE
 c only above minimum depth (continental shelf)
-             if (rF(k).lt.depthfesed) then
+             if (rF(k).gt.-depthfesed) then
 c only if bottom layer
                if (bottom.eq.1.0 _d 0) then
 #ifdef IRON_SED_SOURCE_VARIABLE
