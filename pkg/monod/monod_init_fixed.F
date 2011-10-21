@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_fixed.F,v 1.2 2011/10/05 20:37:23 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_fixed.F,v 1.3 2011/10/21 20:56:53 stephd Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -269,6 +269,8 @@ c grazing exponential 1= holling 2, 2=holling 3
 c set zoo mortality
        ZoomortSmall = 1.0 _d 0/(30.0 _d 0*pday)
        ZoomortBig = 1.0 _d 0/(30.0 _d 0*pday)
+       ZoomortSmall2 = 0. _d 0
+       ZoomortBig2 = 0. _d 0
 c set zoo exportfrac
        ZooexfacSmall = 0.2 _d 0
        ZooexfacBig = 0.7 _d 0
