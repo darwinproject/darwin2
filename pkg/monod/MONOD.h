@@ -17,6 +17,7 @@ c ksat = half sat coeff, phyto specific for each nutrient
 c ksatlight = half sat coeff wrt light, phyto specific 
 c graze = grazing rate, phyto specific for each zooplankton
 c mortzoo = mortality rate for each zooplankton
+c mortzoo2 = quadratic mortality rate for each zooplankton
 c wsink = sinking speed, phyto specific
 c R_XY = stoichiometric ratios of nutrients in phytoplankton
 c        specific to each functional group, relative to Phos
@@ -43,6 +44,7 @@ c           have been tried
      &          zooTempCoeff, zooTempExp, zooTempOptimum, kinhib,
      &          diatomgraz, coccograz, olargegraz,
      &          mortphy, ExportFracP,
+     &          mortzoo2,
      &          Smallgrow, Biggrow, Smallmort, Bigmort,
      &          Smallgrowrange, Biggrowrange, Smallmortrange, 
      &          Bigmortrange,
@@ -75,6 +77,7 @@ c           have been tried
      &          hollexp,
 #endif
      &          ZoomortSmall, ZoomortBig, ZooexfacSmall, ZooexfacBig,
+     &          ZoomortSmall2, ZoomortBig2,
      &          val_R_SiP_diatom, val_R_NP_diaz, val_RFeP_diaz,
      &          val_R_NP, val_RFeP, val_R_PC,
      &          val_R_PICPOC,
@@ -100,6 +103,7 @@ c           have been tried
          _RL ksatFeT(npmax)
          _RL ksatPAR(npmax)
          _RL mortzoo(nzmax)
+         _RL mortzoo2(nzmax)
          _RL wsink(npmax)
          _RL R_NP(npmax)
          _RL R_FeP(npmax)
@@ -167,6 +171,7 @@ c           have been tried
          _RL hollexp
 #endif
          _RL ZoomortSmall, ZoomortBig, ZooexfacSmall, ZooexfacBig
+         _RL ZoomortSmall2, ZoomortBig2
          _RL val_R_SiP_diatom, val_R_NP_diaz, val_RFeP_diaz,
      &          val_R_NP, val_RFeP, val_R_PC, val_R_PICPOC
          _RL ngrowfac,ilight

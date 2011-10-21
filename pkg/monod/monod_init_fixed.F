@@ -269,6 +269,8 @@ c grazing exponential 1= holling 2, 2=holling 3
 c set zoo mortality
        ZoomortSmall = 1.0 _d 0/(30.0 _d 0*pday)
        ZoomortBig = 1.0 _d 0/(30.0 _d 0*pday)
+       ZoomortSmall2 = 0. _d 0
+       ZoomortBig2 = 0. _d 0
 c set zoo exportfrac
        ZooexfacSmall = 0.2 _d 0
        ZooexfacBig = 0.7 _d 0

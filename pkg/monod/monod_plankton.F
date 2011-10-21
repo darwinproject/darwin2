@@ -1123,24 +1123,36 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c accumulate particulate and dissolved detritus
             do nz=1, nzmax
                totzoo_pop=totzoo_pop+
-     &                     ExportFracZ(nz)*mortzoo(nz)*zooP(nz)
+     &                     ExportFracZ(nz)*( mortzoo(nz)*zooP(nz)
+     &                     +  mortzoo2(nz)*zooP(nz)**2 )
                totzoo_dop=totzoo_dop+
-     &                    (1. _d 0-ExportFracZ(nz))*mortzoo(nz)*zooP(nz)
-               totzoo_pon=totzoo_pon+ 
-     &                     ExportFracZ(nz)*mortzoo(nz)*zooN(nz)
+     &                    (1. _d 0-ExportFracZ(nz))*(
+     &                     mortzoo(nz)*zooP(nz)+
+     &                     mortzoo2(nz)*zooP(nz)**2 )
+               totzoo_pon=totzoo_pon+
+     &                     ExportFracZ(nz)*( mortzoo(nz)*zooN(nz)
+     &                     +  mortzoo2(nz)*zooN(nz)**2 )
                totzoo_don=totzoo_don+
-     &                    (1. _d 0-ExportFracZ(nz))*mortzoo(nz)*zooN(nz)
+     &                    (1. _d 0-ExportFracZ(nz))*(
+     &                     mortzoo(nz)*zooN(nz)+
+     &                     mortzoo2(nz)*zooN(nz)**2 )
                totzoo_pofe=totzoo_pofe+
-     &                     ExportFracZ(nz)*mortzoo(nz)*zooFe(nz)
+     &                     ExportFracZ(nz)*( mortzoo(nz)*zooFe(nz)
+     &                     +  mortzoo2(nz)*zooFe(nz)**2 )
                totzoo_dofe=totzoo_dofe+
-     &                   (1. _d 0-ExportFracZ(nz))*mortzoo(nz)*zooFe(nz)
-               totzoo_posi=totzoo_posi+ 
-     &                     mortzoo(nz)*zooSi(nz)
+     &                   (1. _d 0-ExportFracZ(nz))*(
+     &                    mortzoo(nz)*zooFe(nz) +
+     &                    mortzoo2(nz)*zooFe(nz)**2 )
+               totzoo_posi=totzoo_posi+
+     &                     ( mortzoo(nz)*zooSi(nz)+
+     &                       mortzoo2(nz)*zooSi(nz)**2 )
 #ifdef ALLOW_CARBON
                totzoo_poc=totzoo_poc+
-     &                    ExportFracZ(nz)*mortzoo(nz)*zooClocal(nz)
+     &                    ExportFracZ(nz)*( mortzoo(nz)*zooClocal(nz)
+     &                      +  mortzoo2(nz)*zooClocal(nz)**2 )
                totzoo_doc=totzoo_doc+
-     &           (1. _d 0-ExportFracZ(nz))*mortzoo(nz)*zooClocal(nz)
+     &           (1. _d 0-ExportFracZ(nz))*( mortzoo(nz)*zooClocal(nz)
+     &                      +  mortzoo2(nz)*zooClocal(nz)**2 )
 #endif
             enddo
 
@@ -1436,14 +1448,18 @@ c zooplankton mortality
 c zoo in P currency
               dzooPdt(nz)  = dzooPdt(nz)
      &                           - mortzoo(nz)*zooP(nz)
+     &                           - mortzoo2(nz)*zooP(nz)**2
 c zooplankton in other currencies
 C zooplankton stoichiometry varies according to food source
               dzooNdt(nz)  = dzooNdt(nz)
      &                           - mortzoo(nz)*zooN(nz)
+     &                           - mortzoo2(nz)*zooN(nz)**2
               dzooFedt(nz) = dzooFedt(nz)
      &                           - mortzoo(nz)*zooFe(nz)
+     &                           - mortzoo2(nz)*zooFe(nz)**2
               dzooSidt(nz) = dzooSidt(nz)
      &                           - mortzoo(nz)*zooSi(nz)
+     &                           - mortzoo2(nz)*zooSi(nz)**2
             enddo
 
 
@@ -1502,11 +1518,13 @@ c loss of O2 by remineralization
             do nz=1,nzmax
               dzooCdt(nz)  = grazingC(nz)*zooClocal(nz)
      &                           - mortzoo(nz)*zooClocal(nz)
+     &                           - mortzoo2(nz)*zooClocal(nz)**2
             enddo
 #else
             do nz=1,nzmax
               dzooCdt(nz)  = sumgrazzooc(nz)
      &                           - mortzoo(nz)*zooClocal(nz)
+     &                           - mortzoo2(nz)*zooClocal(nz)**2
             enddo
 #endif
 
