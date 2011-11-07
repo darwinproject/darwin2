@@ -283,6 +283,14 @@ c
 COJ for diagnostics
            PParr(i,j,k) = 0. _d 0
            Nfixarr(i,j,k) = 0. _d 0
+#ifdef DAR_DIAG_CHL
+           GeiderChlarr(i,j,k) = 0. _d 0
+           GeiderChl2Carr(i,j,k) = 0. _d 0
+           DoneyChlarr(i,j,k) = 0. _d 0
+           DoneyChl2Carr(i,j,k) = 0. _d 0
+           CloernChlarr(i,j,k) = 0. _d 0
+           CloernChl2Carr(i,j,k) = 0. _d 0
+#endif
 c ANNA_TAVE
 #ifdef WAVES_DIAG_PCHL
            DO np=1,npmax
