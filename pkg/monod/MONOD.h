@@ -221,11 +221,11 @@ c    istar          - photoadaptation light limit
          COMMON/darwin_diags_param/
      &          diver_thresh0, diver_thresh1,
      &          diver_thresh2, diver_thresh3,
-     &          diver_thresh4
+     &          diver_thresh4, shannon_thresh
 
          _RL diver_thresh0, diver_thresh1
          _RL diver_thresh2, diver_thresh3
-         _RL diver_thresh4
+         _RL diver_thresh4, shannon_thresh
 
 #ifdef GEIDER
 c ANNA geider by mQyield instead of alpha

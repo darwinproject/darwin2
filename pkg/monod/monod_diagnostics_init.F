@@ -143,6 +143,22 @@ C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-|--+----|
       diagCode  = 'SM P    MR      '
       CALL DIAGNOSTICS_ADDTOLIST( diagNum,
      I             diagName, diagCode, diagUnits, diagTitle, 0, myThid )
+      
+      diagName = 'Shannon '
+      WRITE(diagTitle, '(A)')
+     &    '# Shannon index'
+      diagUnits = '1               '
+      diagCode  = 'SM P    MR      '
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I             diagName, diagCode, diagUnits, diagTitle, 0, myThid )
+      
+      diagName = 'Simpson '
+      WRITE(diagTitle, '(A)')
+     &    '# Simpson diversity index 1/sum p*p'
+      diagUnits = '1               '
+      diagCode  = 'SM P    MR      '
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I             diagName, diagCode, diagUnits, diagTitle, 0, myThid )
 #endif /* DAR_DIAG_DIVER */
 
 #ifdef ALLOW_DIAZ

@@ -111,6 +111,8 @@ C      always need for diagnostics
       _RL  Diver2(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr)
       _RL  Diver3(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr)
       _RL  Diver4(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr)
+      _RL Shannon(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr)
+      _RL Simpson(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr)
 
       _RL  tmpphy(npmax)
       _RL  totphy, biotot, maxphy, phymax
@@ -277,6 +279,8 @@ c
            Diver2(i,j,k)=0. _d 0
            Diver3(i,j,k)=0. _d 0
            Diver4(i,j,k)=0. _d 0
+           Shannon(i,j,k)=0. _d 0
+           Simpson(i,j,k)=1. _d 0
 #endif
 
 #ifdef ALLOW_DIAGNOSTICS
@@ -735,6 +739,22 @@ c ratio of maximum species
                     Diver4(i,j,k)=Diver4(i,j,k)+1. _d 0
                  endif
                enddo
+c           totphy > thresh0
+            endif
+c Shannon and Simpson indices
+            Shannon(i,j,k) = 0. _d 0
+c note: minimal valid value is 1, but we set to zero below threshold
+            Simpson(i,j,k) = 0. _d 0
+            if (totphy.gt.shannon_thresh) then 
+              do np=1,npmax
+               if (Phy(np) .gt. 0. _d 0) then
+                tmpphy(np) = Phy(np)/totphy
+                Shannon(i,j,k)=Shannon(i,j,k)+tmpphy(np)*LOG(tmpphy(np))
+                Simpson(i,j,k)=Simpson(i,j,k)+tmpphy(np)*tmpphy(np)
+               endif
+              enddo
+              Shannon(i,j,k) = -Shannon(i,j,k)
+              Simpson(i,j,k) = 1./Simpson(i,j,k)
             endif
 #endif
 
@@ -1445,6 +1465,12 @@ c ANNA end TAVE
      &                         0,Nr,2,bi,bj,myThid )
         WRITE(diagname,'(A8)') 'Diver4  '
         CALL DIAGNOSTICS_FILL( Diver4(1-Olx,1-Oly,1), diagname,
+     &                         0,Nr,2,bi,bj,myThid )
+        WRITE(diagname,'(A8)') 'Shannon '
+        CALL DIAGNOSTICS_FILL( Shannon(1-Olx,1-Oly,1), diagname,
+     &                         0,Nr,2,bi,bj,myThid )
+        WRITE(diagname,'(A8)') 'Simpson '
+        CALL DIAGNOSTICS_FILL( Simpson(1-Olx,1-Oly,1), diagname,
      &                         0,Nr,2,bi,bj,myThid )
 #endif
 #ifdef ALLOW_DIAZ

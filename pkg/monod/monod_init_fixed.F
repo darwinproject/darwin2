@@ -338,6 +338,9 @@ c diver3 - fraction of biomass to count
         diver_thresh3=.999 _d 0
 c diver4 - fraction of maximum species
         diver_thresh4=1 _d -5
+c threshold on total biomass for contributing to Shannon and Simpson ind
+c (these become large at very small biomass)
+        shannon_thresh = 1 _d -8   ! mmol P m-3
 #endif
 
 c set up diagnostics
