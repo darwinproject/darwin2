@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_diagnostics_init.F,v 1.1 2011/04/13 18:56:25 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_diagnostics_init.F,v 1.2 2011/11/09 23:34:17 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -139,6 +139,22 @@ C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-|--+----|
       diagName = 'Diver4  '
       WRITE(diagTitle, '(A)')
      &    '# Phy species over threshold for ratio to maximum species'
+      diagUnits = '1               '
+      diagCode  = 'SM P    MR      '
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I             diagName, diagCode, diagUnits, diagTitle, 0, myThid )
+      
+      diagName = 'Shannon '
+      WRITE(diagTitle, '(A)')
+     &    '# Shannon index'
+      diagUnits = '1               '
+      diagCode  = 'SM P    MR      '
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I             diagName, diagCode, diagUnits, diagTitle, 0, myThid )
+      
+      diagName = 'Simpson '
+      WRITE(diagTitle, '(A)')
+     &    '# Simpson diversity index 1/sum p*p'
       diagUnits = '1               '
       diagCode  = 'SM P    MR      '
       CALL DIAGNOSTICS_ADDTOLIST( diagNum,

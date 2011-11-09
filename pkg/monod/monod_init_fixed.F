@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_fixed.F,v 1.3 2011/10/21 20:56:53 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_fixed.F,v 1.4 2011/11/09 23:34:17 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -338,6 +338,9 @@ c diver3 - fraction of biomass to count
         diver_thresh3=.999 _d 0
 c diver4 - fraction of maximum species
         diver_thresh4=1 _d -5
+c threshold on total biomass for contributing to Shannon and Simpson ind
+c (these become large at very small biomass)
+        shannon_thresh = 1 _d -8   ! mmol P m-3
 #endif
 
 c set up diagnostics
