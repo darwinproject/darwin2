@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_plankton.F,v 1.4 2011/10/21 20:56:53 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_plankton.F,v 1.5 2011/11/15 20:16:34 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -94,7 +94,6 @@ c ANNA pass extra variables if WAVEBANDS
                   
 
          implicit none
-#include "EEPARAMS.h"
 #include "MONOD_SIZE.h"
 #include "MONOD.h"
 #include "DARWIN_PARAMS.h"
