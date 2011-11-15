@@ -94,7 +94,6 @@ c ANNA pass extra variables if WAVEBANDS
                   
 
          implicit none
-#include "EEPARAMS.h"
 #include "MONOD_SIZE.h"
 #include "MONOD.h"
 #include "DARWIN_PARAMS.h"
