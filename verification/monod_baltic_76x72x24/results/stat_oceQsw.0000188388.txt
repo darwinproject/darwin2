@@ -1,0 +1,25 @@
+# header of file: oceQsw_stat
+# frequency (s):       1200.000000
+# phase (s)    :          0.000000
+# Regions      :   0
+# Fields       : oceQsw  
+# Nb of levels :    1
+# end of header ------------------------------------------------------------
+ 
+ field : oceQsw   ; Iter =    188389 ; region #   0 ; nb.Lev =   1
+ k | --  Average --  | --  Std.Dev  -- | --     min  --  | --     max   -- | Vol
+  0  1.1356768192E+02  6.3115770940E+01 -0.0000000000E+00  2.0946293796E+02  4.7669588349E+11
+ 
+ field : oceQsw   ; Iter =    188390 ; region #   0 ; nb.Lev =   1
+ k | --  Average --  | --  Std.Dev  -- | --     min  --  | --     max   -- | Vol
+  0  1.1158586004E+02  6.2308851746E+01 -0.0000000000E+00  2.0532529255E+02  4.7669588349E+11
+ 
+ field : oceQsw   ; Iter =    188391 ; region #   0 ; nb.Lev =   1
+ k | --  Average --  | --  Std.Dev  -- | --     min  --  | --     max   -- | Vol
+  0  1.0960420835E+02  6.1543979387E+01 -0.0000000000E+00  2.0118764713E+02  4.7669588349E+11
+ 
+ field : oceQsw   ; Iter =    188392 ; region #   0 ; nb.Lev =   1
+ k | --  Average --  | --  Std.Dev  -- | --     min  --  | --     max   -- | Vol
+  0  1.0762142140E+02  6.0822857201E+01 -0.0000000000E+00  1.9705000172E+02  4.7669588349E+11
+ 
+# records End here.
