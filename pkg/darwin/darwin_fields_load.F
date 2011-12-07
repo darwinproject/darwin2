@@ -253,6 +253,8 @@ C      data for the period ahead and the period behind myTime.
         CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
      &                      SQUEEZE_RIGHT, myThid )
 
+        _END_MASTER(myThid)
+
        IF ( darwin_iceFile .NE. ' '  ) THEN
          CALL READ_REC_XY_RS( darwin_iceFile,fice0,intime0,
      &        myIter,myThid ) 
@@ -401,8 +403,6 @@ c       CALL READ_MFLDS_3D_RS( darwin_oasim_esFile, oasim_es1,
 c    &               nj1, fp, tlam, myIter,myThid )
       ENDIF
 #endif
-
-       _END_MASTER(myThid)
 C
        _EXCH_XY_RS(fice0, myThid )
        _EXCH_XY_RS(fice1, myThid )
