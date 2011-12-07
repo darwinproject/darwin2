@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_init_vari.F,v 1.3 2011/05/11 18:18:47 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_init_vari.F,v 1.4 2011/12/07 20:04:00 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -32,8 +32,9 @@ CEOP
 c set up ecosystem coefficients
 c
 c seed randomization
+      _BEGIN_MASTER( myThid )
       CALL DARWIN_RANDOM_INIT(darwin_seed, myThid)
-
+      _END_MASTER( myThid )
 
 #ifdef ALLOW_QUOTA
       call QUOTA_INIT_VARI(myThid )

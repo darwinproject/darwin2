@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_cons.F,v 1.3 2011/09/22 16:01:30 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_cons.F,v 1.4 2011/12/07 20:04:00 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -49,7 +49,6 @@ C============== Local variables ============================================
        INTEGER np, nz, npnum
 
 
-      _BEGIN_MASTER(myThid)
 c
          tmptotP=0. _d 0
          tmptotN=0. _d 0
@@ -162,8 +161,6 @@ c       print*,'tmptotC',tmptotC
 c       print*,'tmptotA',tmptotA
 c       print*,'tmptotO',tmptotO
 #endif
-
-      _END_MASTER(myThid)
 
        IF ( myProcId.EQ.0 .AND. myThid.EQ.1 ) THEN
         write(DAR_cons_unit1,*), myIter, tmptotP, tmptotP/voltot

@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_vari.F,v 1.3 2011/09/22 16:01:30 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_vari.F,v 1.4 2011/12/07 20:04:00 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -88,6 +88,8 @@ c test....................
 c set up ecosystem coefficients
 c
 c seed randomization
+        _BEGIN_MASTER( myThid )
+
         CALL DARWIN_RANDOM_INIT(darwin_seed, myThid)
 
 c initialize total number of functional groups tried
@@ -99,6 +101,8 @@ c initialize total number of functional groups tried
             call MONOD_GENERATE_PHYTO(MyThid, np)
 #endif
          end do
+
+        _END_MASTER( myThid )
 
 c reduce amount of diaz 
 #ifdef ALLOW_DIAZ
@@ -119,6 +123,8 @@ c reduce amount of diaz
          endif
         enddo
 #endif
+
+        _BEGIN_MASTER( myThid )
 
 c initialize zooplankton
          call MONOD_GENERATE_ZOO(MyThid)
@@ -179,10 +185,14 @@ c  no temp/nutrient limitation
      &               (2*pcmax(np)))
            enddo
 #endif
-           call MONOD_CHECK_CHL(myThid)
 #endif
 #endif
-c ANNA endif
+        _END_MASTER( myThid )
+
+#ifdef DYNAMIC_CHL
+C this initializes fields...
+        call MONOD_CHECK_CHL(myThid)
+#endif
 
          IF ( myProcId.EQ.0 .AND. myThid.EQ.1 ) THEN
 c write out initial phyto characteristics
