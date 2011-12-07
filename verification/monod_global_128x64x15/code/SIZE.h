@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/verification/monod_global_128x64x15/code/SIZE.h,v 1.1 2011/04/13 19:26:00 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/verification/monod_global_128x64x15/code/SIZE.h,v 1.2 2011/12/07 20:09:43 jahn Exp $
 C $Name:  $
 
 C
@@ -44,11 +44,11 @@ C     Nr  :: No. points in Z for full process domain.
       INTEGER Ny
       INTEGER Nr
       PARAMETER (
-     &           sNx = 128,
+     &           sNx =  64,
      &           sNy =  64,
      &           OLx =   4,
      &           OLy =   4,
-     &           nSx =   1,
+     &           nSx =   2,
      &           nSy =   1,
      &           nPx =   1,
      &           nPy =   1,
