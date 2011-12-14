@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/verification/monod_baltic_76x72x24/code/EXF_OPTIONS.h,v 1.1 2011/04/13 19:25:34 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/verification/monod_baltic_76x72x24/code/EXF_OPTIONS.h,v 1.2 2011/12/14 16:37:10 jahn Exp $
 C $Name:  $
 
 #ifndef EXF_OPTIONS_H
@@ -153,9 +153,8 @@ C   Use spatial interpolation to interpolate
 C   forcing files from input grid to model grid.
 #define USE_EXF_INTERPOLATION
 
+#ifndef USING_THREADS
 #define EXF_INTERP_USE_DYNALLOC
-#if ( defined (EXF_INTERP_USE_DYNALLOC) & defined (USING_THREADS) )
-# define EXF_IREAD_USE_GLOBAL_POINTER
 #endif
 
 #endif /* ndef ALLOW_AUTODIFF_TAMC */
