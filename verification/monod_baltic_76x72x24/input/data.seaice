@@ -32,4 +32,9 @@
  SEAICE_rhoAir      = 1.3E0,
       SEAICEuseFluxForm  = .FALSE.,
       DIFF1 = 0.004,
+# For backward compatibility only:
+# emissivities should be inherited from exf and setting them here does
+# not set a good example
+ SEAICE_snow_emiss     = 0.97001763668430343479,
+ SEAICE_ice_emiss      = 0.97001763668430343479,
  &
