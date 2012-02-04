@@ -16,7 +16,6 @@
       MIN_TICE           = -40.,
 #      SEAICE_clipVelocities = .TRUE.,
       SEAICEadvSalt      = .FALSE.,
-      SEAICEadvAge       = .FALSE.,
       SEAICEadvSnow      = .TRUE.,
       SEAICEuseFlooding  = .TRUE.,
       SIsalFrac          = 0.3,

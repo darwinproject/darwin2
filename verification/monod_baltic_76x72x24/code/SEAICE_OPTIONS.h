@@ -70,12 +70,11 @@ C--   Allow SEAICEuseFlooding, which converts snow to ice if submerged.
 C--   By default sea ice is fresh.  Set following flag for salty ice.
 #undef SEAICE_VARIABLE_SALINITY
 
-C--   Track sea ice age.
-C     By default sea ice age is associated with ice area.
-C     Define SEAICE_AGE_VOL to associate age with volume.
-#undef SEAICE_AGE
-#ifdef SEAICE_AGE
-# undef SEAICE_AGE_VOL
+C--   Tracers of ice and/or ice cover.
+#undef ALLOW_SITRACER
+#ifdef ALLOW_SITRACER
+C--   To try avoid 'spontaneous generation' of tracer maxima by advdiff.
+# define ALLOW_SITRACER_ADVCAP
 #endif
 
 C--   By default the seaice model is discretized on a B-Grid (for
