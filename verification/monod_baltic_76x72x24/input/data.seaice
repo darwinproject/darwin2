@@ -36,4 +36,9 @@
 # not set a good example
  SEAICE_snow_emiss     = 0.97001763668430343479,
  SEAICE_ice_emiss      = 0.97001763668430343479,
+#
+#- to reproduce old results with former #defined SEAICE_SOLVE4TEMP_LEGACY code
+ useMaykutSatVapPoly = .TRUE.,
+ postSolvTempIter  =  0,
+#
  &
