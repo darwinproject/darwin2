@@ -4,7 +4,7 @@
       SEAICE_wetIceAlb   = 0.7856,
       SEAICE_drySnowAlb  = 0.9656,
       SEAICE_wetSnowAlb  = 0.8256,
-      SEAICE_waterAlbedo = 0.2756,
+#      SEAICE_waterAlbedo = 0.2756,
       SEAICE_strength    = 2.6780e+04,
       OCEAN_drag         = 8.1541e-04,
       SEAICE_waterDrag   = 5.3508,
@@ -41,4 +41,7 @@
  useMaykutSatVapPoly = .TRUE.,
  postSolvTempIter  =  0,
 #
+# more compatibility settings
+ SEAICE_frazilFrac  = 1.,
+ SEAICE_mcPheePiston = .00833333333333333333,
  &
