@@ -31,6 +31,7 @@ C     == GLobal variables ==
 #include "DARWIN_FLUX.h"
 c#include "GCHEM.h"
 #ifdef ALLOW_SEAICE
+#include "SEAICE_SIZE.h"
 #include "SEAICE.h"
 #endif
 #ifdef ALLOW_THSICE
