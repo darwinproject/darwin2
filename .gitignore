@@ -10,6 +10,7 @@
 ./pkg/shelfice
 ./pkg/admtlm
 ./pkg/ctrl
+./pkg/frazil
 ./pkg/pkg_groups
 ./pkg/embed_files
 ./pkg/exch2
