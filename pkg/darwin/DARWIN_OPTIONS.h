@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/DARWIN_OPTIONS.h,v 1.2 2011/10/05 20:43:25 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/DARWIN_OPTIONS.h,v 1.3 2012/05/31 21:07:33 stephd Exp $
 C $Name:  $
 
 #ifndef DARWIN_OPTIONS_H
@@ -54,6 +54,7 @@ C ======================================================================
 #undef  DENIT_RELAX
 #undef  OLD_NSCHEME
 #undef  ALLOW_MUTANTS
+#undef  ALLOW_CDOM
 
 #undef NOTEMP
 #define TEMP_VERSION 1
