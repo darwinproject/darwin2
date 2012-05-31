@@ -54,6 +54,7 @@ C ======================================================================
 #undef  DENIT_RELAX
 #undef  OLD_NSCHEME
 #undef  ALLOW_MUTANTS
+#undef  ALLOW_CDOM
 
 #undef NOTEMP
 #define TEMP_VERSION 1
