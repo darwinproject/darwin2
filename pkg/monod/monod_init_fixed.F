@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_fixed.F,v 1.4 2011/11/09 23:34:17 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_fixed.F,v 1.5 2012/05/31 21:08:25 stephd Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -305,6 +305,17 @@ c sinking rate for particulate matter (m/s)
          wpic_sink = 15.0 _d 0/pday
          permil      = 1. _d 0 / 1024.5 _d 0
          Pa2Atm      = 1.01325 _d 5
+#endif
+
+#ifdef ALLOW_CDOM
+         fraccdom=2. _d 0 / 100. _d 0
+         cdomdegrd= 1. _d 0 / (200 _d 0 *pday)
+         cdombleach = 1. _d 0 / (15 _d 0 *pday)
+         PARcdom  = 20. _d 0
+         rnp_cdom = 16. _d 0
+         rfep_cdom = 1. _d -3
+         rcp_cdom  = 120. _d 0
+         cdomcoeff = .1 _d -1  / 1.d -4
 #endif
 
 C make sure we have reserved enough space in Ptracers

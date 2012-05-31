@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/MONOD.h,v 1.4 2011/11/09 23:34:17 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/MONOD.h,v 1.5 2012/05/31 21:08:25 stephd Exp $
 C $Name:  $
 
 c MONOD.h
@@ -91,6 +91,11 @@ c           have been tried
 #endif
 #ifdef PART_SCAV
      &         ,scav_rat, scav_inter, scav_exp
+#endif
+#ifdef ALLOW_CDOM
+     &         , fraccdom, cdomdegrd, cdombleach, PARcdom
+     &         , rnp_cdom, rfep_cdom, rcp_cdom
+     &         , cdomcoeff
 #endif
      &         ,nsource,ngroups
     
@@ -187,7 +192,11 @@ c           have been tried
 #ifdef PART_SCAV
          _RL scav_rat, scav_inter, scav_exp
 #endif
-
+#ifdef ALLOW_CDOM
+         _RL fraccdom, cdomdegrd, cdombleach, PARcdom
+         _RL rnp_cdom, rfep_cdom, rcp_cdom
+         _RL cdomcoeff
+#endif
          INTEGER nsource(npmax)
          INTEGER ngroups
 
