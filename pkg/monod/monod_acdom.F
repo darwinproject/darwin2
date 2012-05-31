@@ -9,7 +9,11 @@ C !ROUTINE: RTWB_ACDOM
 c ANNA pass extra variables if WAVEBANDS
 C !INTERFACE: ==========================================================
       SUBROUTINE MONOD_ACDOM(
+#ifdef ALLOW_CDOM
+     I                       cdomlocal,
+#else
      I                        P_chl, aclocal, awlocal,
+#endif
      O                        acdomlocal,
      I                        myThid )
 
@@ -47,6 +51,7 @@ C     === Global variables ===
 #include "EEPARAMS.h"
 #include "PARAMS.h"
 #include "MONOD_SIZE.h"
+#include "MONOD.h"
 #include "SPECTRAL_SIZE.h"
 #ifdef WAVEBANDS
 #include "WAVEBANDS_PARAMS.h"
@@ -63,9 +68,13 @@ C     myThid     :: My Thread Id number
 C !OUTPUT PARAMETERS: ==================================================
 C     acdom      :: absortpion spectra for CDOM per level
 
+#ifdef ALLOW_CDOM
+      _RL cdomlocal(NR)
+#else
       _RL P_chl(npmax,Nr)
       _RL aclocal(npmax,tlam)
       _RL awlocal(tlam)
+#endif
       _RL acdomlocal(Nr,tlam)
 C      _RL     myTime
 C      INTEGER myIter
@@ -82,6 +91,14 @@ C     == Local variables ==
 c params in common block
 c     nl450, excdom, 
 
+#ifdef ALLOW_CDOM
+c use cdom-like tracer
+      do k = 1,Nr
+       do ilam = 1,tlam
+        acdomlocal(k,ilam) = cdomcoeff*cdomlocal(k)*excdom(ilam)
+       enddo
+      enddo
+#else
 c ANNA moved cdom calculation from WG's light.f
 c it's done for RADTRANS and WAVEBANDS_3D
       do k = 1,Nr
@@ -100,6 +117,7 @@ c       write(6,*)'nl,lam,aw,ac,acdom = ',nl,lam(nl),
 c    *aw(nl),ac(1,nl),acdom(1,nl)
 c      enddo
 c ANNA cdom end
+#endif
 
 #endif /* DAR_CALC_ACDOM */
 #endif /* WAVEBANDS */

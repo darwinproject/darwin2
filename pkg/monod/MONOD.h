@@ -92,6 +92,11 @@ c           have been tried
 #ifdef PART_SCAV
      &         ,scav_rat, scav_inter, scav_exp
 #endif
+#ifdef ALLOW_CDOM
+     &         , fraccdom, cdomdegrd, cdombleach, PARcdom
+     &         , rnp_cdom, rfep_cdom, rcp_cdom
+     &         , cdomcoeff
+#endif
      &         ,nsource,ngroups
     
          _RL mu(npmax)
@@ -187,7 +192,11 @@ c           have been tried
 #ifdef PART_SCAV
          _RL scav_rat, scav_inter, scav_exp
 #endif
-
+#ifdef ALLOW_CDOM
+         _RL fraccdom, cdomdegrd, cdombleach, PARcdom
+         _RL rnp_cdom, rfep_cdom, rcp_cdom
+         _RL cdomcoeff
+#endif
          INTEGER nsource(npmax)
          INTEGER ngroups
 

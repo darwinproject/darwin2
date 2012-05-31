@@ -77,6 +77,10 @@ c ANNA pass extra variables if WAVEBANDS
 #ifdef DYNAMIC_CHL
      O                       dphychl, Chlup,
 #endif
+#ifdef ALLOW_CDOM
+     O                       dcdomdt   , 
+     I                       cdomlocal, 
+#endif
 #ifdef WAVEBANDS
      I                       PARwlocal,
 #endif
@@ -203,6 +207,13 @@ c zoo   = zooplankton
          _RL Chlup(npmax)
 #endif
 #endif
+#ifdef ALLOW_CDOM
+         _RL cdomlocal
+         _RL dcdomdt  
+#ifdef ALLOW_CARBON
+         _RL cdomclocal, dcdomcdt    
+#endif
+#endif
 #ifdef ALLOW_PAR_DAY
          _RL PARdaylocal
 #endif
@@ -304,6 +315,15 @@ c  variables for zooplankton grazing rates
 #endif
 #endif
 
+#ifdef ALLOW_CDOM
+        _RL cdomp_degrd, cdomn_degrd, cdomfe_degrd
+        _RL preminP_cdom, preminN_cdom, preminFe_cdom
+#ifdef ALLOW_CARBON
+        _RL cdomc_degrd
+        _RL preminC_cdom
+#endif
+#endif
+
 #ifdef DAR_DIAG_CHL
          _RL tmppcm
          _RL tmpchl2c
@@ -375,6 +395,19 @@ c variables for conversions from phyto and zoo to DOM and POM
          _RL totzoo_dofe
          _RL totzoo_pofe
          _RL totzoo_posi
+
+#ifdef ALLOW_CDOM
+         _RL totphy_cdomp
+         _RL totphy_cdomn
+         _RL totphy_cdomfe
+         _RL totzoo_cdomp
+         _RL totzoo_cdomn
+         _RL totzoo_cdomfe
+#ifdef ALLOW_CARBON
+         _RL totphy_cdomc
+         _RL totzoo_cdomc
+#endif
+#endif
 
          _RL NO2prod
          _RL NO3prod
@@ -1071,6 +1104,18 @@ c accumulate particulate and dissolved detritus
      &                mortphy(np)*phytomin(np)
 #endif
             enddo 
+#ifdef ALLOW_CDOM
+               totphy_cdomp=(fraccdom)*totphy_dop
+               totphy_dop=totphy_dop-totphy_cdomp
+               totphy_cdomn=rnp_cdom*totphy_cdomp
+               totphy_don=totphy_don-totphy_cdomn
+               totphy_cdomfe=rfep_cdom*totphy_cdomp
+               totphy_dofe=totphy_dofe-totphy_cdomfe
+#ifdef ALLOW_CARBON
+               totphy_cdomc=rcp_cdom*totphy_cdomp
+               totphy_doc=totphy_doc-totphy_cdomc
+#endif
+#endif
             if (debug.eq.3) print*,'tot_phy_pop',totphy_pop
             if (debug.eq.3) print*,'tot_phy_dop',totphy_dop
             if (debug.eq.3) print*,'tot_phy_pon',totphy_pon
@@ -1180,6 +1225,19 @@ c accumulate particulate and dissolved detritus
      &                    sumgrazlossPIC(nz)
 #endif
             enddo
+#endif
+
+#ifdef ALLOW_CDOM
+               totzoo_cdomp=(fraccdom)*totzoo_dop
+               totzoo_dop=totzoo_dop-totzoo_cdomp
+               totzoo_cdomn=rnp_cdom*totzoo_cdomp
+               totzoo_don=totzoo_don-totzoo_cdomn
+               totzoo_cdomfe=rfep_cdom*totzoo_cdomp
+               totzoo_dofe=totzoo_dofe-totzoo_cdomfe
+#ifdef ALLOW_CARBON
+               totzoo_cdomc=rcp_cdom*totzoo_cdomp
+               totzoo_doc=totzoo_doc-totzoo_cdomc
+#endif
 #endif
             if (debug.eq.5) print*,'totzoo_pop',totzoo_pop
             if (debug.eq.5) print*,'totzoo_dop',totzoo_dop
@@ -1315,12 +1373,35 @@ c remineralization of sinking particulate
             preminN  = reminTempFunction * Kpremin_N*PONlocal
             preminFe = reminTempFunction * Kpremin_Fe*POFelocal
             preminSi = reminTempFunction * Kpremin_Si*PSilocal
+#ifdef ALLOW_CDOM
+            preminP_cdom = fraccdom*preminP
+            preminP=preminP-preminP_cdom
+            preminN_cdom = rnp_cdom*preminP_cdom
+            preminN=preminN-preminN_cdom
+            preminFe_cdom = rfep_cdom*preminP_cdom
+            preminFe=preminFe-preminFe_cdom
+#endif
 
 #ifdef ALLOW_CARBON
            DOCremin =  reminTempFunction * Kdoc * DOClocal
            preminC  = reminTempFunction * Kpremin_C*POClocal
+#ifdef ALLOW_CDOM
+            preminC_cdom = rcp_cdom*preminP_cdom
+            preminC=preminC-preminC_cdom
+#endif
 c dissolution
            disscPIC = Kdissc*PIClocal
+#endif
+
+#ifdef ALLOW_CDOM
+c degradation of  CDOM - high when bleached by light
+           cdomp_degrd = reminTempFunction * cdomlocal
+     &            *(cdomdegrd+cdombleach*min(PARlocal/PARcdom,1. _d 0) )
+           cdomn_degrd = rnp_cdom * cdomp_degrd
+           cdomfe_degrd= rfep_cdom * cdomp_degrd
+#ifdef ALLOW_CARBON
+           cdomc_degrd = rcp_cdom  * cdomp_degrd
+#endif
 #endif
 
 c chemistry
@@ -1463,8 +1544,18 @@ C zooplankton stoichiometry varies according to food source
 
 
 c sum contributions to inorganic nutrient tendencies
-            dPO4dt =  - consumpPO4 +  preminP  + DOPremin
-            dNH4dt =  - consumpNH4 +  preminN  + DONremin 
+            dPO4dt =  - consumpPO4 +  
+#ifdef ALLOW_CDOM
+     &                 DOPremin
+#else
+     &                 preminP  + DOPremin
+#endif
+            dNH4dt =  - consumpNH4 +  
+#ifdef ALLOW_CDOM
+     &                 DONremin
+#else
+     &                 preminN  +  DONremin 
+#endif
      &                                   - NO2prod
             dNO2dt =  - consumpNO2                        
      &                                   + NO2prod - NO3prod
@@ -1473,12 +1564,27 @@ c sum contributions to inorganic nutrient tendencies
 c-ONLYNO3   dNO3dt =  - consumpNO3 +  preminN  + DONremin
 #ifdef ALLOW_DENIT
             if (O2local.le.O2crit) then
-              denit =  denit_np*(preminP  + DOPremin)
+              denit =  denit_np
+#ifdef ALLOW_CDOM
+     &                *(DOPremin)
+#else 
+     &                *(preminP  + DOPremin)
+#endif
               dNO3dt = dNO3dt - denit
-              dNH4dt = dNH4dt -  (preminN  + DONremin)
+              dNH4dt = dNH4dt -  
+#ifdef ALLOW_CDOM
+     &                 (DONremin)
+#else
+     &                 (preminN  + DONremin)
+#endif
             endif
 #endif
-            dFeTdt =  - consumpFeT +  preminFe + DOFeremin
+            dFeTdt =  - consumpFeT +  
+#ifdef ALLOW_CDOM
+     &                 DOFeremin
+#else
+     &                 preminFe + DOFeremin
+#endif
 #ifdef PART_SCAV
      &                 - scav_part*freefelocal +
 #else
@@ -1489,19 +1595,48 @@ c-ONLYNO3   dNO3dt =  - consumpNO3 +  preminN  + DONremin
 
 c tendency of dissolved organic pool
             dDOPdt  = totphy_dop  + totzoo_dop  - DOPremin 
+#ifdef ALLOW_CDOM
+     &                +preminP + cdomp_degrd
+#endif
             dDONdt  = totphy_don  + totzoo_don  - DONremin 
+#ifdef ALLOW_CDOM
+     &                +preminN + cdomn_degrd
+#endif
             dDOFedt = totphy_dofe + totzoo_dofe - DOFeremin 
+#ifdef ALLOW_CDOM
+     &                +preminFe + cdomfe_degrd
+#endif
+
 c tendency of particulate detritus pools
             dpopdt  = totphy_pop  + totzoo_pop   - preminP + psinkP
+#ifdef ALLOW_CDOM
+     &                -preminP_cdom
+#endif
             dpondt  = totphy_pon  + totzoo_pon   - preminN + psinkN
+#ifdef ALLOW_CDOM
+     &                -preminN_cdom
+#endif
             dpofedt = totphy_pofe + totzoo_pofe  - preminFe + psinkFe
+#ifdef ALLOW_CDOM
+     &                -preminFe_cdom
+#endif
             dpSidt  = totphy_posi + totzoo_posi  - preminSi + psinkSi
 #ifdef ALLOW_CARBON
             dDICdt =  - consumpDIC - consumpDIC_PIC 
+#ifdef ALLOW_CDOM
+     &                                         +  DOCremin
+#else
      &                                         +  preminC  + DOCremin
+#endif
      &                                         + disscPIC
             dDOCdt  = totphy_doc  + totzoo_doc  - DOCremin
+#ifdef ALLOW_CDOM
+     &                    +preminC + cdomc_degrd
+#endif
             dPOCdt  = totphy_poc  + totzoo_poc  - preminC + psinkC
+#ifdef ALLOW_CDOM
+     &                -preminC_cdom
+#endif
             dPICdt  = totphy_pic  + totzoo_pic  - disscPIC + psinkPIC
             dALKdt  = - dNO3dt    - 2.d0 * (consumpDIC_PIC - disscPIC)
 c should be = O2prod - preminP - DOPremin?
@@ -1511,7 +1646,12 @@ c production of O2 by photosynthesis
              dO2dt   = R_OP*consumpPO4
 c loss of O2 by remineralization
              if (O2local.gt.O2crit) then
-               dO2dt   = dO2dt - R_OP*(preminP  + DOPremin)
+               dO2dt   = dO2dt - R_OP
+#ifdef ALLOW_CDOM
+     &                      *(DOPremin)
+#else
+     &                      *(preminP  + DOPremin)
+#endif
              endif
 #ifdef OLD_GRAZE
             do nz=1,nzmax
@@ -1525,6 +1665,11 @@ c loss of O2 by remineralization
      &                           - mortzoo(nz)*zooClocal(nz)
      &                           - mortzoo2(nz)*zooClocal(nz)**2
             enddo
+#endif
+
+#ifdef ALLOW_CDOM
+            dcdomdt = totphy_cdomp + totzoo_cdomp +  preminP_cdom
+     &                  -cdomp_degrd
 #endif
 
 #endif

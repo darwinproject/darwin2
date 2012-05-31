@@ -32,6 +32,7 @@ C iNO2          :: index of NO2  in Ptracer
 C iZoo          :: index of first zooplankton
 C iPhy          :: index of first phytoplankton
 C iChl          :: index of first phytoplankton Chl (if using dynamic chl)
+C iCDOM	        :: index of CDOM (if using CDOM)
 C nDarwin       :: total number of ptracers used by DARWIN
 C nCompZooMax   :: maximum number of components each zooplankton can have (P,N,...)
 C strideCompZoo :: increment between components of zooplankton
@@ -66,6 +67,7 @@ C remember to bring the fields in data.ptracers in the right order !
       INTEGER strideCompZoo
       INTEGER strideTypeZoo
       INTEGER iTot
+      INTEGER nTOT
 #ifdef ALLOW_CARBON
       INTEGER iDIC
       INTEGER iDOC
@@ -77,6 +79,9 @@ C remember to bring the fields in data.ptracers in the right order !
 #endif
 #ifdef DYNAMIC_CHL
       INTEGER iChl
+#endif
+#ifdef ALLOW_CDOM
+      INTEGER iCDOM
 #endif
       PARAMETER (nCompZooMax=4)
       PARAMETER (strideCompZoo=1)
@@ -102,8 +107,14 @@ C remember to bring the fields in data.ptracers in the right order !
 #else
       PARAMETER (iTOT =iPhy +npmax)
 #endif
+#ifdef ALLOW_CDOM
+      PARAMETER (iCDOM =iTOT)
+      PARAMETER (nTOT = iCDOM+1)
+#else
+      PARAMETER (nTOT =iTOT)
+#endif
 #ifdef ALLOW_CARBON
-      PARAMETER (iDIC  =iTOT)
+      PARAMETER (iDIC  =nTOT)
       PARAMETER (iDOC  =iDIC+1)
       PARAMETER (iPOC  =iDOC+1)
       PARAMETER (iPIC  =iPOC+1)
@@ -112,8 +123,10 @@ C remember to bring the fields in data.ptracers in the right order !
       PARAMETER (iZoC  =iO2+1)
       PARAMETER (nDarwin=iZoC+nzmax-1)
 #else
-      PARAMETER (nDarwin=iTOT-1)
+      PARAMETER (nDarwin=nTOT-1)
 #endif
+
+
 C iZooP(nzmax)  :: index of phosphorus content of each zooplankton type
 C iZooN(nzmax)  :: index of nitrogen   content of each zooplankton type
 C iZooFe(nzmax) :: index of iron       content of each zooplankton type

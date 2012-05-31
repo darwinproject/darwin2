@@ -307,6 +307,17 @@ c sinking rate for particulate matter (m/s)
          Pa2Atm      = 1.01325 _d 5
 #endif
 
+#ifdef ALLOW_CDOM
+         fraccdom=2. _d 0 / 100. _d 0
+         cdomdegrd= 1. _d 0 / (200 _d 0 *pday)
+         cdombleach = 1. _d 0 / (15 _d 0 *pday)
+         PARcdom  = 20. _d 0
+         rnp_cdom = 16. _d 0
+         rfep_cdom = 1. _d -3
+         rcp_cdom  = 120. _d 0
+         cdomcoeff = .1 _d -1  / 1.d -4
+#endif
+
 C make sure we have reserved enough space in Ptracers
       IF ( nCompZooMax .LT. 4 ) THEN
         WRITE(msgBuf,'(A,A,I3)')

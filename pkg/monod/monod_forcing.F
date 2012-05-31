@@ -68,6 +68,9 @@ c plankton arrays
       _RL  Phy_k(npmax,Nr)
       _RL  Phyup(npmax)
       _RL  part_k(Nr)
+#ifdef ALLOW_CDOM
+      _RL cdom_k(Nr)
+#endif
 c iron partitioning
       _RL  freefe(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr)
 c some working variables
@@ -125,6 +128,10 @@ C      always need for diagnostics
       _RL dphychl(npmax)
       _RL chlup(npmax)
 #endif
+#endif
+#ifdef ALLOW_CDOM
+      _RL cdoml  
+      _RL dcdoml
 #endif
 
 #ifdef ALLOW_DIAGNOSTICS
@@ -417,6 +424,9 @@ C ========================== i,j loops =================================
 c ------------ these are convenient ------------------------------------
          DO k=1,Nr
           part_k(k)  = max(Ptr(i,j,k,bi,bj,iPOP),0. _d 0)
+#ifdef ALLOW_CDOM
+          cdom_k(k)  = max(Ptr(i,j,k,bi,bj,iCDOM),0. _d 0)
+#endif
           DO np = 1,npmax
             Phy_k(np,k) = max(Ptr(i,j,k,bi,bj,iPhy+np-1),0. _d 0)
 #ifdef GEIDER
@@ -432,9 +442,15 @@ c ------------ these are convenient ------------------------------------
 c ------------ GET CDOM_k FOR WAVEBANDS_3D and RADTRANS ----------------
 #ifdef WAVEBANDS
 #if defined(DAR_CALC_ACDOM) || defined(DAR_RADTRANS)
+#ifdef ALLOW_CDOM
+        call MONOD_ACDOM(cdom_k,
+     O                     acdom_k,
+     I                     myThid)
+#else
          call MONOD_ACDOM(phychl_k,aphy_chl,aw,
      O                     acdom_k,
      I                     myThid)
+#endif
 #else
          DO k=1,Nr
           DO ilam = 1,tlam
@@ -669,6 +685,9 @@ c brute force...
              psil  = max(Ptr(i,j,k,bi,bj,iPOSi ),0. _d 0)
              NH4l  = max(Ptr(i,j,k,bi,bj,iNH4  ),0. _d 0)
              NO2l  = max(Ptr(i,j,k,bi,bj,iNO2  ),0. _d 0)
+#ifdef ALLOW_CDOM
+             cdoml = max(Ptr(i,j,k,bi,bj,iCDOM  ),0. _d 0)
+#endif
 #ifdef ALLOW_CARBON
              dicl  = max(Ptr(i,j,k,bi,bj,iDIC  ),0. _d 0)
              docl  = max(Ptr(i,j,k,bi,bj,iDOC  ),0. _d 0)
@@ -835,6 +854,9 @@ c set tendencies to 0
                dphychl(np)=0. _d 0
              enddo
 #endif
+#ifdef ALLOW_CDOM
+            dcdoml=0. _d 0
+#endif
 #ifdef ALLOW_CARBON
              ddicl=0. _d 0
              ddocl=0. _d 0
@@ -933,6 +955,10 @@ c ANNA pass extra variables if WAVEBANDS
 #ifdef DYNAMIC_CHL
      I                       dphychl,
      I                       chlup,
+#endif
+#ifdef ALLOW_CDOM
+     O                       dcdoml,
+     I                       cdoml,
 #endif
 #ifdef WAVEBANDS
      I                       PARw_k(1,k),
@@ -1140,6 +1166,10 @@ c in darwin_plankton this is stored for previous timestep. Reset here.
 #endif
 #endif
          ENDDO
+#ifdef ALLOW_CDOM
+          Ptr(i,j,k,bi,bj,iCDOM ) = Ptr(i,j,k,bi,bj,iCDOM ) +
+     &                                  dtplankton*dcdoml
+#endif
 #ifdef ALLOW_CARBON
           Ptr(i,j,k,bi,bj,iDIC ) = Ptr(i,j,k,bi,bj,iDIC ) +
      &                                  dtplankton*ddicl
