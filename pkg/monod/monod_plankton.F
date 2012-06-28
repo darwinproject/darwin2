@@ -251,6 +251,7 @@ c phytoplankton light limitation term
          _RL grow(npmax)
          _RL PspecificPO4(npmax)
          _RL phytoTempFunction(npmax)
+         _RL mortPTempFunction
          _RL dummy
          _RL Ndummy
          _RL Nsourcelimit(npmax)
@@ -281,6 +282,8 @@ c varible for mimumum phyto
 #ifdef OLD_GRAZE
 c  variables for zooplankton grazing rates
          _RL zooTempFunction(nzmax)
+         _RL mortZTempFunction
+         _RL mortZ2TempFunction
          _RL grazing_phyto(npmax)
          _RL grazingP(nzmax)
          _RL grazingN(nzmax)
@@ -289,6 +292,8 @@ c  variables for zooplankton grazing rates
 #else
 c  variables for zooplankton grazing rates
          _RL zooTempFunction(nzmax)
+         _RL mortZTempFunction
+         _RL mortZ2TempFunction
          _RL allphyto(nzmax)
          _RL denphyto(nzmax)
          _RL grazphy(npmax,nzmax)
@@ -600,7 +605,9 @@ ccccccccccccccccccccccccccccccc
 
 c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
           call MONOD_TEMPFUNC(Tlocal,phytoTempFunction,
-     &            zooTempFunction, reminTempFunction, myThid)
+     &            zooTempFunction, reminTempFunction,
+     &            mortPTempFunction, mortZTempFunction, 
+     &            mortZ2TempFunction, myThid)
           if (debug.eq.1) print*,'phytoTempFunction',
      &                          phytoTempFunction, Tlocal
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -1082,26 +1089,36 @@ ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c accumulate particulate and dissolved detritus
            do np=1, npmax
                totphy_pop=totphy_pop+
-     &                ExportFracP(np)*mortphy(np)*phytomin(np)
+     &                ExportFracP(np)*mortphy(np)*
+     &                mortPTempFunction*phytomin(np)
                totphy_dop=totphy_dop+
-     &                (1. _d 0-ExportFracP(np))*mortphy(np)*phytomin(np)
+     &                (1. _d 0-ExportFracP(np))*mortphy(np)*
+     &                mortPTempFunction*phytomin(np)
                totphy_pon=totphy_pon+ R_NP(np)*
-     &                ExportFracP(np)*mortphy(np)*phytomin(np)
+     &                ExportFracP(np)*mortphy(np)*
+     &                mortPTempFunction*phytomin(np)
                totphy_don=totphy_don+ R_NP(np)*
-     &               (1. _d 0-ExportFracP(np))*mortphy(np)*phytomin(np)
+     &               (1. _d 0-ExportFracP(np))*mortphy(np)*
+     &                mortPTempFunction*phytomin(np)
                totphy_pofe=totphy_pofe+ R_FeP(np)*
-     &                ExportFracP(np)*mortphy(np)*phytomin(np)
+     &                ExportFracP(np)*mortphy(np)*
+     &                mortPTempFunction*phytomin(np)
                totphy_dofe=totphy_dofe+ R_FeP(np)*
-     &               (1. _d 0-ExportFracP(np))*mortphy(np)*phytomin(np)
+     &               (1. _d 0-ExportFracP(np))*mortphy(np)*
+     &                mortPTempFunction*phytomin(np)
                totphy_posi=totphy_posi+ R_SiP(np)*
-     &                mortphy(np)*phytomin(np)
+     &                mortphy(np)*
+     &                mortPTempFunction*phytomin(np)
 #ifdef ALLOW_CARBON
                totphy_poc=totphy_poc+ R_PC(np)*
-     &                ExportFracP(np)*mortphy(np)*phytomin(np)
+     &                ExportFracP(np)*mortphy(np)*
+     &                mortPTempFunction*phytomin(np)
                totphy_doc=totphy_doc+ R_PC(np)*
-     &               (1. _d 0-ExportFracP(np))*mortphy(np)*phytomin(np)
+     &               (1. _d 0-ExportFracP(np))*mortphy(np)*
+     &                mortPTempFunction*phytomin(np)
                totphy_pic=totphy_pic+ R_PC(np)*R_PICPOC(np)*
-     &                mortphy(np)*phytomin(np)
+     &                mortphy(np)*
+     &                mortPTempFunction*phytomin(np)
 #endif
             enddo 
 #ifdef ALLOW_CDOM
@@ -1167,36 +1184,54 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c accumulate particulate and dissolved detritus
             do nz=1, nzmax
                totzoo_pop=totzoo_pop+
-     &                     ExportFracZ(nz)*( mortzoo(nz)*zooP(nz)
-     &                     +  mortzoo2(nz)*zooP(nz)**2 )
+     &                     ExportFracZ(nz)*( mortzoo(nz)*
+     &                     mortZTempFunction*zooP(nz)
+     &                     +  mortzoo2(nz)*
+     &                     mortZ2TempFunction*zooP(nz)**2 )
                totzoo_dop=totzoo_dop+
      &                    (1. _d 0-ExportFracZ(nz))*(
-     &                     mortzoo(nz)*zooP(nz)+
-     &                     mortzoo2(nz)*zooP(nz)**2 )
+     &                     mortzoo(nz)*
+     &                     mortZTempFunction*zooP(nz)+
+     &                     mortzoo2(nz)*
+     &                     mortZ2TempFunction*zooP(nz)**2 )
                totzoo_pon=totzoo_pon+
-     &                     ExportFracZ(nz)*( mortzoo(nz)*zooN(nz)
-     &                     +  mortzoo2(nz)*zooN(nz)**2 )
+     &                     ExportFracZ(nz)*( mortzoo(nz)*
+     &                     mortZTempFunction*zooN(nz)
+     &                     +  mortzoo2(nz)*
+     &                     mortZ2TempFunction*zooN(nz)**2 )
                totzoo_don=totzoo_don+
      &                    (1. _d 0-ExportFracZ(nz))*(
-     &                     mortzoo(nz)*zooN(nz)+
-     &                     mortzoo2(nz)*zooN(nz)**2 )
+     &                     mortzoo(nz)*
+     &                     mortZTempFunction*zooN(nz)+
+     &                     mortzoo2(nz)*
+     &                     mortZ2TempFunction*zooN(nz)**2 )
                totzoo_pofe=totzoo_pofe+
-     &                     ExportFracZ(nz)*( mortzoo(nz)*zooFe(nz)
-     &                     +  mortzoo2(nz)*zooFe(nz)**2 )
+     &                     ExportFracZ(nz)*( mortzoo(nz)*
+     &                     mortZTempFunction*zooFe(nz)
+     &                     +  mortzoo2(nz)*
+     &                     mortZ2TempFunction*zooFe(nz)**2 )
                totzoo_dofe=totzoo_dofe+
      &                   (1. _d 0-ExportFracZ(nz))*(
-     &                    mortzoo(nz)*zooFe(nz) +
-     &                    mortzoo2(nz)*zooFe(nz)**2 )
+     &                    mortzoo(nz)*
+     &                    mortZTempFunction*zooFe(nz) +
+     &                    mortzoo2(nz)*
+     &                    mortZ2TempFunction*zooFe(nz)**2 )
                totzoo_posi=totzoo_posi+
-     &                     ( mortzoo(nz)*zooSi(nz)+
-     &                       mortzoo2(nz)*zooSi(nz)**2 )
+     &                     ( mortzoo(nz)*
+     &                       mortZTempFunction*zooSi(nz)+
+     &                       mortzoo2(nz)*
+     &                       mortZ2TempFunction*zooSi(nz)**2 )
 #ifdef ALLOW_CARBON
                totzoo_poc=totzoo_poc+
-     &                    ExportFracZ(nz)*( mortzoo(nz)*zooClocal(nz)
-     &                      +  mortzoo2(nz)*zooClocal(nz)**2 )
+     &                    ExportFracZ(nz)*( mortzoo(nz)*
+     &                         mortZTempFunction*zooClocal(nz)
+     &                      +  mortzoo2(nz)*
+     &                         mortZ2TempFunction*zooClocal(nz)**2 )
                totzoo_doc=totzoo_doc+
-     &           (1. _d 0-ExportFracZ(nz))*( mortzoo(nz)*zooClocal(nz)
-     &                      +  mortzoo2(nz)*zooClocal(nz)**2 )
+     &           (1. _d 0-ExportFracZ(nz))*( mortzoo(nz)*
+     &                         mortZTempFunction*zooClocal(nz)
+     &                      +  mortzoo2(nz)*
+     &                         mortZ2TempFunction*zooClocal(nz)**2 )
 #endif
             enddo
 
@@ -1430,7 +1465,8 @@ c phytoplankton
 #else
      &                        - sumgrazphy(np)
 #endif
-     &                        - mortphy(np)*phytomin(np)
+     &                        - mortphy(np)*
+     &                          mortPTempFunction*phytomin(np)
      &                        + psinkphy(np)
 #ifdef GEIDER
 #ifdef DYNAMIC_CHL
@@ -1445,7 +1481,9 @@ c             dphychl(np) = rhochl(np)*PspecificPO4(np)*R_PC(np)
 #else
      &                   - sumgrazphy(np)
 #endif
-     &                   - mortphy(np)*phytomin(np)) *chl2c(np)*R_PC(np)
+     &                   - mortphy(np)*
+     &                     mortPTempFunction*phytomin(np)) 
+     &                       *chl2c(np)*R_PC(np)
      &                        + psinkChl(np) 
 #endif
               Chl=Chl + phychl(np)
@@ -1456,11 +1494,13 @@ c%%%
 #ifdef OLD_GRAZE
               tmpr=grazing_phyto(np)*
      &              (phytomin(np)/(phytomin(np) + kgrazesat)) 
-     &                        + mortphy(np)*phytomin(np)
+     &                        + mortphy(np)*
+     &                          mortPTempFunction*phytomin(np)
      &                        - psinkphy(np)
 #else
               tmpr=sumgrazphy(np)
-     &                        + mortphy(np)*phytomin(np)
+     &                        + mortphy(np)*
+     &                          mortPTempFunction*phytomin(np)
      &                        - psinkphy(np)
 #endif
 #ifdef DAR_DIAG_RSTAR
@@ -1527,19 +1567,27 @@ c zooplankton mortality
             do nz=1,nzmax
 c zoo in P currency
               dzooPdt(nz)  = dzooPdt(nz)
-     &                           - mortzoo(nz)*zooP(nz)
-     &                           - mortzoo2(nz)*zooP(nz)**2
+     &                           - mortzoo(nz)*
+     &                             mortZTempFunction*zooP(nz)
+     &                           - mortzoo2(nz)*
+     &                             mortZ2TempFunction*zooP(nz)**2
 c zooplankton in other currencies
 C zooplankton stoichiometry varies according to food source
               dzooNdt(nz)  = dzooNdt(nz)
-     &                           - mortzoo(nz)*zooN(nz)
-     &                           - mortzoo2(nz)*zooN(nz)**2
+     &                           - mortzoo(nz)*
+     &                             mortZTempFunction*zooN(nz)
+     &                           - mortzoo2(nz)*
+     &                             mortZ2TempFunction*zooN(nz)**2
               dzooFedt(nz) = dzooFedt(nz)
-     &                           - mortzoo(nz)*zooFe(nz)
-     &                           - mortzoo2(nz)*zooFe(nz)**2
+     &                           - mortzoo(nz)*
+     &                             mortZTempFunction*zooFe(nz)
+     &                           - mortzoo2(nz)*
+     &                             mortZ2TempFunction*zooFe(nz)**2
               dzooSidt(nz) = dzooSidt(nz)
-     &                           - mortzoo(nz)*zooSi(nz)
-     &                           - mortzoo2(nz)*zooSi(nz)**2
+     &                           - mortzoo(nz)*
+     &                             mortZTempFunction*zooSi(nz)
+     &                           - mortzoo2(nz)*
+     &                             mortZ2TempFunction*zooSi(nz)**2
             enddo
 
 
@@ -1656,14 +1704,18 @@ c loss of O2 by remineralization
 #ifdef OLD_GRAZE
             do nz=1,nzmax
               dzooCdt(nz)  = grazingC(nz)*zooClocal(nz)
-     &                           - mortzoo(nz)*zooClocal(nz)
-     &                           - mortzoo2(nz)*zooClocal(nz)**2
+     &                           - mortzoo(nz)*
+     &                             mortZTempFunction*zooClocal(nz)
+     &                           - mortzoo2(nz)*
+     &                             mortZ2TempFunction*zooClocal(nz)**2
             enddo
 #else
             do nz=1,nzmax
               dzooCdt(nz)  = sumgrazzooc(nz)
-     &                           - mortzoo(nz)*zooClocal(nz)
-     &                           - mortzoo2(nz)*zooClocal(nz)**2
+     &                           - mortzoo(nz)*
+     &                             mortZTempFunction*zooClocal(nz)
+     &                           - mortzoo2(nz)*
+     &                             mortZ2TempFunction*zooClocal(nz)**2
             enddo
 #endif
 
