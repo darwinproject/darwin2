@@ -43,6 +43,11 @@ c ANNA include wavebands_params.h
 #include "WAVEBANDS_PARAMS.h"
 #endif
 
+c choice which field to take pCO2 from for pCO2limit
+c this assumes we use Ttendency from offline
+#include "FFIELDS.h"
+
+
 C     === Global variables ===
 c tracers
        _RL Ptr(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr,nSx,nSy,nDarwin)
@@ -194,6 +199,7 @@ c some local variables
        _RL PSiupl
        _RL Tlocal
        _RL Slocal
+       _RL pCO2local
        _RL Qswlocal
        _RL NH4l
        _RL NO2l
@@ -810,6 +816,16 @@ c for explicit sinking of particulate matter and phytoplankton
              Slocal = salt(i,j,k,bi,bj)
 #endif
 
+c choice where to get pCO2 from
+c taking from igsm dic run - fed through Tflux array
+c               pCO2local=surfaceForcingT(i,j,bi,bj)
+c or from darwin carbon module
+#ifdef ALLOW_CARBON
+               pCO2local=pCO2(i,j,bi,bj)
+#else
+               pCO2local=280. _d -6
+#endif
+
              freefu = max(freefe(i,j,k),0. _d 0)
              if (k.eq.1) then
                inputFel = inputFe(i,j,bi,bj)
@@ -926,6 +942,7 @@ c ANNA pass extra variables if WAVEBANDS
      I                       pofeupl, psiupl,
      I                       PARl,
      I                       Tlocal, Slocal,
+     I                       pCO2local,
      I                       freefu, inputFel,
      I                       bottom, dzlocal,
      O                       Rstarl, RNstarl,

@@ -48,6 +48,7 @@ c ANNA pass extra variables if WAVEBANDS
      I                       phytoup, popuplocal, ponuplocal, 
      I                       pofeuplocal, psiuplocal,
      I                       PARlocal,Tlocal, Slocal,
+     I                       pCO2local,
      I                       freefelocal, inputFelocal,
      I                       bottom, dzlocal,
      O                       Rstarlocal, RNstarlocal,
@@ -148,6 +149,7 @@ c zoo   = zooplankton
          _RL PARlocal
          _RL Tlocal
          _RL Slocal
+         _RL pCO2local
          _RL freefelocal
          _RL inputFelocal
          _RL bottom
@@ -247,6 +249,7 @@ c phytoplankton specific nutrient limitation term
          _RL limit(npmax)
 c phytoplankton light limitation term
          _RL ilimit(npmax)
+         _RL pCO2limit(npmax)
          _RL ngrow(npmax)
          _RL grow(npmax)
          _RL PspecificPO4(npmax)
@@ -636,6 +639,18 @@ c using Platt-like equations with inhibition
 #endif
 c ANNA endif
 
+c pCO2 limit - default to non
+         do np=1,npmax
+           pCO2limit(np)=1. _d 0
+c          if (np.eq.6) then
+c             pCO2limit(np)=1. _d 0 + (pCO2local-400. _d -6)/600 _d -6
+c             pCO2limit(np)=max(pCO2limit(np),1. _d 0)
+c             pCO2limit(np)=min(pCO2limit(np),2. _d 0)
+c          endif
+           if (debug.eq.15) print*,'pco2limit',pCO2limit(np),pCO2local
+         enddo
+
+
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c Determine phytoplankton nutrient limitation as mimimum of 
 c P,N,Si,Fe. However N can be utilized in several forms, so
@@ -853,7 +868,8 @@ c ANNA endif
 #endif
 
           do np = 1, npmax
-           pcm(np)=pcmax(np)*limit(np)*phytoTempFunction(np)
+           pcm(np)=pcmax(np)*limit(np)*phytoTempFunction(np)*
+     &                                         pCO2limit(np)
 #ifdef DYNAMIC_CHL
            if (phyto(np).gt. 0. _d 0) then
              chl2c(np)=phychl(np)/(phyto(np)*R_PC(np))
@@ -930,7 +946,8 @@ c         acclim(np)=max(acclim(np),chl2cmin(np))
 c diagnostic version of the above that does not feed back to growth
           ChlGeiderlocal = 0. _d 0
           do np = 1, npmax
-           tmppcm = mu(np)*limit(np)*phytoTempFunction(np)
+           tmppcm = mu(np)*limit(np)*phytoTempFunction(np)*
+     &                                       pCO2limit(np)
            if (tmppcm.gt.0.d0) then
              tmpchl2c = Geider_chl2cmax(np)/
      &         (1+(Geider_chl2cmax(np)*Geider_alphachl(np)*PARdaylocal)/
@@ -1290,7 +1307,7 @@ c consumption - sum of phytoplankton contributions
 c phospate uptake by each phytoplankton
 #ifndef GEIDER
                grow(np)=ngrow(np)*mu(np)*limit(np)*ilimit(np)*
-     &                            phytoTempFunction(np)
+     &                            phytoTempFunction(np)*pCO2limit(np)
 #endif
 #ifdef GEIDER
                grow(np)=ngrow(np)*pcarbon(np)
@@ -1506,7 +1523,7 @@ c%%%
 #ifdef DAR_DIAG_RSTAR
 #ifndef GEIDER
               tmpgrow=ngrow(np)*mu(np)*ilimit(np)*
-     &              phytoTempFunction(np)
+     &              phytoTempFunction(np)*pCO2limit(np)
 #endif
 #ifdef GEIDER
               tmpgrow=grow(np)/limit(np)
