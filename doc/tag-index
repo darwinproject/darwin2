@@ -4,6 +4,10 @@ $Name$
     Notes on tags used in darwin
     ============================
 
+ctrb_darwin2_ckpt63o_20120629
+o add temperature dependencies for mortality (default to no dependence - need to
+  change comments in monod_tempfunc to enable)
+
 ctrb_darwin2_ckpt63n_20120604
 
 ctrb_darwin2_ckpt63m_20120506
