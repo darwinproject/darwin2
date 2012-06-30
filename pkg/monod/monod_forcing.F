@@ -21,9 +21,10 @@ C==============================================================
 #include "PARAMS.h"
 #include "GRID.h"
 #include "DYNVARS.h"
-#ifdef USE_QSW
+c for Qsw and/or surfaceForcingT
+c choice which field to take pCO2 from for pCO2limit
+c this assumes we use Ttendency from offline
 #include "FFIELDS.h"
-#endif
 #ifdef ALLOW_LONGSTEP
 #include "LONGSTEP.h"
 #endif
@@ -42,10 +43,6 @@ c ANNA include wavebands_params.h
 #include "SPECTRAL.h"
 #include "WAVEBANDS_PARAMS.h"
 #endif
-
-c choice which field to take pCO2 from for pCO2limit
-c this assumes we use Ttendency from offline
-#include "FFIELDS.h"
 
 
 C     === Global variables ===
