@@ -122,11 +122,15 @@ c    Nfixave      - average N fixation
 c    Zoograzave   - average zooplankton consumption
 c    Parave       - average PAR
 c    Chlave       - average chlorophyll
-c    npzd_timeave  - time for averaging
+c    npzd_timeave - time for averaging
+c    Nlim,Flim,etc- Quota model average limitation factors
 
       COMMON /DARWIN_OUPUT/
      &      PPave, Nfixave, Zoograzave,
      &      PARave, Chlave, Denitave, 
+#ifdef QUOTA_DIAG_LIMIT 
+     &      Nlimave,Flimave,Ilimave,Tlimave,
+#endif
 c ANNA_TAVE
 #ifdef WAVES_DIAG_PCHL
      &      Pchlave,
@@ -157,6 +161,12 @@ c
        _RL  PARave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy)
        _RL  Chlave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy)
        _RL  Denitave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy)
+#ifdef QUOTA_DIAG_LIMIT 
+       _RL  Nlimave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy, npmax)
+       _RL  Flimave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy, npmax)
+       _RL  Ilimave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy, npmax)
+       _RL  Tlimave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy)
+#endif
 c ANNA_TAVE
 #ifdef WAVES_DIAG_PCHL
        _RL  Pchlave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy,npmax)
