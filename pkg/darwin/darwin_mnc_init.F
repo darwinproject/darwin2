@@ -60,6 +60,44 @@ C     Functions
      &     'dar_PP_ave','units','--', myThid)
       CALL MNC_CW_ADD_VATTR_TEXT('dar_PP_ave','description',
      &     '', myThid)
+cbenw limitation diagnostics
+#ifdef QUOTA_DIAG_LIMIT
+      do np=1,npmax
+c nitrogen
+        DO jj = 1,MAX_LEN_FNAM
+          name(jj:jj) = ' '
+        ENDDO
+        WRITE(name,'(a,i3.3)') 'dar_Nlim_',np
+        CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+c iron
+        DO jj = 1,MAX_LEN_FNAM
+           name(jj:jj) = ' '
+        ENDDO
+        WRITE(name,'(a,i3.3)') 'dar_Flim_',np
+        CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+c light
+        DO jj = 1,MAX_LEN_FNAM
+           name(jj:jj) = ' '
+        ENDDO
+        WRITE(name,'(a,i3.3)') 'dar_Ilim_',np
+        CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+      enddo
+c temperature
+      DO jj = 1,MAX_LEN_FNAM
+         name(jj:jj) = ' '
+      ENDDO
+      WRITE(name,'(a)') 'dar_Tlim_ave'
+      CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+      CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
+      CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+#endif
+cbenw limitation diagnostics
 #ifndef ALLOW_QUOTA
       CALL MNC_CW_ADD_VNAME(
      &     'dar_Chl_ave', 'Cen_xy_Hn__C__t', 4,5, myThid)
