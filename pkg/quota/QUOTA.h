@@ -83,6 +83,12 @@ c
      &          tempmax, temprange, tempnorm, tempdecay,
      &          ngrowfac, ilight,
      &          PAR0,
+#ifdef IRON_SED_SOURCE
+     &          depthfesed,fesedflux,fesedflux_pcm,
+#endif
+#ifdef PART_SCAV
+     &          scav_rat, scav_inter, scav_exp,
+#endif
      &          nsource,ngroups,
      &          use_NO3,use_Si,
      &          hollingtype
@@ -128,7 +134,12 @@ c
          _RL tempcoeff2_small, tempcoeff3
          _RL tempmax, temprange, tempnorm,tempdecay
          _RL ngrowfac,ilight
-c
+#ifdef IRON_SED_SOURCE
+         _RL depthfesed, fesedflux, fesedflux_pcm
+#endif
+#ifdef PART_SCAV
+         _RL scav_rat, scav_inter, scav_exp
+#endif
          INTEGER hollingtype
          INTEGER pft(npmax)
          INTEGER nsource(npmax)
