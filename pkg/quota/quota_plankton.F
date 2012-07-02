@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/quota/quota_plankton.F,v 1.1 2011/04/13 18:56:26 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/quota/quota_plankton.F,v 1.2 2012/07/02 09:55:36 benw Exp $
 C $Name:  $
 #include "CPP_OPTIONS.h"
 #include "PTRACERS_OPTIONS.h"
@@ -41,6 +41,9 @@ c ====================================================================
 #ifdef FQUOTA
      I                       freefelocal, inputFelocal,
 #endif
+#ifdef QUOTA_DIAG_LIMIT
+     O                       Nlim, Flim, Ilim, photo_Tempfunction,
+#endif
      I                       PARlocal, Tlocal, Slocal,
      I                       bottom, surface, dzlocal,
      O                       dbiomassdt,dorgmatdt, dnutrientdt,
@@ -80,6 +83,9 @@ c orgmat   = organic matter biomass (dissolved and particulate)
 #ifdef FQUOTA
          _RL freefelocal
          _RL inputFelocal
+#endif
+#ifdef QUOTA_DIAG_LIMIT
+         _RL Nlim(npmax),Flim(npmax),Ilim(npmax),Tlim
 #endif
          _RL m_ref(npmax)
          _RL PARlocal
@@ -195,6 +201,10 @@ c limit ranges from 1 to 0 between qmin and qmax
             qreg(io,jp) = (qmax(io,jp) - quota(io,jp))
      &                  / (qmax(io,jp) - qmin(io,jp) )
           endif
+#ifdef QUOTA_DIAG_LIMIT
+          if (io.eq.iNitr) Nlim(jp) = limit
+          if (io.eq.iIron) Flim(jp) = limit
+#endif
 #ifdef FQUOTA
           if (io.eq.iIron) then
             felimit(jp) = limit
@@ -214,6 +224,7 @@ c limit ranges from 1 to 0 between qmin and qmax
 #endif
           qlimit(jp)     = min(qlimit(jp),limit)
           qreg(iCarb,jp) = min(qreg(iCarb,jp),1. _d 0 - qreg(io,jp))
+c
         enddo ! io
         if (autotrophy(jp).eq. 0. _d 0) then
           biomass(iChlo,jp)  = 0. _d 0 ! pure heterotroph, so chl is zero
@@ -271,6 +282,7 @@ c
 c ****************************************************************
 c ************* Photosynthetic Carbon Assimilation ***************
 c ****************************************************************
+      PP = 0.0 _d 0
       call GEIDER98(
      I              PARlocal,
      I              biomass,
@@ -278,7 +290,11 @@ c ****************************************************************
 #ifdef FQUOTA
      I              felimit,
 #endif
+#ifdef QUOTA_DIAG_LIMIT
+     O              Ilim,
+#endif
      U              up_inorg,
+     O              PP,
      I              photo_Tempfunction,
      O              dchloro, ! chlorophyll synthesis rate
      I              myThid)
@@ -467,13 +483,11 @@ c           Exudation of elemental reservoirs
           endif
 !
 ! calculate temperature adjusted mortality rates
-          m_ref(jp) = kmort(jp)  ! linear
-! quadratic Z mortality
+          m_ref(jp) = kmort(jp) !* activ_Tempfunction
+          ! Z mortality is t dependent - a la Moore 2002
           if (pft(jp).eq.6) then
-            m_ref(jp) = kmort(jp) * 0.5 _d 0                     ! linear
-!     &                + kmort(jp) * 0.25 _d 0 * biomass(iCarb,jp) ! quadratic
+            m_ref(jp) = kmort(jp) * activ_Tempfunction
           endif
-          m_ref(jp) = m_ref(jp) * activ_Tempfunction
 !
 ! Loss and sinking terms - include silicate and chlorophyll
             dbiomassdt(io,jp) = dbiomassdt(io,jp)
@@ -554,7 +568,7 @@ c
      &                  + nrite2nrate * nutrient(iNO2)   ! nitrate from nitrite
 #else
       dnutrientdt(iNO3) = dnutrientdt(iNO3)              ! or
-     &                  + amm2nrate * nutrient(iNH4)     ! nitrate from ammonium
+     &                  + amm2nrite * nutrient(iNH4)     ! nitrate from ammonium
 #endif
 #endif
 c
@@ -599,13 +613,6 @@ c organic matter
         enddo ! ko
       enddo ! io
 c********************************************************************************
-c Uptake diagnostics
-      PP=0. _d 0
-      do jp=1,npmax
-        if (pft(jp).ne.6) then
-          PP = PP + biomass(iCarb,jp) * up_inorg(iCarb,jp) * 86400. _d 0
-        endif
-      enddo
 c -------------------------------------------------------------------
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c --------------------------------------------------------------------------
