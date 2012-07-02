@@ -127,6 +127,7 @@ cbenw - turn on quota model
 #undef SQUOTA
 #define FQUOTA
 
+#define QUOTA_DIAG_LIMIT
 #undef  UNCERTAINTY
 
 C ----------------------------------------------------------------------
