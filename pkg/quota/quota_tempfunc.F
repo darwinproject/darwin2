@@ -36,7 +36,7 @@ c
        Temp_P = 0.05 _d 0
        Temp_A = 0.05 _d 0
 
-       Tempref= 30. _d 0
+       Tempref= 20. _d 0
 c
        photo_TempFunction = exp(Temp_P*(Tlocal - Tempref))
        photo_TempFunction = max(photo_TempFunction,1. _d -10)
