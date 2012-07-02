@@ -1,5 +1,5 @@
-Clphachl
-c $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/quota/quota_generate_phyto.F,v 1.1 2011/04/13 18:56:26 jahn Exp $
+Clphactl
+c $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/quota/quota_generate_phyto.F,v 1.2 2012/07/02 09:50:41 benw Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -80,9 +80,9 @@ c..........................................................
 c       Allocate Phytoplankton Taxa
 c Prochloro
         do jp=1,2
-          biovol(jp)    = 1.25 _d -1 * factor**(jp-1)
+          biovol(jp)    = 0.125 _d 0 * factor**(jp-1)
           autotrophy(jp)= 1.00 _d 0
-          use_NO3(jp)   = 0
+          use_NO3(jp)   = 1
           use_Si(jp)    = 0
           taxon_mu(jp)  = 1.00 _d 0
           pft(jp)       = 1
@@ -93,7 +93,7 @@ c Synnecho
           autotrophy(jp)= 1.00 _d 0
           use_NO3(jp)   = 1
           use_Si(jp)    = 0
-          taxon_mu(jp)  = 1.10 _d 0
+          taxon_mu(jp)  = 1.40 _d 0
           pft(jp)       = 2
         enddo
 c Small Euk
@@ -107,7 +107,7 @@ c Small Euk
         enddo
 c Diatoms
         do jp=10,15
-          biovol(jp)    = 64.0 _d 0 * factor**(jp-10)
+          biovol(jp)    = 128.0 _d 0 * factor**(jp-11)
           autotrophy(jp)= 1.0 _d 0
           use_NO3(jp)   = 1
           use_Si(jp)    = 0
@@ -116,7 +116,7 @@ c Diatoms
         enddo
 c Specialist grazers
         do jp=16,16
-          biovol(jp)    = 8.0 _d 0 * factor**(jp-16)
+          biovol(jp)    = 8.0 _d 0 * factor**(jp-26)
           autotrophy(jp)= 0.00 _d 0
           use_NO3(jp)   = 0
           use_Si(jp)    = 0
@@ -185,23 +185,28 @@ c GRAZING SIZE PREFERENCE RATIO
           endif
 c STANDARD DEVIATION OF SIZE PREFERENCE
             pp_sig(jp) = 0.50 _d 0
+            pp_sig(jp) = 1.00 _d 0
 c FRACTION GRAZED TO DOM
           do io=1,iomax-iChl
-            p = darwin_random(myThid)
-            call invnormal(a,p,
-     &           log10(a_beta_graz(io)),log10(ae_beta_graz(io))*error)
-            call invnormal(b,p,b_beta_graz(io),be_beta_graz(io)*error)
-            beta_graz(io,jp) = 10. _d 0**a * biovol(jp) ** b
-            beta_graz(io,jp)=min(max(
-     &                       beta_graz(io,jp),0.1 _d 0),0.9 _d 0)
+!            p = darwin_random(myThid)
+!            call invnormal(a,p,
+!     &           log10(a_beta_graz(io)),log10(ae_beta_graz(io))*error)
+!            call invnormal(b,p,b_beta_graz(io),be_beta_graz(io)*error)
+!            beta_graz(io,jp) = 10. _d 0**a * biovol(jp) ** b
+!            beta_graz(io,jp)=min(max(
+!     &                       beta_graz(io,jp),0.5 _d 0),0.9 _d 0)
+             if (pft(jp).lt.3) beta_graz(io,jp)=0.8
+             if (pft(jp).gt.2) beta_graz(io,jp)=0.5
 c FRACTION MORTALITY TO DOM
-            p = darwin_random(myThid)
-            call invnormal(a,p,
-     &           log10(a_beta_mort(io)),log10(ae_beta_mort(io))*error)
-            call invnormal(b,p,b_beta_mort(io),be_beta_mort(io)*error)
-            beta_mort(io,jp)= 10. _d 0**a * biovol(jp) ** b
-            beta_mort(io,jp)=min(max(
-     &                       beta_mort(io,jp),0.1 _d 0),0.9 _d 0)
+!            p = darwin_random(myThid)
+!            call invnormal(a,p,
+!     &           log10(a_beta_mort(io)),log10(ae_beta_mort(io))*error)
+!            call invnormal(b,p,b_beta_mort(io),be_beta_mort(io)*error)
+!            beta_mort(io,jp)= 10. _d 0**a * biovol(jp) ** b
+!            beta_mort(io,jp)=min(max(
+!     &                       beta_mort(io,jp),0.5 _d 0),0.9 _d 0)
+             if (pft(jp).lt.3) beta_mort(io,jp)=0.8
+             if (pft(jp).gt.2) beta_mort(io,jp)=0.5
           enddo
 c GRAZING HALF-SATURATION
           p = darwin_random(myThid)
@@ -234,14 +239,12 @@ c SWIMMING
             bioswim(jp)    =  0.00 _d 0
           ENDIF
 c MORTALITY
-          p = darwin_random(myThid)
-          call invnormal(a,p,
-     &         log10(a_mort),log10(ae_mort)*error)
-          call invnormal(b,p,b_mort,be_mort*error)
-          kmort(jp)      = 10. _d 0**a * biovol(jp) ** b
-!          if (pft(jp).eq.6) then
-!            kmort(jp) = kmort(jp) / 8.0 _d 0
-!          endif
+          ! constant background mortality
+          kmort(jp) = a_mort
+          if (pft(jp).eq.6) then
+            ! grazers have lower mortality
+            kmort(jp) = 1.00 _d 0 * a_mort
+          endif
 ! parameters relating to inorganic nutrients
           do ii=1,iimax
 c MAXIMUM NUTRIENT UPTAKE RATE
@@ -321,13 +324,16 @@ c PREFERENCE FUNCTION
               graz_pref(jp,jp2) =
 #ifdef SWITCH3
               ! lower preference for larger P
-!     &        1.0 _d 0
-     &        biovol(jp2)**(-0.16 _d 0)
+     &        1.0 _d 0
+!     &        biovol(jp2)**(-0.16 _d 0)
 #else
      &        exp(-(log(prd_pry/pp_opt(jp))**2) / (2*pp_sig(jp)**2))
      &                                          / pp_sig(jp)/2. _d 0
 #endif
-c
+!              ! reduce diatom palatability
+!              if (pft(jp2).eq.5) then
+!                graz_pref(jp,jp2) = graz_pref(jp,jp2) * 0.8
+!              endif
               if (graz_pref(jp,jp2).lt.1. _d -4) then
                 graz_pref(jp,jp2)=0. _d 0
               endif
