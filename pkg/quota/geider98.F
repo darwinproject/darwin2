@@ -20,7 +20,11 @@ c ====================================================================
 #ifdef FQUOTA
      I             felimit,
 #endif
+#ifdef QUOTA_DIAG_LIMIT
+     O             Ilim,
+#endif
      I             up_inorg,
+     O             PP,
      I             photo_Tempfunction,
      O             dchldt, ! chlorophyll synthesis rate
      I             myThid)
@@ -60,11 +64,16 @@ c
        _RL chlsynth(npmax)
        _RL VCmax
        _RL VCN
+       _RL PP
+#ifdef QUOTA_DIAG_LIMIT
+       _RL Ilim(npmax)
+#endif
 c
 c Geider, MacIntyre and Kana (1998) photosynthesis model
 c adapted for multiple nutrients following Moore et al (2002)
 c
        E0 = PARlocal ! muEin m^-2 s^-1
+       PP = 0.0 _d 0
        do jp=1,npmax
 #ifdef FQUOTA
          alpha_fe = alphachl(jp) * felimit(jp)
@@ -96,7 +105,12 @@ c
 c
              if (PCmax.gt.0. _d 0.and.alpha_fe.gt.0. _d 0) then
                PCPhot(jp) = PCmax                      ! s^-1
-     &          *(1-exp(-alpha_fe*Chl2C*E0/PCmax))
+     &          *(1. _d 0-exp(-alpha_fe*Chl2C*E0/PCmax))
+c
+#ifdef QUOTA_DIAG_LIMIT
+               Ilim(jp)=1. _d 0
+     &                 -exp(-alphachl(jp)*Chl2C*E0/vmaxi(iDIC,jp))
+#endif
 c
                rhochl = Chl2Nmax * PCPhot(jp)          ! mg chl (mmol N)^-1
      &                /(alphachl(jp)*Chl2C*E0)
@@ -112,6 +126,7 @@ c
            endif
 c-----------------------------------------------------------------
            ! for passing back to quota_plankton
+           PP = PP + PCPhot(jp) * C_biomass
            up_inorg(iDIC,jp) = PCPhot(jp) - biosynth*VCN  ! s^-1
            dchldt(jp)        = chlsynth(jp)  ! mg chl m^-3 s^-1
          else ! else if jp is a heterotroph
