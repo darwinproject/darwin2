@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_diags.F,v 1.2 2011/05/11 18:11:56 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_diags.F,v 1.3 2012/07/02 09:37:48 benw Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -75,6 +75,18 @@ C      Normalize by integrated time
      &                 bi,bj,myThid)
          CALL TIMEAVE_NORMALIZ(PPave, DAR_timeave, nR ,
      &                 bi,bj,myThid)
+#ifdef QUOTA_DIAG_LIMIT
+         do np=1,npmax
+           CALL TIMEAVE_NORMALIZ(Nlimave(1-Olx,1-Oly,1,1,1,np),
+     &                          DAR_timeave, nR ,bi,bj,myThid)
+           CALL TIMEAVE_NORMALIZ(Flimave(1-Olx,1-Oly,1,1,1,np),
+     &                          DAR_timeave, nR ,bi,bj,myThid)
+           CALL TIMEAVE_NORMALIZ(Ilimave(1-Olx,1-Oly,1,1,1,np),
+     &                          DAR_timeave, nR ,bi,bj,myThid)
+         enddo
+         CALL TIMEAVE_NORMALIZ(Tlimave,DAR_timeave, nR ,
+     &                                           bi,bj,myThid)
+#endif
 #ifndef ALLOW_QUOTA
          CALL TIMEAVE_NORMALIZ(Chlave, DAR_timeave, nR ,
      &                 bi,bj,myThid)
@@ -367,6 +379,21 @@ c
      &        pf,'dar_tave',0,0,'dar_PAR_ave',PARave,myThid)
          CALL MNC_CW_RL_W(
      &        pf,'dar_tave',0,0,'dar_PP_ave',PPave,myThid)
+#ifdef QUOTA_DIAG_LIMIT
+         do np=1,npmax
+            WRITE(name,'(a,i3.3)') 'dar_Nlim_',np
+            CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &           Nlimave(1-OLx,1-OLy,1,1,1,np),myThid)
+            WRITE(name,'(a,i3.3)') 'dar_Flim_',np
+            CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &           Flimave(1-OLx,1-OLy,1,1,1,np),myThid)
+            WRITE(name,'(a,i3.3)') 'dar_Ilim_',np
+            CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &           Ilimave(1-OLx,1-OLy,1,1,1,np),myThid)
+         enddo
+         CALL MNC_CW_RL_W(
+     &        pf,'dar_tave',0,0,'dar_Tlim_ave',Tlimave,myThid)
+#endif
 #ifndef ALLOW_QUOTA
          CALL MNC_CW_RL_W(
      &        pf,'dar_tave',0,0,'dar_Chl_ave',Chlave,myThid)
@@ -529,6 +556,12 @@ C      Reset averages to zero
         DO bi = myBxLo(myThid), myBxHi(myThid)
          CALL TIMEAVE_RESET(PARave,Nr,bi,bj,myThid)
          CALL TIMEAVE_RESET(PPave,Nr,bi,bj,myThid)
+#ifdef QUOTA_DIAG_LIMIT
+         CALL TIMEAVE_RESET(Nlimave,Nr,bi,bj,myThid)
+         CALL TIMEAVE_RESET(Flimave,Nr,bi,bj,myThid)
+         CALL TIMEAVE_RESET(Ilimave,Nr,bi,bj,myThid)
+         CALL TIMEAVE_RESET(Tlimave,Nr,bi,bj,myThid)
+#endif
 #ifndef ALLOW_QUOTA
          CALL TIMEAVE_RESET(Chlave,Nr,bi,bj,myThid)
 #endif
