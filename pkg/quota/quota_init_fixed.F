@@ -91,7 +91,7 @@ c "Standard" parameters
       ass_eff          =  0.70 _d 0
       ! organic matter sinking rate
       orgsink(1)       =  0.00 _d 0  /pday
-      orgsink(2)       =  1.00 _d +1 /pday
+      orgsink(2)       =  10.0 _d 0  /pday
       ! cost of biosynthesis
       biosynth         =  2.33 _d 0
       ! nitrogen uptake
@@ -103,7 +103,9 @@ c "Standard" parameters
       ! iron
 !      alpfe            =  1.00 _d 0 ! 3D model
       alpfe            =  0.05 _d 0 ! 1D model
-      scav             =  1.10 _d -3 /pday
+!      scav             =  1.10 _d -3 /pday
+      scav             =  4.40 _d -3 /pday
+
       ligand_stab      =  2.00 _d +5
       ligand_tot       =  1.00 _d -3
       freefemax        =  0.10 _d -3
@@ -117,8 +119,8 @@ c                                            mmol POC/m3/s
       ! basic light
       k_w              =  0.04 _d 0
       k_chl            =  0.03 _d 0
-!      chl2nmax         =  3.00 _d 0 ! Moore 2002 (labelled as GD98)
-      chl2nmax         =  5.6 _d 0  ! Geider 1998
+      chl2nmax         =  3.00 _d 0 ! Moore 2002 (labelled as GD98)
+!      chl2nmax         =  5.6 _d 0  ! Geider 1998
 c-----------------------------------------------------
 c ALLOMETRIC PARAMETERS
 c parameter = aV^b
@@ -138,7 +140,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccc
       be_graz          =  0.02 _d 0
 ! half saturation grazing prey carbon concentration
 !      a_kg             =  2.24 _d +1       ! mmol C m^-3
-      a_kg             =  0.56 _d +1       ! mmol C m^-3
+      a_kg             =  1.00 _d 0       ! mmol C m^-3
       ae_kg            =  3.80 _d 0
       b_kg             =  0.00 _d 0
       be_kg            =  0.03 _d 0
@@ -155,7 +157,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccc
       be_bioswim       =  0.00 _d 0
 cccccccccccccccccccccccccccccccccccccccccccccccccccccc
 ! mortality
-      a_mort           =  0.05 _d 0 / pday  ! d^-1
+      a_mort           =  0.02 _d 0 / pday  ! d^-1
       ae_mort          =  1.00 _d 0
       b_mort           =  0.00 _d 0
       be_mort          =  0.00 _d 0
@@ -189,18 +191,18 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccc
       b_kexc(iCarb)    = -0.33 _d 0
       be_kexc(iCarb)   =  0.09 _d 0
       ! fraction grazing to DOC
-      a_beta_graz(iCarb)  =  1.10 _d 0
+      a_beta_graz(iCarb)  =  1.00 _d 0
       ae_beta_graz(iCarb) =  1.00 _d 0
-      b_beta_graz(iCarb)  = -0.30 _d 0
+      b_beta_graz(iCarb)  = -0.40 _d 0
       be_beta_graz(iCarb) =  0.00 _d 0
       ! fraction mortality to DOC
-      a_beta_mort(iCarb)  =  1.10 _d 0
+      a_beta_mort(iCarb)  =  1.00 _d 0
       ae_beta_mort(iCarb) =  1.00 _d 0
-      b_beta_mort(iCarb)  = -0.30 _d 0
+      b_beta_mort(iCarb)  = -0.40 _d 0
       be_beta_mort(iCarb) =  0.00 _d 0
       ! carbon remineralisation rate
-      remin(iCarb,1)   =  0.01 _d 0 /pday
-      remin(iCarb,2)   =  0.02 _d 0 /pday
+      remin(iCarb,1)   =  0.02 _d 0 /pday
+      remin(iCarb,2)   =  0.04 _d 0 /pday
 ! nitrogen & nitrate
       ! maximum NO3 uptake rate
       a_vmaxi(iNO3)    =  0.51 _d 0 / pday   ! mmol N (mmol C)^-1 d^-1
@@ -229,18 +231,18 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccc
       b_kexc(iNitr)    = -0.33 _d 0
       be_kexc(iNitr)   =  0.09 _d 0
       ! fraction grazing to DON
-      a_beta_graz(iNitr)  =  1.10 _d 0
+      a_beta_graz(iNitr)  =  1.00 _d 0
       ae_beta_graz(iNitr) =  1.00 _d 0
-      b_beta_graz(iNitr)  = -0.30 _d 0
+      b_beta_graz(iNitr)  = -0.40 _d 0
       be_beta_graz(iNitr) =  0.00 _d 0
       ! fraction mortality to DON
-      a_beta_mort(iNitr)  =  1.10 _d 0
+      a_beta_mort(iNitr)  =  1.00 _d 0
       ae_beta_mort(iNitr) =  1.00 _d 0
-      b_beta_mort(iNitr)  = -0.30 _d 0
+      b_beta_mort(iNitr)  = -0.40 _d 0
       be_beta_mort(iNitr) =  0.00 _d 0
       ! N remineralisation rate
-      remin(iNitr,1)   =  0.01 _d 0  /pday
-      remin(iNitr,2)   =  0.02 _d 0  /pday
+      remin(iNitr,1)   =  0.02 _d 0  /pday
+      remin(iNitr,2)   =  0.04 _d 0  /pday
 #ifdef NITRITE
 ! nitrite
       ! maximum NO2 uptake rate
@@ -295,18 +297,18 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccc
       b_kexc(iPhos)    = -0.33 _d 0
       be_kexc(iPhos)   =  0.09 _d 0
       ! fraction grazing to DOP
-      a_beta_graz(iPhos)  =  1.10 _d 0
+      a_beta_graz(iPhos)  =  1.00 _d 0
       ae_beta_graz(iPhos) =  1.00 _d 0
-      b_beta_graz(iPhos)  = -0.30 _d 0
+      b_beta_graz(iPhos)  = -0.40 _d 0
       be_beta_graz(iPhos) =  0.00 _d 0
       ! fraction mortality to DOP
-      a_beta_mort(iPhos)  =  1.10 _d 0
+      a_beta_mort(iPhos)  =  1.00 _d 0
       ae_beta_mort(iPhos) =  1.00 _d 0
-      b_beta_mort(iPhos)  = -0.30 _d 0
+      b_beta_mort(iPhos)  = -0.40 _d 0
       be_beta_mort(iPhos) =  0.00 _d 0
       ! P remineralisation rate
-      remin(iPhos,1)   =  0.01 _d 0  /pday
-      remin(iPhos,2)   =  0.02 _d 0  /pday
+      remin(iPhos,1)   =  0.02 _d 0  /pday
+      remin(iPhos,2)   =  0.04 _d 0  /pday
 #endif
 #ifdef SQUOTA
 ! silicate
@@ -389,18 +391,18 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccc
       b_kexc(iIron)    =  0.00 _d 0
       be_kexc(iIron)   =  0.00 _d 0
       ! fraction grazing to DOFe
-      a_beta_graz(iIron)  =  1.10 _d 0
+      a_beta_graz(iIron)  =  1.00 _d 0
       ae_beta_graz(iIron) =  1.00 _d 0
-      b_beta_graz(iIron)  = -0.30 _d 0
+      b_beta_graz(iIron)  = -0.40 _d 0
       be_beta_graz(iIron) =  0.00 _d 0
       ! fraction mortality to DOFe
-      a_beta_mort(iIron)  =  1.10 _d 0
+      a_beta_mort(iIron)  =  1.00 _d 0
       ae_beta_mort(iIron) =  1.00 _d 0
-      b_beta_mort(iIron)  = -0.30 _d 0
+      b_beta_mort(iIron)  = -0.40 _d 0
       be_beta_mort(iIron) =  0.00 _d 0
       ! Fe remineralisation rate
-      remin(iIron,1)   =  0.01 _d 0  /pday
-      remin(iIron,2)   =  0.02 _d 0  /pday
+      remin(iIron,1)   =  0.02 _d 0  /pday
+      remin(iIron,2)   =  0.04 _d 0  /pday
 #endif
 cccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c end allometric scaling
