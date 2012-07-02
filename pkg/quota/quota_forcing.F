@@ -64,12 +64,18 @@ c light variables
       _RL atten,lite
       _RL newtime     ! for sub-timestepping
       _RL runtim      ! time from tracer initialization
-
-#ifdef DAR_DIAG_DIVER
-      _RL Diver1(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr)
-      _RL Diver2(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr)
-      _RL Diver3(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr)
-      _RL Diver4(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr)
+c
+#ifdef ALLOW_DIAGNOSTICS
+COJ for diagnostics
+      _RL  PParr(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr)
+#endif
+#ifdef ALLOW_TIMEAVE
+#ifdef QUOTA_DIAG_LIMIT
+      _RL Nlim(npmax)
+      _RL Flim(npmax)
+      _RL Ilim(npmax)
+      _RL Tlim
+#endif
 #endif
 c
 
@@ -88,7 +94,7 @@ c local tendencies
 
       INTEGER bottom
       INTEGER surface
-      INTEGER i,j,k,it, ktmp
+      INTEGER i,j,k,it,itmp,ktmp
       INTEGER ii,io,jp,ko, jp2, jpsave
       INTEGER place
       INTEGER debug
@@ -96,7 +102,7 @@ c local tendencies
 
 c
 c--------------------------------------------------
-c initialise vatriables
+c initialise variables
       DO j=1-OLy,sNy+OLy
       DO i=1-OLx,sNx+OLx
        do k=1,Nr
@@ -104,13 +110,10 @@ c initialise vatriables
            freefe(i,j,k) = 0.0 _d 0
 # endif
            PAR(i,j,k)    = 0.0 _d 0
-#ifdef DAR_DIAG_DIVER
-           Diver1(i,j,k) = 0.0 _d 0
-           Diver2(i,j,k) = 0.0 _d 0
-           Diver3(i,j,k) = 0.0 _d 0
-           Diver4(i,j,k) = 0.0 _d 0
+#ifdef ALLOW_DIAGNOSTICS
+COJ for diagnostics
+           PParr(i,j,k) = 0. _d 0
 #endif
-c
         enddo !k
        ENDDO !i
        ENDDO !j
@@ -203,25 +206,29 @@ c             ambient nutrients for each element (1 to iimax)
               dnutrient(ii) = 0. _d 0
             enddo ! ii
 c *********************************************************************
-c Unicellular biomass (including chlorophyll biomass)
+c Unicellular biomass (including chlorophyll biomass - for non-grazers)
             do io=1,iomax
               do jp=1,npmax
-                place = place + 1
-                biomass(io,jp)  = max(Ptr(i,j,k,bi,bj,place),0. _d 0)
+                if (io.ne.iChlo.or.pft(jp).ne.6) then ! no grazer chlorophyll
+                  place = place + 1
+                  biomass(io,jp)  = max(Ptr(i,j,k,bi,bj,place),0. _d 0)
 ! biomasses above current layer for sinking
-                if (k.eq.1) then
-                  bioabove(io,jp)=0. _d 0
-                endif
+                  if (k.eq.1) then
+                    bioabove(io,jp)=0. _d 0
+                  endif
 ! biomasses below current layer for swimming
-                if (k.eq.Nr) then
-                  biobelow(io,jp)=0. _d 0
-                elseif (hFacC(i,j,k+1,bi,bj).eq.0. _d 0) then
-                  biobelow(io,jp)=0. _d 0
-                else
-                  biobelow(io,jp)=max(Ptr(i,j,k+1,bi,bj,place),0. _d 0)
-                endif
+                  if (k.eq.Nr) then
+                   biobelow(io,jp)=0. _d 0
+                  elseif (hFacC(i,j,k+1,bi,bj).eq.0. _d 0) then
+                   biobelow(io,jp)=0. _d 0
+                  else
+                   biobelow(io,jp)=max(Ptr(i,j,k+1,bi,bj,place),0. _d 0)
+                  endif
 ! initialise biomass rate of change
-                dbiomass(io,jp) = 0. _d 0
+                  dbiomass(io,jp) = 0. _d 0
+                else ! if grazer, fill chl biomass with zeros
+                  biomass(io,jp)  = 0. _d 0
+                endif
               enddo ! jp
             enddo
 c *********************************************************************
@@ -315,12 +322,38 @@ c ---------------------------------------------------------------------
 #ifdef FQUOTA
      I                       freefu, inputFel,
 #endif
+#ifdef ALLOW_TIMEAVE
+#ifdef QUOTA_DIAG_LIMIT
+     O                       Nlim, Flim, Ilim, Tlim,
+#endif
+#endif
      I                       PARlocal, Tlocal, Slocal,
      I                       bottom, surface, dzlocal,
      O                       dbiomass, dorgmat, dnutrient,
      I                       debug,
      I                       runtim,
      I                       MyThid)
+c ---------------------------------------------------------------------
+#ifdef FQUOTA
+#ifdef IRON_SED_SOURCE
+c only above minimum depth (continental shelf)
+             if (rF(k).lt.depthfesed) then
+c only if bottom layer
+               if (HFacC(i,j,k+1,bi,bj).eq.0. _d 0) then
+#ifdef IRON_SED_SOURCE_VARIABLE
+c calculate sink of POC into bottom layer
+                tmp=orgsink(2)*orgabove(iCarb,2)/dzlocal
+c convert to dPOCl
+                dnutrient(iFeT) = dnutrient(iFeT)
+     &                          + fesedflux_pcm*tmp
+#else
+                dnutrient(iFeT) = dnutrient(iFeT)
+     &                          + fesedflux/(drF(k)*hFacC(i,j,k,bi,bj))
+#endif
+               endif
+             endif
+#endif
+#endif
 c ---------------------------------------------------------------------
 c save un-updated biomass as layer above
             do io=1,iomax
@@ -350,11 +383,13 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccc
 c Biomass
             do io=1,iomax
               do jp=1,npmax
-                place = place + 1
-                Ptr(i,j,k,bi,bj,place) = Ptr(i,j,k,bi,bj,place)
-     &                                 + dtplankton*dbiomass(io,jp)
-                if (pft(jp).eq.6.and.io.eq.iChlo) then
-                  Ptr(i,j,k,bi,bj,place) = 0. _d 0
+                if (io.ne.iChlo.or.pft(jp).ne.6) then ! if not a grazer
+                  place = place + 1
+                  Ptr(i,j,k,bi,bj,place) = Ptr(i,j,k,bi,bj,place)
+     &                                   + dtplankton*dbiomass(io,jp)
+                  if (pft(jp).eq.6.and.io.eq.iChlo) then
+                    Ptr(i,j,k,bi,bj,place) = 0. _d 0
+                  endif
                 endif
               enddo ! jp
             enddo ! io
@@ -371,22 +406,28 @@ c Organic matter
             enddo ! io
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
-            PPave(i,j,k,bi,bj) = PPave(i,j,k,bi,bj)+
-     &                           PP*dtplankton
-            PARave(i,j,k,bi,bj) = PARave(i,j,k,bi,bj)+
-     &                            PARlocal * dtplankton
-c
+#ifdef ALLOW_DIAGNOSTICS
+COJ for diagnostics
+            PParr(i,j,k) = PP
+#endif /* ALLOW_DIAGNOSTICS */
+
 #ifdef ALLOW_TIMEAVE
+             PPave(i,j,k,bi,bj) = PPave(i,j,k,bi,bj)
+     &                          + PP * dtplankton
+            PARave(i,j,k,bi,bj) = PARave(i,j,k,bi,bj)
+     &                          + PARlocal * dtplankton
 c
-#ifdef DAR_DIAG_DIVER
-             Diver1ave(i,j,k,bi,bj)=Diver1ave(i,j,k,bi,bj)+
-     &                           Diver1(i,j,k)*dtplankton
-             Diver2ave(i,j,k,bi,bj)=Diver2ave(i,j,k,bi,bj)+
-     &                           Diver2(i,j,k)*dtplankton
-             Diver3ave(i,j,k,bi,bj)=Diver3ave(i,j,k,bi,bj)+
-     &                           Diver3(i,j,k)*dtplankton
-             Diver4ave(i,j,k,bi,bj)=Diver4ave(i,j,k,bi,bj)+
-     &                           Diver4(i,j,k)*dtplankton
+#ifdef QUOTA_DIAG_LIMIT
+            do jp=1,npmax
+              Nlimave(i,j,k,bi,bj,jp) = Nlimave(i,j,k,bi,bj,jp)
+     &                                + Nlim(jp) * dtplankton
+              Flimave(i,j,k,bi,bj,jp) = Flimave(i,j,k,bi,bj,jp)
+     &                                + Flim(jp) * dtplankton
+              Ilimave(i,j,k,bi,bj,jp) = Ilimave(i,j,k,bi,bj,jp)
+     &                                + Ilim(jp) * dtplankton
+            enddo
+            Tlimave(i,j,k,bi,bj) = Tlimave(i,j,k,bi,bj)
+     &                           + Tlim * dtplankton
 #endif
 #endif
           endif
@@ -401,35 +442,9 @@ c
 COJ fill diagnostics
 #ifdef ALLOW_DIAGNOSTICS
        IF ( useDiagnostics ) THEN
-        diagname = '        '
-        do jp=1,npmax
-            WRITE(diagname,'(A8)') 'dCHL',jp,' '
-            CALL DIAGNOSTICS_FILL
-     &      (dCHLarr(1-Olx,1-Oly,1,jp),diagname,0,Nr,2,bi,bj,myThid)
-          do ii=1,iimax
-            WRITE(diagname,'(A8)') 'PP',ii,jp,' '
-            CALL DIAGNOSTICS_FILL
-     &      (PParr(1-Olx,1-Oly,1,ii,jp),diagname,0,Nr,2,bi,bj,myThid)
-          enddo
-        enddo
-c
-        WRITE(diagname,'(A8)') 'PAR     '
-        CALL DIAGNOSTICS_FILL( PAR(1-Olx,1-Oly,1), diagname,
+        diagname = 'PP      '
+        CALL DIAGNOSTICS_FILL( PParr(1-Olx,1-Oly,1), diagname,
      &                         0,Nr,2,bi,bj,myThid )
-#ifdef DAR_DIAG_DIVER
-        WRITE(diagname,'(A8)') 'Diver1  '
-        CALL DIAGNOSTICS_FILL( Diver1(1-Olx,1-Oly,1), diagname,
-     &                         0,Nr,2,bi,bj,myThid )
-        WRITE(diagname,'(A8)') 'Diver2  '
-        CALL DIAGNOSTICS_FILL( Diver2(1-Olx,1-Oly,1), diagname,
-     &                         0,Nr,2,bi,bj,myThid )
-        WRITE(diagname,'(A8)') 'Diver3  '
-        CALL DIAGNOSTICS_FILL( Diver3(1-Olx,1-Oly,1), diagname,
-     &                         0,Nr,2,bi,bj,myThid )
-        WRITE(diagname,'(A8)') 'Diver4  '
-        CALL DIAGNOSTICS_FILL( Diver4(1-Olx,1-Oly,1), diagname,
-     &                         0,Nr,2,bi,bj,myThid )
-#endif
        ENDIF
 #endif
 COJ
