@@ -218,7 +218,7 @@ c<><><><><><><><><><><><><><><><><><><><><><><><><><>
          close(IniUnit3)
 c-----------------------------------------------
 c        write out organic matter remineralisation rates
-         CALL MDSFINDUNIT( IniUnit4, mythid )
+         CALL MDSFINDUNIT( IniUnit3, mythid )
          open(IniUnit4,file='plankton-orgmat.dat',status='unknown')
 ! DOM remineralisation rates
          char_n=0
@@ -294,12 +294,6 @@ c set arrays to zero if first timestep
          DO bi = myBxLo(myThid), myBxHi(myThid)
           CALL TIMEAVE_RESET(PARave,   Nr,  bi, bj, myThid)
           CALL TIMEAVE_RESET(PPave,    Nr,  bi, bj, myThid)
-#ifdef DAR_DIAG_DIVER
-          CALL TIMEAVE_RESET(Diver1ave,   Nr,  bi, bj, myThid)
-          CALL TIMEAVE_RESET(Diver2ave,   Nr,  bi, bj, myThid)
-          CALL TIMEAVE_RESET(Diver3ave,   Nr,  bi, bj, myThid)
-          CALL TIMEAVE_RESET(Diver4ave,   Nr,  bi, bj, myThid)
-#endif
 c         CALL TIMEAVE_RESET(SURave,   1,  bi, bj, myThid)
           WRITE(msgbuf,'(A)')
      &      'QQ start timeave'
