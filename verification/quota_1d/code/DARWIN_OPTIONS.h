@@ -79,6 +79,7 @@ cbenw - turn on quota model
 cbenw - switching to enable one zoo debug version
 #define SWITCH3
 
+#define QUOTA_DIAG_LIMIT
 #undef  UNCERTAINTY
 
 c <><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
