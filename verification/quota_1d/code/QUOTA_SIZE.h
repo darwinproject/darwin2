@@ -18,12 +18,13 @@ c
          INTEGER iimax ! inorganic elements
          INTEGER nsize ! number of size classes
          INTEGER npmax ! total plankton types
+         INTEGER iPhoto ! number of plankton that use chlorophyll
          INTEGER iomax ! biomass elements (includes C, Si & Chl)
          INTEGER iSil  ! switch for dynamic silicate (1 or 0)
          INTEGER iChl  ! switch for dynamic chlorophyll (1 or 0)
          INTEGER komax ! organic matter types (must be 2)
          PARAMETER(iimax=5,iomax=4,komax=2) ! elements, biomasses and organics
-         PARAMETER(npmax=16)                ! size and taxonomic classes
+         PARAMETER(npmax=16,iPhoto=15)                ! size and taxonomic classes
          PARAMETER(iSil=0,iChl=1)           ! flags
 c
 c inutrient       :: index of first nutrient in Ptracer
@@ -46,8 +47,8 @@ c
 c
       PARAMETER (inutrient  = 1 )
       PARAMETER (ibiomass   = inutrient + iimax )
-      PARAMETER (iorgmat    = ibiomass  + npmax * iomax )
-      PARAMETER (nDarwin    = iorgmat   + 2 * (iomax-iChl) - iSil - 1 )
+      PARAMETER (iorgmat  =ibiomass+npmax*iomax-(npmax-iPhoto)*iChl)
+      PARAMETER (nDarwin  =iorgmat   + 2 * (iomax-iChl) - iSil - 1 )
 c
 c (N.B. ptracers lists biomass of element i for all plankton, then moves on to the next element i+1)
 c (N.B. ptracers lists mass of element i for all OM classes, then moves on to the next element i+1)
