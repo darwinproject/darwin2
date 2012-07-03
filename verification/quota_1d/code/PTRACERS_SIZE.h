@@ -16,7 +16,7 @@ C  and is set here (default 1)
 C
 C     Number of tracers
       INTEGER PTRACERS_num
-      PARAMETER(PTRACERS_num = 75 )
+      PARAMETER(PTRACERS_num = 74 )
 
 
 #ifdef ALLOW_AUTODIFF_TAMC
