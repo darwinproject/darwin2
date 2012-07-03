@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/verification/quota_1d/code/DARWIN_OPTIONS.h,v 1.3 2012/07/03 06:50:44 benw Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/verification/quota_1d/code/DARWIN_OPTIONS.h,v 1.4 2012/07/03 06:51:48 benw Exp $
 C $Name:  $
 
 #ifndef DARWIN_OPTIONS_H
@@ -79,7 +79,7 @@ cbenw - turn on quota model
 cbenw - switching to enable one zoo debug version
 #define SWITCH3
 
-#define QUOTA_DIAG_LIMIT
+#undef  QUOTA_DIAG_LIMIT
 #undef  UNCERTAINTY
 
 c <><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
