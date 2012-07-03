@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/verification/quota_1d/code/PTRACERS_SIZE.h,v 1.1 2011/04/13 19:26:03 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/verification/quota_1d/code/PTRACERS_SIZE.h,v 1.2 2012/07/03 06:52:30 benw Exp $
 C $Name:  $
 
 #ifdef ALLOW_PTRACERS
@@ -16,7 +16,7 @@ C  and is set here (default 1)
 C
 C     Number of tracers
       INTEGER PTRACERS_num
-      PARAMETER(PTRACERS_num = 75 )
+      PARAMETER(PTRACERS_num = 74 )
 
 
 #ifdef ALLOW_AUTODIFF_TAMC
