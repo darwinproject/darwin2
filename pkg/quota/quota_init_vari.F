@@ -218,7 +218,7 @@ c<><><><><><><><><><><><><><><><><><><><><><><><><><>
          close(IniUnit3)
 c-----------------------------------------------
 c        write out organic matter remineralisation rates
-         CALL MDSFINDUNIT( IniUnit3, mythid )
+         CALL MDSFINDUNIT( IniUnit4, mythid )
          open(IniUnit4,file='plankton-orgmat.dat',status='unknown')
 ! DOM remineralisation rates
          char_n=0
