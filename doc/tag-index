@@ -1,8 +1,18 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.22 2012/06/29 16:16:24 jahn Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.23 2012/07/07 15:31:57 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
+
+ctrb_darwin2_ckpt63p_20120707
+o update quota package to version used in L&O paper
+  - change parameters
+  - add iron_sed_source and part_scav
+  - change generation of phyto:
+    Prochlorococcus use nitrate, simpler partitioning of OM,
+    no quadratic mortality, diatom palatability is not special
+  - add N, Fe, T and I limitation diagnostics
+  - remove unused chlorophyll tracer for zooplankton
 
 ctrb_darwin2_ckpt63o_20120629
 o add temperature dependencies for mortality (default to no dependence - need to
