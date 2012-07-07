@@ -4,6 +4,16 @@ $Name$
     Notes on tags used in darwin
     ============================
 
+ctrb_darwin2_ckpt63p_20120707
+o update quota package to version used in L&O paper
+  - change parameters
+  - add iron_sed_source and part_scav
+  - change generation of phyto:
+    Prochlorococcus use nitrate, simpler partitioning of OM,
+    no quadratic mortality, diatom palatability is not special
+  - add N, Fe, T and I limitation diagnostics
+  - remove unused chlorophyll tracer for zooplankton
+
 ctrb_darwin2_ckpt63o_20120629
 o add temperature dependencies for mortality (default to no dependence - need to
   change comments in monod_tempfunc to enable)
