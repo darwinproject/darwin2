@@ -328,9 +328,15 @@ C make sure we have reserved enough space in Ptracers
       ENDIF
       DO nz = 1,nzmax
         iZooP (nz)  = iZoo +                   (nz-1)*strideTypeZoo
+#ifdef ONLY_P_CYCLE
+        iZooN (nz)  = nptot
+        iZooFe(nz)  = nptot
+        iZooSi(nz)  = nptot
+#else
         iZooN (nz)  = iZoo + 1*strideCompZoo + (nz-1)*strideTypeZoo
         iZooFe(nz)  = iZoo + 2*strideCompZoo + (nz-1)*strideTypeZoo
         iZooSi(nz)  = iZoo + 3*strideCompZoo + (nz-1)*strideTypeZoo
+#endif
       ENDDO
 #ifdef ALLOW_CARBON
        DO nz = 1,nzmax
