@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_fixed.F,v 1.5 2012/05/31 21:08:25 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_fixed.F,v 1.6 2012/07/24 16:01:56 stephd Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -328,9 +328,15 @@ C make sure we have reserved enough space in Ptracers
       ENDIF
       DO nz = 1,nzmax
         iZooP (nz)  = iZoo +                   (nz-1)*strideTypeZoo
+#ifdef ONLY_P_CYCLE
+        iZooN (nz)  = nptot
+        iZooFe(nz)  = nptot
+        iZooSi(nz)  = nptot
+#else
         iZooN (nz)  = iZoo + 1*strideCompZoo + (nz-1)*strideTypeZoo
         iZooFe(nz)  = iZoo + 2*strideCompZoo + (nz-1)*strideTypeZoo
         iZooSi(nz)  = iZoo + 3*strideCompZoo + (nz-1)*strideTypeZoo
+#endif
       ENDDO
 #ifdef ALLOW_CARBON
        DO nz = 1,nzmax

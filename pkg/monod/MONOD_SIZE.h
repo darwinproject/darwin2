@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/MONOD_SIZE.h,v 1.2 2012/05/31 21:08:25 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/MONOD_SIZE.h,v 1.3 2012/07/24 16:01:56 stephd Exp $
 C $Name:  $
 
 c MONOD_SIZE.h
@@ -83,6 +83,42 @@ C remember to bring the fields in data.ptracers in the right order !
 #ifdef ALLOW_CDOM
       INTEGER iCDOM
 #endif
+#ifdef ONLY_P_CYCLE
+      INTEGER nptot
+      PARAMETERS (nptot=npmax+nzmax+4) 
+c
+      PARAMETER (nCompZooMax=1)
+      PARAMETER (strideCompZoo=1)
+      PARAMETER (strideTypeZoo=nCompZooMax)
+      PARAMETER (iPO4  =1)
+      PARAMETER (iNO3  =nptot)
+      PARAMETER (iFeT  =nptot)
+      PARAMETER (iSi   =nptot)
+      PARAMETER (iDOP  =2)
+      PARAMETER (iDON  =nptot)
+      PARAMETER (iDOFe =nptot)
+      PARAMETER (iZoo  =3)
+      PARAMETER (iPOP  =iZoo+nzmax*nCompZooMax)
+      PARAMETER (iPON  =nptot   )
+      PARAMETER (iPOFe =nptot   )
+      PARAMETER (iPOSi =nptot   )
+      PARAMETER (iNH4  =nptot   )
+      PARAMETER (iNO2  =nptot   )
+      PARAMETER (iPhy  =iPOP  +1)
+#ifdef DYNAMIC_CHL
+      PARAMETER (iChl =iPhy +npmax)
+      PARAMETER (iTOT =iPhy +npmax+npmax)
+#else
+      PARAMETER (iTOT =iPhy +npmax)
+#endif
+#ifdef ALLOW_CDOM
+      PARAMETER (iCDOM =iTOT)
+      PARAMETER (nTOT = iCDOM+1)
+#else
+      PARAMETER (nTOT =iTOT)
+#endif
+      PARAMETER (nDarwin=nTOT-1)
+#else   ! ALL NUTRIENT CYCLES
       PARAMETER (nCompZooMax=4)
       PARAMETER (strideCompZoo=1)
       PARAMETER (strideTypeZoo=nCompZooMax)
@@ -124,6 +160,7 @@ C remember to bring the fields in data.ptracers in the right order !
       PARAMETER (nDarwin=iZoC+nzmax-1)
 #else
       PARAMETER (nDarwin=nTOT-1)
+#endif
 #endif
 
 
