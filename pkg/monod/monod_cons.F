@@ -81,6 +81,9 @@ c Phosphorus budget
               npnum=iPhy+np-1
               tmptotP=tmptotP+Ptracer(i,j,k,bi,bj,npnum)*vol  !Phy 
            enddo
+#ifdef ALLOW_CDOM
+           tmptotP=tmptotP+Ptracer(i,j,k,bi,bj,iCDOM)*vol  !CDOM
+#endif
 c Nitrogen budget
            tmptotN=tmptotN+Ptracer(i,j,k,bi,bj,iNO3)*vol    !NO3
            tmptotN=tmptotN+Ptracer(i,j,k,bi,bj,iNH4)*vol   !NH4
@@ -94,6 +97,9 @@ c Nitrogen budget
               npnum=iPhy+np-1
               tmptotN=tmptotN+Ptracer(i,j,k,bi,bj,npnum)*R_NP(np)*vol  !Phy
            enddo
+#ifdef ALLOW_CDOM
+           tmptotN=tmptotN+Ptracer(i,j,k,bi,bj,iCDOM)*rnp_cdom*vol  !CDOM
+#endif
 c Iron budget
            tmptotFe=tmptotFe+Ptracer(i,j,k,bi,bj,iFeT)*vol    !Fet
            tmptotFe=tmptotFe+Ptracer(i,j,k,bi,bj,iDOFe)*vol    !DOFe
@@ -105,6 +111,9 @@ c Iron budget
               npnum=iPhy+np-1
               tmptotFe=tmptotFe+Ptracer(i,j,k,bi,bj,npnum)*R_FeP(np)*vol  !Phy
            enddo
+#ifdef ALLOW_CDOM
+           tmptotFe=tmptotFe+Ptracer(i,j,k,bi,bj,iCDOM)*rfep_cdom*vol  !CDOM
+#endif
 c Silica budget
            tmptotSi=tmptotSi+Ptracer(i,j,k,bi,bj,iSi)*vol    !Si
            tmptotSi=tmptotSi+Ptracer(i,j,k,bi,bj,iPOSi)*vol   !POSi
@@ -129,6 +138,9 @@ c carbon budget
               npnum=iPhy+np-1
               tmptotC=tmptotC+Ptracer(i,j,k,bi,bj,npnum)*R_PC(np)*vol  !Phy
            enddo
+#ifdef ALLOW_CDOM
+           tmptotC=tmptotC+Ptracer(i,j,k,bi,bj,iCDOM)*rcp_cdom*vol  !CDOM
+#endif
 c alkalinity budget !!!!! NOT FULL BUDGET!!!!!
            tmptotA=tmptotA+Ptracer(i,j,k,bi,bj,iALK)*vol    !ALK
 c oxygem budget !!!!!!!! NOT FULL BUDGET !!!!!!!!!!!
