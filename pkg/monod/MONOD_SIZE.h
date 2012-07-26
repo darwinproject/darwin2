@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/MONOD_SIZE.h,v 1.3 2012/07/24 16:01:56 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/MONOD_SIZE.h,v 1.4 2012/07/26 20:43:36 stephd Exp $
 C $Name:  $
 
 c MONOD_SIZE.h
@@ -85,7 +85,7 @@ C remember to bring the fields in data.ptracers in the right order !
 #endif
 #ifdef ONLY_P_CYCLE
       INTEGER nptot
-      PARAMETERS (nptot=npmax+nzmax+4) 
+      PARAMETER (nptot=npmax+nzmax+4) 
 c
       PARAMETER (nCompZooMax=1)
       PARAMETER (strideCompZoo=1)
