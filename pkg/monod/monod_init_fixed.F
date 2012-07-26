@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_fixed.F,v 1.7 2012/07/26 18:01:22 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_fixed.F,v 1.8 2012/07/26 18:05:34 stephd Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -221,6 +221,15 @@ c ammonia and nitrite inhibition
 c set si half sat
        val_ksatsi=1. _d 0
 c set nutrient ratios for phyto
+#ifdef ONLY_P_CYCLE
+       val_R_SiP_diatom=0.0 _d 0
+       val_R_NP=0.0 _d 0
+       val_RFeP=0.0 _d -3
+       val_R_NP_diaz=0.0 _d  0
+       val_RFeP_diaz=0.0 _d 0 * val_RFeP
+       val_R_PC=0.0 _d 0
+       val_R_PICPOC=0.0 _d 0
+#else
        val_R_SiP_diatom=16.0 _d 0  ! 32 for Fanny's runs
        val_R_NP=16.0 _d 0
        val_RFeP=1.0 _d -3
@@ -228,6 +237,8 @@ c set nutrient ratios for phyto
        val_RFeP_diaz=30.0 _d 0 * val_RFeP
        val_R_PC=120.0 _d 0
        val_R_PICPOC=0.8 _d 0
+#endif
+c
 #ifdef OLD_GRAZE
 c grazing hlaf saturation
        kgrazesat = 0.1 _d 0
