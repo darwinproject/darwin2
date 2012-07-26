@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_fixed.F,v 1.8 2012/07/26 18:05:34 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_fixed.F,v 1.9 2012/07/26 21:40:10 stephd Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -334,11 +334,13 @@ c sinking rate for particulate matter (m/s)
 
 C make sure we have reserved enough space in Ptracers
       IF ( nCompZooMax .LT. 4 ) THEN
+#ifndef ONLY_P_CYCLE
         WRITE(msgBuf,'(A,A,I3)')
      &    'MONOD_INIT_FIXED: ERROR: 4 zooplankton components, but ',
      &    'nCompZooMax = ', nCompZooMax
         CALL PRINT_ERROR( msgBuf , 1)
         STOP 'ABNORMAL END: S/R MONOD_INIT_FIXED'
+#endif
       ENDIF
       DO nz = 1,nzmax
         iZooP (nz)  = iZoo +                   (nz-1)*strideTypeZoo
