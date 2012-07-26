@@ -85,7 +85,7 @@ C remember to bring the fields in data.ptracers in the right order !
 #endif
 #ifdef ONLY_P_CYCLE
       INTEGER nptot
-      PARAMETERS (nptot=npmax+nzmax+4) 
+      PARAMETER (nptot=npmax+nzmax+4) 
 c
       PARAMETER (nCompZooMax=1)
       PARAMETER (strideCompZoo=1)
