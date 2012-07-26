@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/MONOD.h,v 1.5 2012/05/31 21:08:25 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/MONOD.h,v 1.6 2012/07/26 18:01:22 stephd Exp $
 C $Name:  $
 
 c MONOD.h
@@ -60,7 +60,7 @@ c           have been tried
      &          SmallPsatrange, BigPsatrange, ProcPsatrange,
      &          prochlPsat,
      &          UniDzPsat, UniDzPsatrange, 
-     &          depthdenit, o2crit, denit_np,
+     &          depthdenit, o2crit, denit_np, denit_no3, no3crit,
 #ifdef OLD_GRAZE
      &          graze,
      &          kgrazesat,
@@ -154,7 +154,8 @@ c           have been tried
          _RL UniDzPsat, UniDzPsatrange
          _RL depthdenit
          _RL o2crit
-         _RL denit_np
+         _RL denit_np, denit_no3
+         _RL no3crit
          _RL ksatNH4fac, ksatNO2fac
          _RL sig1,sig2,sig3
          _RL val_ksatsi

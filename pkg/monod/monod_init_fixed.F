@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_fixed.F,v 1.6 2012/07/24 16:01:56 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_fixed.F,v 1.7 2012/07/26 18:01:22 stephd Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -106,9 +106,12 @@ c depth for denitrification to start
 
 c critical oxygen for O2/NO3 remineralization
       O2crit = 6.0 _d 0    !(Lipschultz et al 1990, DSR 37, 1513-1541)
-c ratio of no3 to p in denitrification process
+c ratio of n to p in denitrification process
       denit_np = 120.0 _d 0
-
+c ratio no3 used relative to all n in denitrification process
+      denit_no3 = 104.0 _d 0
+c critical nitrate below which no denit (or remin) happens
+      no3crit = 1. _d -2
 c
 c oxidation rates for ammonium and nitrite
 c i.e. Knita ...    NH4 -> NO2

@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_plankton.F,v 1.8 2012/06/29 20:41:59 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_plankton.F,v 1.9 2012/07/26 18:01:22 stephd Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -1456,6 +1456,44 @@ c degradation of  CDOM - high when bleached by light
 #endif
 #endif
 
+#ifdef ALLOW_DENIT
+           if (O2local.lt.O2crit) then
+              if (NO3local.lt.no3crit) then
+c no remineralization for N, P, Fe (not Si?)
+               DOPremin = 0. _d 0
+               DONremin = 0. _d 0 
+               DOFeremin = 0. _d 0 
+               preminP  = 0. _d 0 
+               preminN  = 0. _d 0
+               preminFe =  0. _d 0
+#ifdef ALLOW_CDOM
+               preminP_cdom =  0. _d 0
+               preminN_cdom =  0. _d 0
+               preminFe_cdom =  0. _d 0
+#endif
+#ifdef ALLOW_CARBON
+              DOCremin = 0. _d 0
+              preminC  = 0. _d 0
+#ifdef ALLOW_CDOM
+              preminC_cdom =  0. _d 0
+#endif
+#endif
+
+#ifdef ALLOW_CDOM
+c degradation of  CDOM - high when bleached by light
+           cdomp_degrd = reminTempFunction * cdomlocal
+     &            *(cdombleach*min(PARlocal/PARcdom,1. _d 0) )
+           cdomn_degrd = rnp_cdom * cdomp_degrd
+           cdomfe_degrd= rfep_cdom * cdomp_degrd
+#ifdef ALLOW_CARBON
+           cdomc_degrd = rcp_cdom  * cdomp_degrd
+#endif
+#endif
+              endif
+           endif
+#endif
+c end denit caveats
+
 c chemistry
 c NH4 -> NO2 -> NO3 by bacterial action
             NO2prod = knita*( 1. _d 0-min(PARlocal/PAR0,1. _d 0) )
@@ -1635,7 +1673,7 @@ c-ONLYNO3   dNO3dt =  - consumpNO3 +  preminN  + DONremin
 #else 
      &                *(preminP  + DOPremin)
 #endif
-              dNO3dt = dNO3dt - denit
+              dNO3dt = dNO3dt - (denit_no3/denit_np)*denit
               dNH4dt = dNH4dt -  
 #ifdef ALLOW_CDOM
      &                 (DONremin)
