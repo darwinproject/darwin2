@@ -354,6 +354,14 @@ c set arrays to zero if first timestep
      &                                    Nr,bi,bj,myThid)
           enddo
 #endif
+#ifdef DAR_DIAG_IRR_AMPS
+          do i=1,tlam
+           CALL TIMEAVE_RESET(c1ave(1-OLx,1-OLy,1,1,1,i),
+     &                                    Nr,bi,bj,myThid)
+           CALL TIMEAVE_RESET(c2ave(1-OLx,1-OLy,1,1,1,i),
+     &                                    Nr,bi,bj,myThid)
+          enddo
+#endif
 #ifdef DAR_DIAG_ABSORP
           do i=1,tlam
            CALL TIMEAVE_RESET(aave(1-OLx,1-OLy,1,1,1,i),
@@ -377,6 +385,10 @@ c set arrays to zero if first timestep
            CALL TIMEAVE_RESET(bbpartave(1-OLx,1-OLy,1,1,1,i),
      &                                    Nr,bi,bj,myThid)
           enddo
+#endif
+#ifdef DAR_RADTRANS
+          CALL TIMEAVE_RESET(rmudave(1-OLx,1-OLy,1,1),
+     &                                   1,bi,bj,myThid)
 #endif
 c ANNA_TAVE
 #ifdef WAVES_DIAG_PCHL

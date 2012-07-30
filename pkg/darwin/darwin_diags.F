@@ -112,6 +112,14 @@ C      Normalize by integrated time
      &                          DAR_timeave,nR,bi,bj,myThid)
          enddo
 #endif
+#ifdef DAR_DIAG_IRR_AMPS
+         do ii = 1,tlam
+          CALL TIMEAVE_NORMALIZ(c1ave(1-Olx,1-Oly,1,1,1,ii),
+     &                          DAR_timeave,nR,bi,bj,myThid)
+          CALL TIMEAVE_NORMALIZ(c2ave(1-Olx,1-Oly,1,1,1,ii),
+     &                          DAR_timeave,nR,bi,bj,myThid)
+         enddo
+#endif
 #ifdef DAR_DIAG_ABSORP
          do ii = 1,tlam
           CALL TIMEAVE_NORMALIZ(aave(1-Olx,1-Oly,1,1,1,ii),
@@ -135,6 +143,10 @@ C      Normalize by integrated time
           CALL TIMEAVE_NORMALIZ(bbpartave(1-Olx,1-Oly,1,1,1,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
          enddo
+#endif
+#ifdef DAR_RADTRANS
+         CALL TIMEAVE_NORMALIZ(rmudave(1-Olx,1-Oly,1,1),
+     &                         DAR_timeave,1,bi,bj,myThid)
 #endif
 
 c ANNA_TAVE
@@ -257,6 +269,20 @@ c
      &           myIter,myThid)
          enddo
 #endif
+#ifdef DAR_DIAG_IRR_AMPS
+         do ii = 1,tlam
+           WRITE(suff,'(A5,I2.2,A1,I10.10)') 'c1ave',
+     &           ii,'.',myIter
+           CALL WRITE_FLD_XYZ_RL(suff,' ',
+     &           c1ave(1-Olx,1-Oly,1,1,1,ii),
+     &           myIter,myThid)
+           WRITE(suff,'(A5,I2.2,A1,I10.10)') 'c2ave',
+     &           ii,'.',myIter
+           CALL WRITE_FLD_XYZ_RL(suff,' ',
+     &           c2ave(1-Olx,1-Oly,1,1,1,ii),
+     &           myIter,myThid)
+         enddo
+#endif
 #ifdef DAR_DIAG_ABSORP
          do ii = 1,tlam
            WRITE(suff,'(A4,I2.2,A1,I10.10)') 'aave',
@@ -298,6 +324,13 @@ c
      &           bbpartave(1-Olx,1-Oly,1,1,1,ii),
      &           myIter,myThid)
          enddo
+#endif
+#ifdef DAR_RADTRANS
+         WRITE(suff,'(A7,A1,I10.10)') 'rmudave',
+     &         '.',myIter
+         CALL WRITE_FLD_XY_RL(suff,' ',
+     &         rmudave(1-Olx,1-Oly,1,1),
+     &         myIter,myThid)
 #endif
 
 c ANNA_TAVE
@@ -425,6 +458,19 @@ c
      &           Eutave(1-OLx,1-OLy,1,1,1,ii),myThid)
          enddo
 #endif
+#ifdef DAR_DIAG_IRR_AMPS
+         do ii = 1,tlam
+            DO jj = 1,MAX_LEN_FNAM
+              name(jj:jj) = ' '
+            ENDDO
+            WRITE(name,'(a,i2.2)') 'dar_c1_',ii
+            CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &           c1ave(1-OLx,1-OLy,1,1,1,ii),myThid)
+            WRITE(name,'(a,i2.2)') 'dar_c2_',ii
+            CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &           c2ave(1-OLx,1-OLy,1,1,1,ii),myThid)
+         enddo
+#endif
 #ifdef DAR_DIAG_ABSORP
          do ii = 1,tlam
             DO jj = 1,MAX_LEN_FNAM
@@ -463,6 +509,14 @@ c
             CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
      &           bbpartave(1-OLx,1-OLy,1,1,1,ii),myThid)
          enddo
+#endif
+#ifdef DAR_RADTRANS
+         DO jj = 1,MAX_LEN_FNAM
+           name(jj:jj) = ' '
+         ENDDO
+         WRITE(name,'(a)') 'dar_rmud'
+         CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &        rmudave(1-OLx,1-OLy,1,1),myThid)
 #endif
 c ANNA_TAVE
 #ifdef WAVES_DIAG_PCHL
@@ -582,6 +636,14 @@ C      Reset averages to zero
      &                                    Nr,bi,bj,myThid)
          enddo
 #endif
+#ifdef DAR_DIAG_IRR_AMPS
+         do ii = 1,tlam
+           CALL TIMEAVE_RESET(c1ave(1-OLx,1-OLy,1,1,1,ii),
+     &                                    Nr,bi,bj,myThid)
+           CALL TIMEAVE_RESET(c2ave(1-OLx,1-OLy,1,1,1,ii),
+     &                                    Nr,bi,bj,myThid)
+         enddo
+#endif
 #ifdef DAR_DIAG_ABSORP
          do ii = 1,tlam
            CALL TIMEAVE_RESET(aave(1-OLx,1-OLy,1,1,1,ii),
@@ -605,6 +667,10 @@ C      Reset averages to zero
            CALL TIMEAVE_RESET(bbpartave(1-OLx,1-OLy,1,1,1,ii),
      &                                    Nr,bi,bj,myThid)
          enddo
+#endif
+#ifdef DAR_RADTRANS
+         CALL TIMEAVE_RESET(rmudave(1-OLx,1-OLy,1,1),
+     &                                  1,bi,bj,myThid)
 #endif
 c ANNA_TAVE 
 #ifdef WAVES_DIAG_PCHL

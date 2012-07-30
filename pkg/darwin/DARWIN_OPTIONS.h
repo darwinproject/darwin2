@@ -42,6 +42,7 @@ C ======================================================================
 #undef  DAR_DIAG_SCATTER
 #undef  DAR_DIAG_PART_SCATTER
 #undef  DAR_DIAG_IRR
+#undef  DAR_DIAG_IRR_AMPS
 
 C ======================================================================
 C options for monod package

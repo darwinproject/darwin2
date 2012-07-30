@@ -11,6 +11,7 @@ C !INTERFACE: ==========================================================
      I                   H,rmud,Edsf,Essf,a_k,bt_k,bb_k,kmax,niter,
      O                   Edbot,Esbot,Eubot,Eutop,
      O                   tirrq,tirrwq,
+     O                   c1out, c2out,
      I                   myThid)
 
 C !DESCRIPTION:
@@ -74,6 +75,7 @@ C     tirrwq :: total scalar irradiance at cell center per waveband
       _RL Edbot(tlam,Nr),Esbot(tlam,Nr),Eubot(tlam,Nr),Eutop(tlam,Nr)
       _RL tirrq(Nr)
       _RL tirrwq(tlam,Nr)
+      _RL c1out(tlam,Nr), c2out(tlam,Nr)
 
 #ifdef DAR_RADTRANS
 
@@ -115,6 +117,8 @@ c     find deepest wet layer
         Edbot(nl,k) = 0.0
         Esbot(nl,k) = 0.0
         Eubot(nl,k) = 0.0
+        c1out(nl,k) = 0.0
+        c2out(nl,k) = 0.0
        ENDDO
        IF (Edsf(nl) .GE. darwin_radmodThresh .OR.
      &     Essf(nl) .GE. darwin_radmodThresh) THEN
@@ -160,10 +164,14 @@ C     start with Aas solution (no increasing mode)
          Estop(nl,k+1) = MAX(0., c2*expAsdr(k) + x(k)*Edbot(nl,k))
          Eubot(nl,k) = MAX(0., R2(k)*c2*expAsdr(k) + y(k)*Edbot(nl,k))
          Eutop(nl,k) = R2(k)*c2 + y(k)*Edtop(nl,k)
+         c1out(nl,k) = 0.
+         c2out(nl,k) = c2
         ENDDO
 C       Aas b.c. in bottom layer
         c2 = Estop(nl,kbot) - x(kbot)*Edtop(nl,kbot)
         Eutop(nl,kbot) = R2(kbot)*c2 + y(kbot)*Edtop(nl,kbot)
+        c1out(nl,kbot) = 0.
+        c2out(nl,kbot) = c2
 
 c     improve solution iteratively
         DO iter=1,niter
@@ -190,10 +198,14 @@ c         compute Estop(k+1) from Estop(k) and Eubot(k)
           Esnew = expAsdr(k)*c2 + c1 + x(k)*Edbot(nl,k)
           Estop(nl,k+1) = MAX(0., Esnew)
           Eutop(nl,k) = R2(k)*c2+R1(k)*expmAudr(k)*c1+y(k)*Edtop(nl,k)
+          c1out(nl,k) = c1
+          c2out(nl,k) = c2
          ENDDO
 C        Aas b.c. in bottom layer
          c2 = Estop(nl,kbot) - x(kbot)*Edtop(nl,kbot)
          Eutop(nl,kbot) = R2(kbot)*c2 + y(kbot)*Edtop(nl,kbot)
+         c1out(nl,kbot) = 0.
+         c2out(nl,kbot) = c2
 C       enddo iter
         ENDDO
 

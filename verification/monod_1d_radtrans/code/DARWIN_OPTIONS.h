@@ -52,6 +52,7 @@ CEOP
 #define DAR_DIAG_SCATTER
 #define DAR_DIAG_PART_SCATTER
 #define DAR_DIAG_IRR
+#define DAR_DIAG_IRR_AMPS
 
 C diagnostic chlorophyll
 #undef  DAR_DIAG_CHL
