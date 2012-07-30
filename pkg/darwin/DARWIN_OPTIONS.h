@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/DARWIN_OPTIONS.h,v 1.4 2012/07/02 09:42:22 benw Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/DARWIN_OPTIONS.h,v 1.5 2012/07/30 15:21:51 jahn Exp $
 C $Name:  $
 
 #ifndef DARWIN_OPTIONS_H
@@ -42,6 +42,7 @@ C ======================================================================
 #undef  DAR_DIAG_SCATTER
 #undef  DAR_DIAG_PART_SCATTER
 #undef  DAR_DIAG_IRR
+#undef  DAR_DIAG_IRR_AMPS
 
 C ======================================================================
 C options for monod package

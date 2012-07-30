@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_forcing.F,v 1.8 2012/06/30 19:23:04 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_forcing.F,v 1.9 2012/07/30 15:21:51 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -98,6 +98,7 @@ c ANNA define variables for wavebands
        _RL Edz(tlam,Nr),Esz(tlam,Nr),Euz(tlam,Nr),Eutop(tlam,Nr)
        _RL tirrq(nr)
        _RL tirrwq(tlam,nr)
+       _RL c1(tlam,nr), c2(tlam,nr)
        _RL solz
        _RL rmud
        _RL actot,bctot,bbctot
@@ -633,6 +634,7 @@ c           add water and CDOM
      I                darwin_radtrans_kmax,darwin_radtrans_niter,
      O                Edz,Esz,Euz,Eutop,
      O                tirrq,tirrwq,
+     O                c1,c2,
      I                myThid)
 #else
 c dzlocal ?????
@@ -1339,6 +1341,14 @@ Coj            no Eu at surface (yet)
      &                                 Eutop(ilam,k)*dtplankton
              enddo
 #endif
+#ifdef DAR_DIAG_IRR_AMPS
+             do ilam = 1,tlam
+               c1ave(i,j,k,bi,bj,ilam)=c1ave(i,j,k,bi,bj,ilam)+
+     &                                 c1(ilam,k)*dtplankton
+               c2ave(i,j,k,bi,bj,ilam)=c2ave(i,j,k,bi,bj,ilam)+
+     &                                 c2(ilam,k)*dtplankton
+             enddo
+#endif
 #ifdef DAR_DIAG_ABSORP
              do ilam = 1,tlam
                aave(i,j,k,bi,bj,ilam)=aave(i,j,k,bi,bj,ilam)+
@@ -1362,6 +1372,12 @@ Coj            no Eu at surface (yet)
                bbpartave(i,j,k,bi,bj,ilam)=bbpartave(i,j,k,bi,bj,ilam)+
      &                                 bbpart_k(k,ilam)*dtplankton
              enddo
+#endif
+#ifdef DAR_RADTRANS
+             if (k.eq.1) then
+               rmudave(i,j,bi,bj)=rmudave(i,j,bi,bj)+
+     &                                 rmud*dtplankton
+             endif
 #endif
 #ifdef DAR_DIAG_RSTAR
              do np=1,npmax

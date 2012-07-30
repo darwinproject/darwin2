@@ -1,8 +1,10 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.23 2012/07/07 15:31:57 jahn Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.24 2012/07/30 15:21:51 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
+
+o add timeave diagnostics rmud and c1, c2 for irradiance amplitudes
 
 ctrb_darwin2_ckpt63p_20120707
 o update quota package to version used in L&O paper

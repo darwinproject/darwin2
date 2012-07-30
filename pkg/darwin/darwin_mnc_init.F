@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_mnc_init.F,v 1.2 2012/07/02 09:40:58 benw Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_mnc_init.F,v 1.3 2012/07/30 15:21:51 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -153,6 +153,21 @@ cbenw limitation diagnostics
       enddo
 #endif
 
+#ifdef DAR_DIAG_IRR_AMPS
+      do ii=1,tlam
+          DO jj = 1,MAX_LEN_FNAM
+             name(jj:jj) = ' '
+          ENDDO
+          WRITE(name,'(a,i2.2)') 'dar_c1_',ii
+          CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+          WRITE(name,'(a,i2.2)') 'dar_c2_',ii
+          CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+      enddo
+#endif
 #ifdef DAR_DIAG_ABSORP
       do ii=1,tlam
           DO jj = 1,MAX_LEN_FNAM
@@ -197,6 +212,15 @@ cbenw limitation diagnostics
           CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
           CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
       enddo
+#endif
+#ifdef DAR_RADTRANS
+      DO jj = 1,MAX_LEN_FNAM
+         name(jj:jj) = ' ' 
+      ENDDO
+      WRITE(name,'(a)') 'dar_rmud'
+      CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__-__t',3,4,myThid)
+      CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
+      CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
 #endif
 
 c ANNA_TAVE
