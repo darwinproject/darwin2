@@ -4,7 +4,16 @@ $Name$
     Notes on tags used in darwin
     ============================
 
+ctrb_darwin2_ckpt63q_20120731
 o add timeave diagnostics rmud and c1, c2 for irradiance amplitudes
+o bug fix, so denitrification (and remineralization) will not happen when
+  NO3 below a critical value (NO3crit)
+o add CDOM into budget for N,P,Fe and C
+o new define ONLY_P_CYCLE, to run with reduced number ptracers to
+  only look at Phosphorus cycle.
+  ORDER: PO4, DOP, ZOO1P,..., ZOO(Nzmax)P, POP, Phy1,...,Phy(npmax), Dummy
+  Dummy is initialized with zero, and stands in for all additional
+  tracers in the code.
 
 ctrb_darwin2_ckpt63p_20120707
 o update quota package to version used in L&O paper
