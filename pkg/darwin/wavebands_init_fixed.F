@@ -63,11 +63,17 @@ c local indeces
 C band widths used to convert OASIM data to irradiation per nm
 C put boundaries half-way between central values
 C but first and last boundary are at first and last "central" value
-      wb_width(1) = .5*(pwaves(2)-pwaves(1))
-      do i=2,tlam-1
-        wb_width(i) = .5*(pwaves(i+1)-pwaves(i-1))
-      enddo
-      wb_width(tlam) = .5*(pwaves(tlam)-pwaves(tlam-1))
+      if (darwin_wavebands(1).EQ.0) then
+        wb_width(1) = .5*(pwaves(2)-pwaves(1))
+        do i=2,tlam-1
+          wb_width(i) = .5*(pwaves(i+1)-pwaves(i-1))
+        enddo
+        wb_width(tlam) = .5*(pwaves(tlam)-pwaves(tlam-1))
+      else
+        do i=1,tlam
+          wb_width(i) = darwin_wavebands(i+1) - darwin_wavebands(i)
+        enddo
+      endif
       wb_totalWidth = 0.0
       do i=1,tlam
         wb_totalWidth = wb_totalWidth + wb_width(i)

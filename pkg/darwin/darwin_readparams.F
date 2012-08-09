@@ -76,6 +76,7 @@ CEOP
       NAMELIST /DARWIN_SPECTRAL_PARM/
      &           darwin_waves
 #ifdef WAVEBANDS
+     &          ,darwin_wavebands
 #ifdef DAR_CALC_ACDOM
      &          ,darwin_Sdom
 #endif
@@ -162,24 +163,12 @@ c default periodic forcing to same as for GCHEM
       DO ilam=1,tlam
         darwin_waves(ilam) = 0
       ENDDO
-      IF (tlam.EQ.13) THEN
-        darwin_waves(1) = 400
-        darwin_waves(2) = 425
-        darwin_waves(3) = 450
-        darwin_waves(4) = 475
-        darwin_waves(5) = 500
-        darwin_waves(6) = 525
-        darwin_waves(7) = 550
-        darwin_waves(8) = 575
-        darwin_waves(9) = 600
-        darwin_waves(10) = 625
-        darwin_waves(11) = 650
-        darwin_waves(12) = 675
-        darwin_waves(13) = 700
-      ENDIF
 #endif
 
 #ifdef WAVEBANDS
+      DO ilam=1,tlam+1
+        darwin_wavebands(ilam) = 0
+      ENDDO
 #ifdef DAR_CALC_ACDOM
       darwin_Sdom = 0.014 _d 0
 #endif
@@ -319,6 +308,32 @@ C Close the open data file
       CLOSE(iUnit)
 
 #if defined(WAVEBANDS) || defined(OASIM)
+      IF ( darwin_waves(1).EQ.0.0 .AND. tlam.EQ.13 ) THEN
+        darwin_waves(1) = 400
+        darwin_waves(2) = 425
+        darwin_waves(3) = 450
+        darwin_waves(4) = 475
+        darwin_waves(5) = 500
+        darwin_waves(6) = 525
+        darwin_waves(7) = 550
+        darwin_waves(8) = 575
+        darwin_waves(9) = 600
+        darwin_waves(10) = 625
+        darwin_waves(11) = 650
+        darwin_waves(12) = 675
+        darwin_waves(13) = 700
+        IF ( darwin_wavebands(1).NE.0.0 ) THEN
+         WRITE(msgBuf,'(2A)') 'DARWIN_READPARMS: ',
+     &   'darwin_wavebands given without darwin_waves.'
+         CALL PRINT_ERROR( msgBuf, myThid )
+         WRITE(msgBuf,'(2A)') 'DARWIN_READPARMS: ',
+     &   'using standard waveband centers 400, 425, ...'
+         CALL PRINT_ERROR( msgBuf, myThid )
+         WRITE(msgBuf,'(2A)') 'DARWIN_READPARMS: ',
+     &   'provide darwin_waves if this is not desired.'
+         CALL PRINT_ERROR( msgBuf, myThid )
+        ENDIF
+      ENDIF
 c   Quanta conversion
       planck = 6.6256 _d -34   !Plancks constant J sec
       c = 2.998 _d 8                 !speed of light m/sec
@@ -328,6 +343,12 @@ c   Quanta conversion
       do ilam = 1,tlam
        rlamm = darwin_waves(ilam)*1 _d -9  !lambda in m
        WtouEins(ilam) = 1 _d 6*rlamm*hcoavo      !Watts to uEin/s conversion
+       IF ( rlamm .EQ. 0.0 ) THEN
+        WRITE(msgBuf,'(2A)') 'DARWIN_READPARMS: ',
+     &  'please provide wavelengths in darwin_waves.'
+        CALL PRINT_ERROR( msgBuf, myThid )
+        STOP 'ABNORMAL END: S/R DARWIN_READPARMS'
+       ENDIF
       enddo
 #endif
 
