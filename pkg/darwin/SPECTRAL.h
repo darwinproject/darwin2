@@ -1,12 +1,14 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/SPECTRAL.h,v 1.2 2012/07/30 15:21:51 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/SPECTRAL.h,v 1.3 2012/08/09 21:18:53 jahn Exp $
 C $Name:  $
 
 C SPECTRAL.h 
 C description: spectral runtime parameters and fields
 
 C  darwin_waves         :: 'central' wavelengths of wavebands (nm)
-      COMMON/SPECTRAL_PARAMS_R/darwin_waves
+C  darwin_wavebands     :: waveband boundaries (nm)
+      COMMON/SPECTRAL_PARAMS_R/darwin_waves, darwin_wavebands
       _RL darwin_waves(tlam)
+      _RL darwin_wavebands(tlam+1)
 
 C WtouEins    :: W to uEin/s conversion factor
       COMMON/darwin_oasim/ WtouEins

@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/wavebands_init_fixed.F,v 1.1 2011/04/13 18:56:25 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/wavebands_init_fixed.F,v 1.2 2012/08/09 21:18:53 jahn Exp $
 C $Name:  $
 
 c ANNA wavebands_init_fixed.F reads-in and assigns input paramters for WAVEBANDS. 
@@ -63,11 +63,17 @@ c local indeces
 C band widths used to convert OASIM data to irradiation per nm
 C put boundaries half-way between central values
 C but first and last boundary are at first and last "central" value
-      wb_width(1) = .5*(pwaves(2)-pwaves(1))
-      do i=2,tlam-1
-        wb_width(i) = .5*(pwaves(i+1)-pwaves(i-1))
-      enddo
-      wb_width(tlam) = .5*(pwaves(tlam)-pwaves(tlam-1))
+      if (darwin_wavebands(1).EQ.0) then
+        wb_width(1) = .5*(pwaves(2)-pwaves(1))
+        do i=2,tlam-1
+          wb_width(i) = .5*(pwaves(i+1)-pwaves(i-1))
+        enddo
+        wb_width(tlam) = .5*(pwaves(tlam)-pwaves(tlam-1))
+      else
+        do i=1,tlam
+          wb_width(i) = darwin_wavebands(i+1) - darwin_wavebands(i)
+        enddo
+      endif
       wb_totalWidth = 0.0
       do i=1,tlam
         wb_totalWidth = wb_totalWidth + wb_width(i)
