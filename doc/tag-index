@@ -4,6 +4,9 @@ $Name$
     Notes on tags used in darwin
     ============================
 
+ctrb_darwin2_ckpt63r_20120817
+o new parameter darwin_wavebands for waveband boundaries
+
 ctrb_darwin2_ckpt63q_20120731
 o add timeave diagnostics rmud and c1, c2 for irradiance amplitudes
 o bug fix, so denitrification (and remineralization) will not happen when
