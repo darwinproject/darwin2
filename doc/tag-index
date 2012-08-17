@@ -1,8 +1,11 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.25 2012/07/31 19:56:25 jahn Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.26 2012/08/17 12:44:12 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
+
+ctrb_darwin2_ckpt63r_20120817
+o new parameter darwin_wavebands for waveband boundaries
 
 ctrb_darwin2_ckpt63q_20120731
 o add timeave diagnostics rmud and c1, c2 for irradiance amplitudes
