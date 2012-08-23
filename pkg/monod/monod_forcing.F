@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_forcing.F,v 1.10 2012/08/23 21:48:24 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_forcing.F,v 1.11 2012/08/23 21:49:33 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -105,6 +105,7 @@ c ANNA define variables for wavebands
        _RL actot,bctot,bbctot
        _RL apart_k(Nr,tlam),bpart_k(Nr,tlam),bbpart_k(Nr,tlam)
        _RL bt_k(Nr,tlam), bb_k(Nr,tlam)
+       _RL discEs, discEu
 #else
        _RL PARwdn(tlam)
 #endif
@@ -331,6 +332,11 @@ COJ
         enddo
        ENDDO
        ENDDO
+
+#ifdef DAR_RADTRANS
+       discEs = 0.
+       discEu = 0.
+#endif
 c
 c bio-chemical time loop
 c--------------------------------------------------
@@ -637,21 +643,40 @@ c           initialize output variables
           ENDDO
          ENDDO
 
-#ifdef DAR_RADTRANS_ITERATIVE
-         call MONOD_RADTRANS_ITER(
+         IF (darwin_radtrans_niter.GE.0) THEN
+           call MONOD_RADTRANS_ITER(
      I                dz_k,rmud,Edwsf,Eswsf,a_k,bt_k,bb_k,
      I                darwin_radtrans_kmax,darwin_radtrans_niter,
      O                Edz,Esz,Euz,Eutop,
      O                tirrq,tirrwq,
      O                amp1,amp2,
      I                myThid)
-#else
+         ELSEIF (darwin_radtrans_niter.EQ.-1) THEN
 c dzlocal ?????
-         call MONOD_RADTRANS(
+           call MONOD_RADTRANS(
      I                drF,rmud,Edwsf,Eswsf,a_k,bt_k,bb_k,
      O                Edz,Esz,Euz,Eutop,
      O                tirrq,tirrwq,
      I                myThid)
+         ELSE
+           call MONOD_RADTRANS_DIRECT(
+     I                dz_k,rmud,Edwsf,Eswsf,a_k,bt_k,bb_k,
+     I                darwin_radtrans_kmax,
+     O                Edz,Esz,Euz,Estop,Eutop,
+     O                tirrq,tirrwq,
+     O                amp1,amp2,
+     I                myThid)
+#ifdef DAR_CHECK_IRR_CONT
+           DO ilam = 1,tlam
+             discEs=MAX(discEs,ABS(Estop(ilam,1)-Eswsf(ilam)))
+           ENDDO
+           DO k=1,darwin_radtrans_kmax-1
+            DO ilam = 1,tlam
+             discEs=MAX(discEs,ABS(Estop(ilam,k+1)-Esz(ilam,k)))
+             discEu=MAX(discEu,ABS(Eutop(ilam,k+1)-Euz(ilam,k)))
+            ENDDO
+           ENDDO
+         ENDIF
 #endif
 c
 c uses chl from prev timestep (as wavebands does)
@@ -1493,6 +1518,10 @@ C       reset the other slot for averaging
         ENDDO
        ENDIF
 C itistime
+#endif
+
+#ifdef DAR_CHECK_IRR_CONT
+       print*,'max Es, Eu discontinuties',discEs,discEu
 #endif
 
 COJ fill diagnostics

@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/DARWIN_OPTIONS.h,v 1.5 2012/07/30 15:21:51 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/DARWIN_OPTIONS.h,v 1.6 2012/08/23 21:49:33 jahn Exp $
 C $Name:  $
 
 #ifndef DARWIN_OPTIONS_H
@@ -72,13 +72,15 @@ C ======================================================================
 #undef  DAR_CALC_ACDOM
 #undef  DAR_RADTRANS
 #undef  DAR_RADTRANS_USE_MODEL_CALENDAR
-C truncation to 2 downward decreasing modes a la Aas
+
+C truncate to 2 downward decreasing modes a la Aas
+C only relevant if old, non-iterative solver is used (darwin_radtrans_niter = -1)
 #undef  DAR_RADTRANS_DECREASING
-C iterative solution
-#undef  DAR_RADTRANS_ITERATIVE
+
 C use rmus for all components to convert to scalar irradiance
 C (not recommended)
 #undef  DAR_RADTRANS_RMUS_PAR
+
 C define this to turn of reading of phyto backscattering spectra
 C and revert to fixed backscat ratios darwin_bbphy(nabp) set in data.darwin
 #undef  DAR_NONSPECTRAL_BACKSCATTERING_RATIO
