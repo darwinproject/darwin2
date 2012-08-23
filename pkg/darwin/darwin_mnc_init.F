@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_mnc_init.F,v 1.4 2012/08/23 21:47:27 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_mnc_init.F,v 1.5 2012/08/23 21:48:24 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -149,6 +149,12 @@ cbenw limitation diagnostics
           CALL MNC_CW_ADD_VATTR_TEXT(name,'units','W/m^2', myThid)
           CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
      &     'upwelling irradiance just above top of layer', myThid)
+          WRITE(name,'(a,i2.2)') 'dar_Estop',ii
+          CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','W/m^2', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     &     'diffuse downwelling irradiance just below top of layer',
+     &     myThid)
           WRITE(name,'(a,i2.2)') 'dar_Eutop',ii
           CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
           CALL MNC_CW_ADD_VATTR_TEXT(name,'units','W/m^2', myThid)
@@ -162,12 +168,12 @@ cbenw limitation diagnostics
           DO jj = 1,MAX_LEN_FNAM
              name(jj:jj) = ' '
           ENDDO
-          WRITE(name,'(a,i2.2)') 'dar_c1_',ii
+          WRITE(name,'(a,i2.2)') 'dar_amp1_',ii
           CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
           CALL MNC_CW_ADD_VATTR_TEXT(name,'units','W/m^2', myThid)
           CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
      &     'amplitude of downward increasing mode', myThid)
-          WRITE(name,'(a,i2.2)') 'dar_c2_',ii
+          WRITE(name,'(a,i2.2)') 'dar_amp2_',ii
           CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
           CALL MNC_CW_ADD_VATTR_TEXT(name,'units','W/m^2', myThid)
           CALL MNC_CW_ADD_VATTR_TEXT(name,'description',

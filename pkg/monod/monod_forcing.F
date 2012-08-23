@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_forcing.F,v 1.9 2012/07/30 15:21:51 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_forcing.F,v 1.10 2012/08/23 21:48:24 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -95,10 +95,11 @@ c ANNA define variables for wavebands
 #ifdef DAR_RADTRANS
        integer iday,iyr,imon,isec,lp,wd,mydate(4)
        _RL Edwsf(tlam),Eswsf(tlam)
-       _RL Edz(tlam,Nr),Esz(tlam,Nr),Euz(tlam,Nr),Eutop(tlam,Nr)
+       _RL Edz(tlam,Nr),Esz(tlam,Nr),Euz(tlam,Nr)
+       _RL Estop(tlam,Nr),Eutop(tlam,Nr)
        _RL tirrq(nr)
        _RL tirrwq(tlam,nr)
-       _RL c1(tlam,nr), c2(tlam,nr)
+       _RL amp1(tlam,nr), amp2(tlam,nr)
        _RL solz
        _RL rmud
        _RL actot,bctot,bbctot
@@ -625,6 +626,14 @@ c           add water and CDOM
             bt_k(k,ilam) = bw(ilam) + bctot + bpart_k(k,ilam)
             bb_k(k,ilam) = darwin_bbw*bw(ilam)+bbctot+bbpart_k(k,ilam)
             bb_k(k,ilam) = MAX(darwin_bbmin, bb_k(k,ilam))
+c           initialize output variables
+            Edz(ilam,k) = 0.0
+            Esz(ilam,k) = 0.0
+            Euz(ilam,k) = 0.0
+            Estop(ilam,k) = 0.0
+            Eutop(ilam,k) = 0.0
+            amp1(ilam,k) = 0.0
+            amp2(ilam,k) = 0.0
           ENDDO
          ENDDO
 
@@ -634,7 +643,7 @@ c           add water and CDOM
      I                darwin_radtrans_kmax,darwin_radtrans_niter,
      O                Edz,Esz,Euz,Eutop,
      O                tirrq,tirrwq,
-     O                c1,c2,
+     O                amp1,amp2,
      I                myThid)
 #else
 c dzlocal ?????
@@ -1337,16 +1346,18 @@ Coj            no Eu at surface (yet)
                Euave(i,j,k,bi,bj,ilam)=Euave(i,j,k,bi,bj,ilam)+
      &                                 Euz(ilam,k-1)*dtplankton
               endif
+              Estave(i,j,k,bi,bj,ilam)=Estave(i,j,k,bi,bj,ilam)+
+     &                                 Estop(ilam,k)*dtplankton
               Eutave(i,j,k,bi,bj,ilam)=Eutave(i,j,k,bi,bj,ilam)+
      &                                 Eutop(ilam,k)*dtplankton
              enddo
 #endif
 #ifdef DAR_DIAG_IRR_AMPS
              do ilam = 1,tlam
-               c1ave(i,j,k,bi,bj,ilam)=c1ave(i,j,k,bi,bj,ilam)+
-     &                                 c1(ilam,k)*dtplankton
-               c2ave(i,j,k,bi,bj,ilam)=c2ave(i,j,k,bi,bj,ilam)+
-     &                                 c2(ilam,k)*dtplankton
+               amp1ave(i,j,k,bi,bj,ilam)=amp1ave(i,j,k,bi,bj,ilam)+
+     &                                 amp1(ilam,k)*dtplankton
+               amp2ave(i,j,k,bi,bj,ilam)=amp2ave(i,j,k,bi,bj,ilam)+
+     &                                 amp2(ilam,k)*dtplankton
              enddo
 #endif
 #ifdef DAR_DIAG_ABSORP

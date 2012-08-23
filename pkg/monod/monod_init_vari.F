@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_vari.F,v 1.5 2012/07/30 15:21:51 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_vari.F,v 1.6 2012/08/23 21:48:25 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -350,15 +350,17 @@ c set arrays to zero if first timestep
      &                                    Nr,bi,bj,myThid)
            CALL TIMEAVE_RESET(Euave(1-OLx,1-OLy,1,1,1,i),
      &                                    Nr,bi,bj,myThid)
+           CALL TIMEAVE_RESET(Estave(1-OLx,1-OLy,1,1,1,i),
+     &                                    Nr,bi,bj,myThid)
            CALL TIMEAVE_RESET(Eutave(1-OLx,1-OLy,1,1,1,i),
      &                                    Nr,bi,bj,myThid)
           enddo
 #endif
 #ifdef DAR_DIAG_IRR_AMPS
           do i=1,tlam
-           CALL TIMEAVE_RESET(c1ave(1-OLx,1-OLy,1,1,1,i),
+           CALL TIMEAVE_RESET(amp1ave(1-OLx,1-OLy,1,1,1,i),
      &                                    Nr,bi,bj,myThid)
-           CALL TIMEAVE_RESET(c2ave(1-OLx,1-OLy,1,1,1,i),
+           CALL TIMEAVE_RESET(amp2ave(1-OLx,1-OLy,1,1,1,i),
      &                                    Nr,bi,bj,myThid)
           enddo
 #endif

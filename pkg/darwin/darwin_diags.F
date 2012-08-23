@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_diags.F,v 1.4 2012/07/30 15:21:51 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_diags.F,v 1.5 2012/08/23 21:48:24 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -108,15 +108,17 @@ C      Normalize by integrated time
      &                          DAR_timeave,nR,bi,bj,myThid)
           CALL TIMEAVE_NORMALIZ(Euave(1-Olx,1-Oly,1,1,1,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
+          CALL TIMEAVE_NORMALIZ(Estave(1-Olx,1-Oly,1,1,1,ii),
+     &                          DAR_timeave,nR,bi,bj,myThid)
           CALL TIMEAVE_NORMALIZ(Eutave(1-Olx,1-Oly,1,1,1,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
          enddo
 #endif
 #ifdef DAR_DIAG_IRR_AMPS
          do ii = 1,tlam
-          CALL TIMEAVE_NORMALIZ(c1ave(1-Olx,1-Oly,1,1,1,ii),
+          CALL TIMEAVE_NORMALIZ(amp1ave(1-Olx,1-Oly,1,1,1,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
-          CALL TIMEAVE_NORMALIZ(c2ave(1-Olx,1-Oly,1,1,1,ii),
+          CALL TIMEAVE_NORMALIZ(amp2ave(1-Olx,1-Oly,1,1,1,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
          enddo
 #endif
@@ -262,6 +264,11 @@ c
            CALL WRITE_FLD_XYZ_RL(suff,' ',
      &           Euave(1-Olx,1-Oly,1,1,1,ii),
      &           myIter,myThid)
+           WRITE(suff,'(A8,I2.2,A1,I10.10)') 'Estopave',
+     &           ii,'.',myIter
+           CALL WRITE_FLD_XYZ_RL(suff,' ',
+     &           Estave(1-Olx,1-Oly,1,1,1,ii),
+     &           myIter,myThid)
            WRITE(suff,'(A8,I2.2,A1,I10.10)') 'Eutopave',
      &           ii,'.',myIter
            CALL WRITE_FLD_XYZ_RL(suff,' ',
@@ -271,15 +278,15 @@ c
 #endif
 #ifdef DAR_DIAG_IRR_AMPS
          do ii = 1,tlam
-           WRITE(suff,'(A5,I2.2,A1,I10.10)') 'c1ave',
+           WRITE(suff,'(A5,I2.2,A1,I10.10)') 'amp1ave',
      &           ii,'.',myIter
            CALL WRITE_FLD_XYZ_RL(suff,' ',
-     &           c1ave(1-Olx,1-Oly,1,1,1,ii),
+     &           amp1ave(1-Olx,1-Oly,1,1,1,ii),
      &           myIter,myThid)
-           WRITE(suff,'(A5,I2.2,A1,I10.10)') 'c2ave',
+           WRITE(suff,'(A5,I2.2,A1,I10.10)') 'amp2ave',
      &           ii,'.',myIter
            CALL WRITE_FLD_XYZ_RL(suff,' ',
-     &           c2ave(1-Olx,1-Oly,1,1,1,ii),
+     &           amp2ave(1-Olx,1-Oly,1,1,1,ii),
      &           myIter,myThid)
          enddo
 #endif
@@ -453,6 +460,9 @@ c
             WRITE(name,'(a,i2.2)') 'dar_Eu',ii
             CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
      &           Euave(1-OLx,1-OLy,1,1,1,ii),myThid)
+            WRITE(name,'(a,i2.2)') 'dar_Estop',ii
+            CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &           Estave(1-OLx,1-OLy,1,1,1,ii),myThid)
             WRITE(name,'(a,i2.2)') 'dar_Eutop',ii
             CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
      &           Eutave(1-OLx,1-OLy,1,1,1,ii),myThid)
@@ -463,12 +473,12 @@ c
             DO jj = 1,MAX_LEN_FNAM
               name(jj:jj) = ' '
             ENDDO
-            WRITE(name,'(a,i2.2)') 'dar_c1_',ii
+            WRITE(name,'(a,i2.2)') 'dar_amp1_',ii
             CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
-     &           c1ave(1-OLx,1-OLy,1,1,1,ii),myThid)
-            WRITE(name,'(a,i2.2)') 'dar_c2_',ii
+     &           amp1ave(1-OLx,1-OLy,1,1,1,ii),myThid)
+            WRITE(name,'(a,i2.2)') 'dar_amp2_',ii
             CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
-     &           c2ave(1-OLx,1-OLy,1,1,1,ii),myThid)
+     &           amp2ave(1-OLx,1-OLy,1,1,1,ii),myThid)
          enddo
 #endif
 #ifdef DAR_DIAG_ABSORP
@@ -632,15 +642,17 @@ C      Reset averages to zero
      &                                    Nr,bi,bj,myThid)
            CALL TIMEAVE_RESET(Euave(1-OLx,1-OLy,1,1,1,ii),
      &                                    Nr,bi,bj,myThid)
+           CALL TIMEAVE_RESET(Estave(1-OLx,1-OLy,1,1,1,ii),
+     &                                    Nr,bi,bj,myThid)
            CALL TIMEAVE_RESET(Eutave(1-OLx,1-OLy,1,1,1,ii),
      &                                    Nr,bi,bj,myThid)
          enddo
 #endif
 #ifdef DAR_DIAG_IRR_AMPS
          do ii = 1,tlam
-           CALL TIMEAVE_RESET(c1ave(1-OLx,1-OLy,1,1,1,ii),
+           CALL TIMEAVE_RESET(amp1ave(1-OLx,1-OLy,1,1,1,ii),
      &                                    Nr,bi,bj,myThid)
-           CALL TIMEAVE_RESET(c2ave(1-OLx,1-OLy,1,1,1,ii),
+           CALL TIMEAVE_RESET(amp2ave(1-OLx,1-OLy,1,1,1,ii),
      &                                    Nr,bi,bj,myThid)
          enddo
 #endif
