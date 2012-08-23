@@ -24,10 +24,10 @@ C oasim_es :: spectral diffuse downwelling irradiance at surface read from file
 
       COMMON /SPECTRAL_OUPUT/
 #ifdef DAR_DIAG_IRR
-     &      Edave,Esave,Euave,Eutave,
+     &      Edave,Esave,Euave,Estave,Eutave,
 #endif
 #ifdef DAR_DIAG_IRR_AMPS
-     &      c1ave,c2ave,
+     &      amp1ave,amp2ave,
 #endif
 #ifdef DAR_DIAG_ABSORP
      &      aave,
@@ -47,11 +47,12 @@ C oasim_es :: spectral diffuse downwelling irradiance at surface read from file
        _RL  Edave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,tlam)
        _RL  Esave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,tlam)
        _RL  Euave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,tlam)
+       _RL  Estave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,tlam)
        _RL  Eutave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,tlam)
 #endif
 #ifdef DAR_DIAG_IRR_AMPS
-       _RL  c1ave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,tlam)
-       _RL  c2ave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,tlam)
+       _RL  amp1ave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,tlam)
+       _RL  amp2ave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,tlam)
 #endif
 #ifdef DAR_DIAG_ABSORP
        _RL  aave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,tlam)

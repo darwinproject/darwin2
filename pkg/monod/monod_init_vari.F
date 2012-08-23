@@ -350,15 +350,17 @@ c set arrays to zero if first timestep
      &                                    Nr,bi,bj,myThid)
            CALL TIMEAVE_RESET(Euave(1-OLx,1-OLy,1,1,1,i),
      &                                    Nr,bi,bj,myThid)
+           CALL TIMEAVE_RESET(Estave(1-OLx,1-OLy,1,1,1,i),
+     &                                    Nr,bi,bj,myThid)
            CALL TIMEAVE_RESET(Eutave(1-OLx,1-OLy,1,1,1,i),
      &                                    Nr,bi,bj,myThid)
           enddo
 #endif
 #ifdef DAR_DIAG_IRR_AMPS
           do i=1,tlam
-           CALL TIMEAVE_RESET(c1ave(1-OLx,1-OLy,1,1,1,i),
+           CALL TIMEAVE_RESET(amp1ave(1-OLx,1-OLy,1,1,1,i),
      &                                    Nr,bi,bj,myThid)
-           CALL TIMEAVE_RESET(c2ave(1-OLx,1-OLy,1,1,1,i),
+           CALL TIMEAVE_RESET(amp2ave(1-OLx,1-OLy,1,1,1,i),
      &                                    Nr,bi,bj,myThid)
           enddo
 #endif
