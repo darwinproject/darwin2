@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/verification/monod_1d_radtrans/code/DARWIN_OPTIONS.h,v 1.2 2012/07/30 15:21:51 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/verification/monod_1d_radtrans/code/DARWIN_OPTIONS.h,v 1.3 2012/08/23 21:49:54 jahn Exp $
 C $Name:  $
 
 #ifndef DARWIN_OPTIONS_H
@@ -56,6 +56,8 @@ CEOP
 
 C diagnostic chlorophyll
 #undef  DAR_DIAG_CHL
+
+#define DAR_CHECK_IRR_CONT
 
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C dependencies
