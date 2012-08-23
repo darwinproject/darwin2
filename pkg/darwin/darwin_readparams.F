@@ -189,7 +189,7 @@ c value >= 100 will be converted to index in wavebands_init_fixed
         darwin_bbphy(i) = 0 _d 0
       enddo
       darwin_radtrans_kmax = Nr
-      darwin_radtrans_niter = 1
+      darwin_radtrans_niter = -2
       darwin_part_size_P = 1 _d -15   ! mmol P per particle
 #endif
 #endif /* WAVEBANDS */
@@ -416,7 +416,7 @@ C--   Print a summary of parameter values:
      &'   /* deepest level in which to compute irradiances */')
       CALL WRITE_0D_I( darwin_radtrans_niter, INDEX_NONE,
      &   'darwin_radtrans_niter =',
-     &'   /* number of "radtrans improvement" iterations */')
+     &'   /* iterations/method for solveing 3-stream equations */')
 #endif /* DAR_RADTRANS */
 #endif /* WAVEBANDS */
 

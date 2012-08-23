@@ -101,9 +101,15 @@ C     darwin_bbw          :: backscattering to forward scattering ratio for wate
 C     darwin_bbphy        :: backscattering to forward scattering ratio for Chlorophyll
 C     darwin_bbmin        :: minimum backscattering coefficient (not ratio)
 c     darwin_radtrans_kmax  :: deepest layer to compute irradiances in
-c     darwin_radtrans_niter :: number of iterations for iterative improvement of radmod solution
+c                              (is considered infinitely deep for boundary condition)
+c     darwin_radtrans_niter :: how to solve 3-stream equations:
+c                              -2 means use direct solver (default)
+c                              -1 means use approximate non-iterative solver
+c                              (either a la Aas #ifdef DAR_RADTRANS_DECREASING, or a la W.Gregg)
+c                              >= 0 is number of iterations for iterative improvement of radmod solution
 c     darwin_part_size_P    :: phosphorus content of one particle. used to compute number of particles
 C
+
       COMMON /DARWIN_RADTRANS_PARM_I/
      &       darwin_PAR_ilamLo, darwin_PAR_ilamHi
      &      ,darwin_radtrans_kmax
