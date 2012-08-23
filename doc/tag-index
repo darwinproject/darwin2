@@ -4,6 +4,8 @@ $Name$
     Notes on tags used in darwin
     ============================
 
+o add direct radtrans solver
+
 ctrb_darwin2_ckpt63r_20120817
 o new parameter darwin_wavebands for waveband boundaries
 
