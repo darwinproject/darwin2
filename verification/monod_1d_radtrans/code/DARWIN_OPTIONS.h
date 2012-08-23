@@ -57,6 +57,8 @@ CEOP
 C diagnostic chlorophyll
 #undef  DAR_DIAG_CHL
 
+#define DAR_CHECK_IRR_CONT
+
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C dependencies
 c if two or nine species setup we don't want specific temperature ranges

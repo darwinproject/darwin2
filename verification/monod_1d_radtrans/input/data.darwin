@@ -15,5 +15,5 @@
  &DARWIN_SPECTRAL_PARM
 #darwin_bbphy=0.0029, 0.0032, 0.00559, 0.00559,
  darwin_radtrans_kmax=22,
- darwin_radtrans_niter=2,
+ darwin_radtrans_niter=-2,
  /
