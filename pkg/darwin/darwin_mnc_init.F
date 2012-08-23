@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_mnc_init.F,v 1.3 2012/07/30 15:21:51 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_mnc_init.F,v 1.4 2012/08/23 21:47:27 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -136,20 +136,24 @@ cbenw limitation diagnostics
           ENDDO
           WRITE(name,'(a,i2.2)') 'dar_Ed',ii
           CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','W/m^2', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     &     'direct downwelling irradiance at top of layer', myThid)
           WRITE(name,'(a,i2.2)') 'dar_Es',ii
           CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','W/m^2', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     &     'diffuse downwelling irradiance at top of layer', myThid)
           WRITE(name,'(a,i2.2)') 'dar_Eu',ii
           CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','W/m^2', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     &     'upwelling irradiance just above top of layer', myThid)
           WRITE(name,'(a,i2.2)') 'dar_Eutop',ii
           CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','W/m^2', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     &     'upwelling irradiance just below top of layer', myThid)
       enddo
 #endif
 
@@ -160,12 +164,14 @@ cbenw limitation diagnostics
           ENDDO
           WRITE(name,'(a,i2.2)') 'dar_c1_',ii
           CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','W/m^2', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     &     'amplitude of downward increasing mode', myThid)
           WRITE(name,'(a,i2.2)') 'dar_c2_',ii
           CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','W/m^2', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     &     'amplitude of downward decreasing mode', myThid)
       enddo
 #endif
 #ifdef DAR_DIAG_ABSORP
@@ -175,8 +181,9 @@ cbenw limitation diagnostics
           ENDDO
           WRITE(name,'(a,i2.2)') 'dar_a',ii
           CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','1/m', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     &     'total absorption coefficient', myThid)
       enddo
 #endif
 #ifdef DAR_DIAG_SCATTER
@@ -186,12 +193,14 @@ cbenw limitation diagnostics
           ENDDO
           WRITE(name,'(a,i2.2)') 'dar_bt',ii
           CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','1/m', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     &     'total scattering coefficient', myThid)
           WRITE(name,'(a,i2.2)') 'dar_bb',ii
           CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','1/m', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     &     'total backscattering coefficient', myThid)
       enddo
 #endif
 #ifdef DAR_DIAG_PART_SCATTER
@@ -201,16 +210,19 @@ cbenw limitation diagnostics
           ENDDO
           WRITE(name,'(a,i2.2)') 'dar_apart',ii
           CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','1/m', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     &     'absorption coefficient due to particles', myThid)
           WRITE(name,'(a,i2.2)') 'dar_btpart',ii
           CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','1/m', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     &     'scattering coefficient due to particles', myThid)
           WRITE(name,'(a,i2.2)') 'dar_bbpart',ii
           CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
-          CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','1/m', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     &     'backscattering coefficient due to particles', myThid)
       enddo
 #endif
 #ifdef DAR_RADTRANS
@@ -220,7 +232,8 @@ cbenw limitation diagnostics
       WRITE(name,'(a)') 'dar_rmud'
       CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__-__t',3,4,myThid)
       CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
-      CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+      CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     & 'inverse cosine of under-water solar zenith angle', myThid)
 #endif
 
 c ANNA_TAVE
