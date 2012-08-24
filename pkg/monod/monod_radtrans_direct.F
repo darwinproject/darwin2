@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_radtrans_direct.F,v 1.1 2012/08/23 21:53:00 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_radtrans_direct.F,v 1.2 2012/08/24 19:45:36 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -200,6 +200,10 @@ C compute irradiances
           amp1(nl,k) = c1
           amp2(nl,k) = c2
          ENDDO
+         IF (kbot .LT. Nr) THEN
+          Estop(nl,kbot+1) = Esbot(nl,kbot)
+          Eutop(nl,kbot+1) = Eubot(nl,kbot)
+         ENDIF
 
 C       endif thresh
         ENDIF
