@@ -106,6 +106,8 @@ c ANNA define variables for wavebands
        _RL apart_k(Nr,tlam),bpart_k(Nr,tlam),bbpart_k(Nr,tlam)
        _RL bt_k(Nr,tlam), bb_k(Nr,tlam)
        _RL discEs, discEu
+       INTEGER idiscEs,jdiscEs,kdiscEs,ldiscEs
+       INTEGER idiscEu,jdiscEu,kdiscEu,ldiscEu
 #else
        _RL PARwdn(tlam)
 #endif
@@ -334,6 +336,14 @@ COJ
        ENDDO
 
 #ifdef DAR_RADTRANS
+       idiscEs = 0
+       jdiscEs = 0
+       kdiscEs = 0
+       ldiscEs = 0
+       idiscEu = 0
+       jdiscEu = 0
+       kdiscEu = 0
+       ldiscEu = 0
        discEs = 0.
        discEu = 0.
 #endif
@@ -667,17 +677,38 @@ c dzlocal ?????
      O                amp1,amp2,
      I                myThid)
 #ifdef DAR_CHECK_IRR_CONT
+           IF( dz_k(1) .GT. 0.0 )THEN
            DO ilam = 1,tlam
-             discEs=MAX(discEs,ABS(Estop(ilam,1)-Eswsf(ilam)))
-           ENDDO
-           DO k=1,darwin_radtrans_kmax-1
-            DO ilam = 1,tlam
-             discEs=MAX(discEs,ABS(Estop(ilam,k+1)-Esz(ilam,k)))
-             discEu=MAX(discEu,ABS(Eutop(ilam,k+1)-Euz(ilam,k)))
+           IF(Eswsf(ilam).GE.darwin_radmodThresh .OR.
+     &        Edwsf(ilam).GE.darwin_radmodThresh ) THEN
+            IF(ABS(Estop(ilam,1)-Eswsf(ilam)) .GT. discEs )THEN
+              discEs = ABS(Estop(ilam,1)-Eswsf(ilam))
+              idiscEs = i
+              jdiscEs = j
+              kdiscEs = 1
+              ldiscEs = ilam
+            ENDIF
+            DO k=1,darwin_radtrans_kmax-1
+             IF(ABS(Estop(ilam,k+1)-Esz(ilam,k)) .GT. discEs)THEN
+              discEs = ABS(Estop(ilam,k+1)-Esz(ilam,k))
+              idiscEs = i
+              jdiscEs = j
+              kdiscEs = k+1
+              ldiscEs = ilam
+             ENDIF
+             IF(ABS(Eutop(ilam,k+1)-Euz(ilam,k)) .GT. discEu)THEN
+              discEu = ABS(Eutop(ilam,k+1)-Euz(ilam,k))
+              idiscEu = i
+              jdiscEu = j
+              kdiscEu = k+1
+              ldiscEu = ilam
+             ENDIF
             ENDDO
+           ENDIF
            ENDDO
-         ENDIF
+           ENDIF
 #endif
+         ENDIF
 c
 c uses chl from prev timestep (as wavebands does)
 c keep like this in case need to consider upwelling irradiance as affecting the grid box above
@@ -1521,7 +1552,14 @@ C itistime
 #endif
 
 #ifdef DAR_CHECK_IRR_CONT
-       print*,'max Es, Eu discontinuties',discEs,discEu
+       i = myXGlobalLo-1+(bi-1)*sNx+idiscEs
+       j = myYGlobalLo-1+(bj-1)*sNy+jdiscEs
+       write(6,'(I4.4,X,A,4(X,I4),1PE24.16)')myProcId,'max Es disc',
+     &                                   i,j,kdiscEs,ldiscEs,discEs
+       i = myXGlobalLo-1+(bi-1)*sNx+idiscEu
+       j = myYGlobalLo-1+(bj-1)*sNy+jdiscEu
+       write(6,'(I4.4,X,A,4(X,I4),1PE24.16)')myProcId,'max Eu disc',
+     &                                   i,j,kdiscEu,ldiscEu,discEu
 #endif
 
 COJ fill diagnostics

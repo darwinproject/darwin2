@@ -200,6 +200,10 @@ C compute irradiances
           amp1(nl,k) = c1
           amp2(nl,k) = c2
          ENDDO
+         IF (kbot .LT. Nr) THEN
+          Estop(nl,kbot+1) = Esbot(nl,kbot)
+          Eutop(nl,kbot+1) = Eubot(nl,kbot)
+         ENDIF
 
 C       endif thresh
         ENDIF
