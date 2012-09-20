@@ -216,7 +216,7 @@ c
        call tracer_sumvol(
      &             PPave, nR, PPtot, myThid )
        PPtot=PPtot*120. _d 0 * 12. _d 0* 1. _d -3* 31536000. _d 0
-     &                      *1. _d-15
+     &                      *1. _d -15
        call tracer_sumvol(
      &             Nfixave, nR, Nfixtot, myThid )
        Nfixtot=Nfixtot*14. _d 0 *1. _d -3* 31536000. _d 0
