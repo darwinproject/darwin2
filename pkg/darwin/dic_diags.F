@@ -76,7 +76,7 @@ C      Normalize by integrated time
      &             SURCave, co2fluxtot, myThid )
 c mmol/s to GtC/y
        co2fluxtot=co2fluxtot* 12. _d 0* 1. _d -3* 31536000. _d 0
-     &                      *1. _d-15
+     &                      *1. _d -15
        write(dar_fluxtot_unit,*) myIter, co2fluxtot
 #endif
 
