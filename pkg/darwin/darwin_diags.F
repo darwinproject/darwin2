@@ -96,6 +96,16 @@ C      Normalize by integrated time
          CALL TIMEAVE_NORMALIZ(Denitave, DAR_timeave, nR ,
      &                 bi,bj,myThid)
 
+#ifdef DAR_DIAG_PARW
+         do ii = 1,tlam
+          CALL TIMEAVE_NORMALIZ(PARwave(1-Olx,1-Oly,1,1,1,ii),
+     &                          DAR_timeave,nR,bi,bj,myThid)
+         enddo
+         do np = 1,npmax
+          CALL TIMEAVE_NORMALIZ(chl2cave(1-Olx,1-Oly,1,1,1,np),
+     &                          DAR_timeave,nR,bi,bj,myThid)
+         enddo
+#endif
 #ifdef DAR_DIAG_ACDOM
          CALL TIMEAVE_NORMALIZ(aCDOMave, DAR_timeave, nR ,
      &                 bi,bj,myThid)
@@ -149,6 +159,23 @@ C      Normalize by integrated time
 #ifdef DAR_RADTRANS
          CALL TIMEAVE_NORMALIZ(rmudave(1-Olx,1-Oly,1,1),
      &                         DAR_timeave,1,bi,bj,myThid)
+#endif
+#ifdef DAR_DIAG_EK
+         do np = 1,npmax
+          CALL TIMEAVE_NORMALIZ(Ekave(1-Olx,1-Oly,1,1,1,np),
+     &                          DAR_timeave,nR,bi,bj,myThid)
+          CALL TIMEAVE_NORMALIZ(EkoverEave(1-Olx,1-Oly,1,1,1,np),
+     &                          DAR_timeave,nR,bi,bj,myThid)
+          CALL TIMEAVE_NORMALIZ(acclimave(1-Olx,1-Oly,1,1,1,np),
+     &                          DAR_timeave,nR,bi,bj,myThid)
+          do ii = 1,tlam
+            CALL TIMEAVE_NORMALIZ(Ek_nlave(1-Olx,1-Oly,1,1,1,np,ii),
+     &                          DAR_timeave,nR,bi,bj,myThid)
+            CALL TIMEAVE_NORMALIZ(
+     &                       EkoverE_nlave(1-Olx,1-Oly,1,1,1,np,ii),
+     &                          DAR_timeave,nR,bi,bj,myThid)
+          enddo
+         enddo
 #endif
 
 c ANNA_TAVE
@@ -243,6 +270,22 @@ c
      &        myIter,myThid)
          CALL WRITE_FLD_XYZ_RL('DAR_Denittave.',suff,Denitave,
      &        myIter,myThid)
+#ifdef DAR_DIAG_PARW
+         do ii = 1,tlam
+           WRITE(suff,'(A8,I2.2,A1,I10.10)') 'PARwave',
+     &           ii,'.',myIter
+           CALL WRITE_FLD_XYZ_RL(suff,' ',
+     &           PARwave(1-Olx,1-Oly,1,1,1,ii),
+     &           myIter,myThid)
+         enddo
+         do np = 1,npmax
+           WRITE(suff,'(A8,I2.2,A1,I10.10)') 'chl2cave',
+     &           np,'.',myIter
+           CALL WRITE_FLD_XYZ_RL(suff,' ',
+     &           chl2cave(1-Olx,1-Oly,1,1,1,np),
+     &           myIter,myThid)
+         enddo
+#endif
 #ifdef DAR_DIAG_ACDOM
          CALL WRITE_FLD_XYZ_RL('DAR_aCDOMtave',suff,aCDOMave,
      &        myIter,myThid)
@@ -338,6 +381,37 @@ c
          CALL WRITE_FLD_XY_RL(suff,' ',
      &         rmudave(1-Olx,1-Oly,1,1),
      &         myIter,myThid)
+#endif
+#ifdef DAR_DIAG_EK
+         do np = 1,npmax
+           WRITE(suff,'(A8,I2.2,A1,I10.10)') 'Ekave',
+     &           np,'.',myIter
+           CALL WRITE_FLD_XYZ_RL(suff,' ',
+     &           Ekave(1-Olx,1-Oly,1,1,1,np),
+     &           myIter,myThid)
+           WRITE(suff,'(A8,I2.2,A1,I10.10)') 'EkoverEave',
+     &           np,'.',myIter
+           CALL WRITE_FLD_XYZ_RL(suff,' ',
+     &           EkoverEave(1-Olx,1-Oly,1,1,1,np),
+     &           myIter,myThid)
+           WRITE(suff,'(A8,I2.2,A1,I10.10)') 'acclimave',
+     &           np,'.',myIter
+           CALL WRITE_FLD_XYZ_RL(suff,' ',
+     &           acclimave(1-Olx,1-Oly,1,1,1,np),
+     &           myIter,myThid)
+           do ii = 1,tlam
+             WRITE(suff,'(A8,I2.2,A1,I2.2,A1,I10.10)') 'Ek_nl_ave',
+     &             np,'_',ii,'.',myIter
+             CALL WRITE_FLD_XYZ_RL(suff,' ',
+     &             Ek_nlave(1-Olx,1-Oly,1,1,1,np,ii),
+     &             myIter,myThid)
+             WRITE(suff,'(A8,I2.2,A1,I2.2,A1,I10.10)') 'EkoverE_nl_ave',
+     &             np,'_',ii,'.',myIter
+             CALL WRITE_FLD_XYZ_RL(suff,' ',
+     &             EkoverE_nlave(1-Olx,1-Oly,1,1,1,np,ii),
+     &             myIter,myThid)
+           enddo
+         enddo
 #endif
 
 c ANNA_TAVE
@@ -442,6 +516,24 @@ c
      &        pf,'dar_tave',0,0,'dar_Nfix_ave',Nfixave,myThid)
          CALL MNC_CW_RL_W(
      &        pf,'dar_tave',0,0,'dar_Denit_ave',Denitave,myThid)
+#ifdef DAR_DIAG_PARW
+         do ii = 1,tlam
+            DO jj = 1,MAX_LEN_FNAM
+              name(jj:jj) = ' '
+            ENDDO
+            WRITE(name,'(a,i2.2)') 'dar_PARw',ii
+            CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &           PARwave(1-OLx,1-OLy,1,1,1,ii),myThid)
+        enddo
+         do np = 1,npmax
+            DO jj = 1,MAX_LEN_FNAM
+              name(jj:jj) = ' '
+            ENDDO
+            WRITE(name,'(a,i2.2)') 'dar_chl2c',np
+            CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &           chl2cave(1-OLx,1-OLy,1,1,1,np),myThid)
+        enddo
+#endif
 #ifdef DAR_DIAG_ACDOM
          CALL MNC_CW_RL_W(
      &        pf,'dar_tave',0,0,'dar_aCDOM_ave',aCDOMave,myThid)
@@ -527,6 +619,30 @@ c
          WRITE(name,'(a)') 'dar_rmud'
          CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
      &        rmudave(1-OLx,1-OLy,1,1),myThid)
+#endif
+#ifdef DAR_DIAG_EK
+         do np = 1,npmax
+            DO jj = 1,MAX_LEN_FNAM
+              name(jj:jj) = ' '
+            ENDDO
+            WRITE(name,'(a,i2.2)') 'dar_Ek',np
+            CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &           Ekave(1-OLx,1-OLy,1,1,1,np),myThid)
+            WRITE(name,'(a,i2.2)') 'dar_EkoverE',np
+            CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &           EkoverEave(1-OLx,1-OLy,1,1,1,np),myThid)
+            WRITE(name,'(a,i2.2)') 'dar_acclim',np
+            CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &           acclimave(1-OLx,1-OLy,1,1,1,np),myThid)
+            do ii = 1,tlam
+              WRITE(name,'(a,i2.2,a,i2.2)') 'dar_Ek_nl',np,'_',ii
+              CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &             Ek_nlave(1-OLx,1-OLy,1,1,1,np,ii),myThid)
+              WRITE(name,'(a,i2.2,a,i2.2)') 'dar_EkoverE_nl',np,'_',ii
+              CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &             EkoverE_nlave(1-OLx,1-OLy,1,1,1,np,ii),myThid)
+            enddo
+        enddo
 #endif
 c ANNA_TAVE
 #ifdef WAVES_DIAG_PCHL
@@ -631,6 +747,16 @@ C      Reset averages to zero
 #endif
          CALL TIMEAVE_RESET(Nfixave,Nr,bi,bj,myThid)
          CALL TIMEAVE_RESET(Denitave,Nr,bi,bj,myThid)
+#ifdef DAR_DIAG_PARW
+         do ii = 1,tlam
+           CALL TIMEAVE_RESET(PARwave(1-OLx,1-OLy,1,1,1,ii),
+     &                                    Nr,bi,bj,myThid)
+         enddo
+         do np = 1,npmax
+           CALL TIMEAVE_RESET(chl2cave(1-OLx,1-OLy,1,1,1,np),
+     &                                    Nr,bi,bj,myThid)
+         enddo
+#endif
 #ifdef DAR_DIAG_ACDOM
          CALL TIMEAVE_RESET(aCDOMave,Nr,bi,bj,myThid)
 #endif
@@ -683,6 +809,22 @@ C      Reset averages to zero
 #ifdef DAR_RADTRANS
          CALL TIMEAVE_RESET(rmudave(1-OLx,1-OLy,1,1),
      &                                  1,bi,bj,myThid)
+#endif
+#ifdef DAR_DIAG_EK
+         do np = 1,npmax
+           CALL TIMEAVE_RESET(Ekave(1-OLx,1-OLy,1,1,1,np),
+     &                                    Nr,bi,bj,myThid)
+           CALL TIMEAVE_RESET(EkoverEave(1-OLx,1-OLy,1,1,1,np),
+     &                                    Nr,bi,bj,myThid)
+           CALL TIMEAVE_RESET(acclimave(1-OLx,1-OLy,1,1,1,np),
+     &                                    Nr,bi,bj,myThid)
+           do ii = 1,tlam
+             CALL TIMEAVE_RESET(Ek_nlave(1-OLx,1-OLy,1,1,1,np,ii),
+     &                                    Nr,bi,bj,myThid)
+             CALL TIMEAVE_RESET(EkoverE_nlave(1-OLx,1-OLy,1,1,1,np,ii),
+     &                                    Nr,bi,bj,myThid)
+           enddo
+         enddo
 #endif
 c ANNA_TAVE 
 #ifdef WAVES_DIAG_PCHL

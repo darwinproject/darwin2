@@ -129,6 +129,29 @@ cbenw limitation diagnostics
      &     '', myThid)
 #endif
 
+#ifdef DAR_DIAG_PARW
+      do ii=1,tlam
+          DO jj = 1,MAX_LEN_FNAM
+             name(jj:jj) = ' '
+          ENDDO
+          WRITE(name,'(a,i2.2)') 'dar_PARw',ii
+          CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','uEin/m2/s', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     &     'par at centre grid cell', myThid)
+      enddo
+      do np=1,npmax
+          DO jj = 1,MAX_LEN_FNAM
+             name(jj:jj) = ' '
+          ENDDO
+          WRITE(name,'(a,i2.2)') 'dar_chl2c',np
+          CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','mg/mmol', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     &              'local chl to carbon ratio', myThid)
+      enddo
+#endif
+
 #ifdef DAR_DIAG_IRR
       do ii=1,tlam
           DO jj = 1,MAX_LEN_FNAM
@@ -241,7 +264,43 @@ cbenw limitation diagnostics
       CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
      & 'inverse cosine of under-water solar zenith angle', myThid)
 #endif
-
+#ifdef DAR_DIAG_EK
+      do np=1,npmax
+          DO jj = 1,MAX_LEN_FNAM
+             name(jj:jj) = ' '
+          ENDDO
+          WRITE(name,'(a,i2.2)') 'dar_Ek',np
+          CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','uEin/m2/s', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     &              'Ek', myThid)
+          WRITE(name,'(a,i2.2)') 'dar_EkoverE',np
+          CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     &              'Ek over E', myThid)
+          WRITE(name,'(a,i2.2)') 'dar_acclim',np
+          CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'units','mg/mmol', myThid)
+          CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     &              'acclimated Chl to C ratio', myThid)
+          do ii=1,tlam
+            DO jj = 1,MAX_LEN_FNAM
+               name(jj:jj) = ' '
+            ENDDO
+            WRITE(name,'(a,i2.2,a,i2.2)') 'dar_Ek_nl',np,'_',ii
+            CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+            CALL MNC_CW_ADD_VATTR_TEXT(name,'units','uEin/m2/s', myThid)
+            CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     &       'spectral Ek', myThid)
+            WRITE(name,'(a,i2.2,a,i2.2)') 'dar_EkoverE_nl',np,'_',ii
+            CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+            CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
+            CALL MNC_CW_ADD_VATTR_TEXT(name,'description',
+     &       'spectral Ek over E', myThid)
+         enddo
+      enddo
+#endif
 c ANNA_TAVE
 #ifdef WAVES_DIAG_PCHL
       do np=1,npmax
