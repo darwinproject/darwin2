@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_forcing.F,v 1.12 2012/08/24 19:45:36 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_forcing.F,v 1.13 2012/10/23 16:39:32 stephd Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -92,6 +92,8 @@ c ANNA define variables for wavebands
        _RL PARw_k(tlam,Nr)
        _RL PARwup(tlam)
        _RL acdom_k(Nr,tlam)
+       _RL Ek_nll(npmax,tlam)
+       _RL EkoverE_nll(npmax,tlam)
 #ifdef DAR_RADTRANS
        integer iday,iyr,imon,isec,lp,wd,mydate(4)
        _RL Edwsf(tlam),Eswsf(tlam)
@@ -131,9 +133,13 @@ C      always need for diagnostics
 #ifdef GEIDER
       _RL phychl(npmax)
       _RL phychl_k(npmax,Nr)
+      _RL Ekl(npmax)
+      _RL EkoverEl(npmax)
+      _RL chl2cl(npmax)
 #ifdef DYNAMIC_CHL
       _RL dphychl(npmax)
       _RL chlup(npmax)
+      _RL accliml(npmax)
 #endif
 #endif
 #ifdef ALLOW_CDOM
@@ -964,6 +970,17 @@ c set other arguments to zero
                 NfixPl(np)=0. _d 0
 #endif
 #endif
+#ifdef DAR_DIAG_PARW
+                chl2cl(np)=0. _d 0
+#endif
+#ifdef DAR_DIAG_EK
+                Ekl(np)=0. _d 0
+                EkoverEl(np)=0. _d 0
+                do ilam=1,tlam
+                  Ek_nll(np,ilam)=0. _d 0
+                  EkoverE_nll(np,ilam)=0. _d 0
+                enddo
+#endif
              enddo
 
 
@@ -1033,9 +1050,18 @@ c ANNA pass extra variables if WAVEBANDS
 #endif
 #ifdef GEIDER
      O                       phychl,
+#ifdef DAR_DIAG_EK
+     I                       Ekl, EkoverEl,
+#endif
+#ifdef DAR_DIAG_PARW
+     I                       chl2cl,
+#endif
 #ifdef DYNAMIC_CHL
      I                       dphychl,
      I                       chlup,
+#ifdef DAR_DIAG_EK
+     O                       accliml,
+#endif
 #endif
 #ifdef ALLOW_CDOM
      O                       dcdoml,
@@ -1043,6 +1069,9 @@ c ANNA pass extra variables if WAVEBANDS
 #endif
 #ifdef WAVEBANDS
      I                       PARw_k(1,k),
+#ifdef DAR_DIAG_EK
+     I                       Ek_nll, EkoverE_nll,
+#endif
 #endif
 #endif
 #ifdef ALLOW_PAR_DAY
@@ -1381,6 +1410,16 @@ c    &                       deltaTclock/float(nsubtime)
      &                           phychl(np)*dtplankton
              enddo
 #endif
+#ifdef DAR_DIAG_PARW
+            do ilam=1,tlam
+               PARwave(i,j,k,bi,bj,ilam)=PARwave(i,j,k,bi,bj,ilam)+
+     &                           PARw_k(ilam,k)*dtplankton
+            enddo
+            do np=1,npmax
+              chl2cave(i,j,k,bi,bj,np)=chl2cave(i,j,k,bi,bj,np)+
+     &                          chl2cl(np)*dtplankton
+            enddo
+#endif
 #ifdef DAR_DIAG_ACDOM
 c            print*,'acdom',k,acdom_k(k,darwin_diag_acdom_ilam)
              aCDOMave(i,j,k,bi,bj)=aCDOMave(i,j,k,bi,bj)+
@@ -1445,6 +1484,24 @@ Coj            no Eu at surface (yet)
                rmudave(i,j,bi,bj)=rmudave(i,j,bi,bj)+
      &                                 rmud*dtplankton
              endif
+#endif
+#ifdef DAR_DIAG_EK
+            do np=1,npmax
+             Ekave(i,j,k,bi,bj,np)=Ekave(i,j,k,bi,bj,np)+
+     &                        Ekl(np)*dtplankton
+             EkoverEave(i,j,k,bi,bj,np)=EkoverEave(i,j,k,bi,bj,np)+
+     &                        EkoverEl(np)*dtplankton
+             acclimave(i,j,k,bi,bj,np)=acclimave(i,j,k,bi,bj,np)+
+     &                        accliml(np)*dtplankton
+             do ilam=1,tlam
+                Ek_nlave(i,j,k,bi,bj,np,ilam)=
+     &                        Ek_nlave(i,j,k,bi,bj,np,ilam)+
+     &                        Ek_nll(np,ilam)*dtplankton
+                EkoverE_nlave(i,j,k,bi,bj,np,ilam)=
+     &                        EkoverE_nlave(i,j,k,bi,bj,np,ilam)+
+     &                        EkoverE_nll(np,ilam)*dtplankton
+             enddo
+            enddo
 #endif
 #ifdef DAR_DIAG_RSTAR
              do np=1,npmax

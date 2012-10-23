@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/DARWIN_IO.h,v 1.5 2012/07/02 09:39:53 benw Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/DARWIN_IO.h,v 1.6 2012/10/23 17:55:30 stephd Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -138,6 +138,12 @@ c ANNA_TAVE
 #ifdef DAR_DIAG_ACDOM
      &      aCDOMave,
 #endif
+#ifdef DAR_DIAG_PARW
+     &      chl2cave,
+#endif
+#ifdef DAR_DIAG_EK
+     &      Ekave, EkoverEave, acclimave,
+#endif
 c ANNA end TAVE
 #ifdef DAR_DIAG_RSTAR
      &      Rstarave, RNstarave,
@@ -173,6 +179,14 @@ c ANNA_TAVE
 #endif
 #ifdef DAR_DIAG_ACDOM
        _RL  aCDOMave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy)
+#endif
+#ifdef DAR_DIAG_PARW
+       _RL  chl2cave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy,npmax)
+#endif
+#ifdef DAR_DIAG_EK
+       _RL  Ekave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy,npmax)
+       _RL  EkoverEave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy,npmax)
+       _RL  acclimave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy,npmax)
 #endif
 c ANNA end TAVE
 #ifdef DAR_DIAG_RSTAR

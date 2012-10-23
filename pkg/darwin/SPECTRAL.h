@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/SPECTRAL.h,v 1.4 2012/08/23 21:48:24 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/SPECTRAL.h,v 1.5 2012/10/23 17:55:30 stephd Exp $
 C $Name:  $
 
 C SPECTRAL.h 
@@ -23,6 +23,9 @@ C oasim_es :: spectral diffuse downwelling irradiance at surface read from file
 #endif
 
       COMMON /SPECTRAL_OUPUT/
+#ifdef DAR_DIAG_PARW
+     &      PARwave,
+#endif
 #ifdef DAR_DIAG_IRR
      &      Edave,Esave,Euave,Estave,Eutave,
 #endif
@@ -41,7 +44,15 @@ C oasim_es :: spectral diffuse downwelling irradiance at surface read from file
      &      btpartave,
      &      bbpartave,
 #endif
+#ifdef DAR_DIAG_EK
+     &      Ek_nlave,
+     &      EkoverE_nlave,
+#endif
      &      rmudave
+
+#ifdef DAR_DIAG_PARW
+       _RL  PARwave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy,tlam)
+#endif
 
 #ifdef DAR_DIAG_IRR
        _RL  Edave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,tlam)
@@ -65,6 +76,12 @@ C oasim_es :: spectral diffuse downwelling irradiance at surface read from file
        _RL  apartave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,tlam)
        _RL  bbpartave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,tlam)
        _RL  btpartave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,tlam)
+#endif
+#ifdef DAR_DIAG_EK
+       _RL  Ek_nlave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy,npmax,
+     &              tlam)
+       _RL  EkoverE_nlave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy,
+     &                   npmax,tlam)
 #endif
        _RL  rmudave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
 
