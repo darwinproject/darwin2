@@ -339,6 +339,16 @@ c set arrays to zero if first timestep
           CALL TIMEAVE_RESET(Chlave,   Nr,  bi, bj, myThid)
           CALL TIMEAVE_RESET(Nfixave,   Nr,  bi, bj, myThid)
           CALL TIMEAVE_RESET(Denitave,   Nr,  bi, bj, myThid)
+#ifdef DAR_DIAG_PARW
+          do i=1,tlam
+           CALL TIMEAVE_RESET(PARwave(1-OLx,1-OLy,1,1,1,i),
+     &                                    Nr,bi,bj,myThid)
+          enddo
+          do np=1,npmax
+           CALL TIMEAVE_RESET(chl2cave(1-OLx,1-OLy,1,1,1,np),
+     &                                    Nr,bi,bj,myThid)
+          enddo
+#endif
 #ifdef DAR_DIAG_ACDOM
           CALL TIMEAVE_RESET(aCDOMave,   Nr,  bi, bj, myThid)
 #endif
@@ -400,6 +410,20 @@ c ANNA_TAVE
           enddo
 #endif
 c ANNA end TAVE
+#ifdef DAR_DIAG_EK
+           do np=1,npmax
+           CALL TIMEAVE_RESET(Ekave(1-OLx,1-OLy,1,1,1,np),
+     &                                      Nr,bi,bj,myThid)
+           CALL TIMEAVE_RESET(EkoverEave(1-OLx,1-OLy,1,1,1,np),
+     &                                      Nr,bi,bj,myThid)
+           do i=1,tlam
+             CALL TIMEAVE_RESET(Ek_nlave(1-OLx,1-OLy,1,1,1,np,i),
+     &                                      Nr,bi,bj,myThid)
+             CALL TIMEAVE_RESET(EkoverE_nlave(1-OLx,1-OLy,1,1,1,np,i),
+     &                                      Nr,bi,bj,myThid)
+           enddo
+          enddo
+#endif
 #ifdef DAR_DIAG_RSTAR
           do np=1,npmax
            CALL TIMEAVE_RESET(Rstarave(1-OLx,1-OLy,1,1,1,np),
