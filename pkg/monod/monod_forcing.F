@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_forcing.F,v 1.13 2012/10/23 16:39:32 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_forcing.F,v 1.14 2012/10/25 15:58:24 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -505,7 +505,8 @@ c ------------ GET INCIDENT NON-SPECTRAL LIGHT -------------------------
 
 #else /* not USE_QSW */
 
-         lite = sfac(j)*maskC(i,j,1,bi,bj)/86400*1 _d 6
+C        convert W/m2 to uEin/s/m2
+         lite = sfac(j)*parconv*maskC(i,j,1,bi,bj)
 
 #endif /* not USE_QSW */
 #endif /* not READ_PAR */
