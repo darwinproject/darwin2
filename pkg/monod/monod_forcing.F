@@ -505,7 +505,8 @@ c ------------ GET INCIDENT NON-SPECTRAL LIGHT -------------------------
 
 #else /* not USE_QSW */
 
-         lite = sfac(j)*maskC(i,j,1,bi,bj)/86400*1 _d 6
+C        convert W/m2 to uEin/s/m2
+         lite = sfac(j)*parconv*maskC(i,j,1,bi,bj)
 
 #endif /* not USE_QSW */
 #endif /* not READ_PAR */
