@@ -1,8 +1,12 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.29 2012/10/12 14:11:53 jahn Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.30 2012/11/16 21:07:15 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
+
+ctrb_darwin2_ckpt64a_20121116
+o add diagnostics for chl:c, Ek and Ek/E
+o fix units when using insol
 
 ctrb_darwin2_ckpt64_20121012
 
