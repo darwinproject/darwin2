@@ -4,6 +4,10 @@ $Name$
     Notes on tags used in darwin
     ============================
 
+ctrb_darwin2_ckpt64a_20121116
+o add diagnostics for chl:c, Ek and Ek/E
+o fix units when using insol
+
 ctrb_darwin2_ckpt64_20121012
 
 ctrb_darwin2_ckpt63s_20120908
