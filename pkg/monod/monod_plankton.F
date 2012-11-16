@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_plankton.F,v 1.9 2012/07/26 18:01:22 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_plankton.F,v 1.10 2012/11/16 19:50:22 stephd Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -75,8 +75,17 @@ c ANNA pass extra variables if WAVEBANDS
 #endif
 #ifdef GEIDER
      I                       phychl, 
+#ifdef DAR_DIAG_EK
+     O                       Ek, EkoverE,
+#endif
+#ifdef DAR_DIAG_PARW
+     O                       chl2c,
+#endif
 #ifdef DYNAMIC_CHL
      O                       dphychl, Chlup,
+#ifdef DAR_DIAG_EK
+     O                       acclim, 
+#endif
 #endif
 #ifdef ALLOW_CDOM
      O                       dcdomdt   , 
@@ -84,6 +93,9 @@ c ANNA pass extra variables if WAVEBANDS
 #endif
 #ifdef WAVEBANDS
      I                       PARwlocal,
+#ifdef DAR_DIAG_EK
+     O                       Ek_nl, EkoverE_nl,
+#endif
 #endif
 #endif
 #ifdef ALLOW_PAR_DAY
@@ -204,9 +216,13 @@ c zoo   = zooplankton
 #endif
 #ifdef GEIDER
          _RL phychl(npmax)
+         _RL Ek(npmax)
+         _RL EkoverE(npmax)
+         _RL chl2c(npmax)
 #ifdef DYNAMIC_CHL
          _RL dphychl(npmax)
          _RL Chlup(npmax)
+         _RL acclim(npmax)
 #endif
 #endif
 #ifdef ALLOW_CDOM
@@ -228,12 +244,10 @@ c ANNA Global variables for WAVEBANDS
 c ANNA these variables are passed in/out of darwin_forcing.F
 #ifdef WAVEBANDS
          _RL PARwlocal(tlam)      !PAR at midpoint of previous(in) and local(out) gridcell
+         _RL Ek_nl(npmax,tlam)
+         _RL EkoverE_nl(npmax,tlam)
 #endif
 c ANNA endif
-
-
-
-
 
 c LOCAL VARIABLES
 c -------------------------------------------------------------
@@ -315,9 +329,7 @@ c  variables for zooplankton grazing rates
         _RL alpha_I(npmax)
         _RL pcarbon(npmax)
         _RL pcm(npmax)
-        _RL chl2c(npmax)
 #ifdef DYNAMIC_CHL
-        _RL acclim(npmax)
         _RL psinkchl(npmax)
         _RL rhochl(npmax)
 #endif
@@ -455,10 +467,6 @@ c ANNA inportant but local variables that can be fogotten
 #endif
 c ANNA endif
 
-c ANNA - for inhib
-         _RL Ek
-         _RL EkoverE
-
 c.................................................................
 
 #ifdef ALLOW_MUTANTS
@@ -516,9 +524,17 @@ c energetic disadvantage of using NO2/No3: off=0, on=1
            pcarbon(np) = 0. _d 0
            pcm(np)=0. _d 0
            chl2c(np)=0. _d 0
+           Ek(np)=0. _d 0
+           EkoverE(np)=0. _d 0
 #ifdef DYNAMIC_CHL
            acclim(np)=0. _d 0
            psinkChl(np)=0. _d 0
+#endif
+#ifdef WAVEBANDS
+           do ilam=1,tlam
+            Ek_nl(np,ilam)=0. _d 0
+            EkoverE_nl(np,ilam)=0. _d 0
+           enddo
 #endif
          enddo
 #endif
@@ -890,16 +906,22 @@ c assumes balanced growth, eq A14 in Geider et al 1997
 c Eq A1 in Geider et al 1997
                pcarbon(np)=pcm(np)*( 1 -
      &          exp((-alpha_I(np)*chl2c(np))/(pcm(np))) )
+#ifdef WAVEBANDS 
+               Ek(np) = pcm(np)/(chl2c(np)*alpha_mean(np))
+               EkoverE(np) = Ek(np) / PARlocal
+               do nl=1, tlam
+                  Ek_nl(np,nl)=pcm(np)/(chl2c(np)*alphachl_nl(np,nl))
+                  EkoverE_nl(np,nl) = Ek_nl(np,nl) / PARwlocal(nl)
+               enddo
+#else
+               Ek(np) = pcm(np)/(chl2c(np)*alphachl(np))
+               EkoverE(np) = Ek(np) / PARlocal
+#endif
 c for inhibition
                if (inhibcoef_geid(np).gt.0. _d 0) then
-#ifdef WAVEBANDS 
-                 Ek = pcm(np)/(chl2c(np)*alpha_mean(np))
-#else
-                 Ek = pcm(np)/(chl2c(np)*alphachl(np))
-#endif
-                 EkoverE = Ek / PARlocal
-                 if (PARlocal .ge. Ek) then !photoinhibition begins
-                  pcarbon(np) = pcarbon(np)*(EkoverE*inhibcoef_geid(np))
+                 if (PARlocal .ge. Ek(np)) then !photoinhibition begins
+                  pcarbon(np) = pcarbon(np)*
+     &                            (EkoverE(np)*inhibcoef_geid(np))
                  endif
                endif
 c end inhib
@@ -915,12 +937,12 @@ c end inhib
                pcarbon(np)=0. _d 0
              endif
            else ! if pcm 0
-             pcm(np)=0.d0
+             pcm(np)=0. _d 0
 #ifndef DYNAMIC_CHL
              chl2c(np)=chl2cmin(np)
 #endif
-             pcarbon(np)=0.d0
-             ilimit(np)=0.d0
+             pcarbon(np)=0. _d 0
+             ilimit(np)=0. _d 0
            endif
 #ifdef DYNAMIC_CHL
 c Chl:C acclimated to current conditions 
