@@ -44,4 +44,5 @@
 # more compatibility settings
  SEAICE_frazilFrac  = 1.,
  SEAICE_mcPheePiston = .00833333333333333333,
+ SEAICE_multDim     = 7,
  &
