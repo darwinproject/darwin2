@@ -1,48 +1,30 @@
 # SEAICE parameters
  &SEAICE_PARM01
-      SEAICE_dryIceAlb   = 0.8756,
-      SEAICE_wetIceAlb   = 0.7856,
-      SEAICE_drySnowAlb  = 0.9656,
-      SEAICE_wetSnowAlb  = 0.8256,
-#      SEAICE_waterAlbedo = 0.2756,
-      SEAICE_strength    = 2.6780e+04,
-      OCEAN_drag         = 8.1541e-04,
-      SEAICE_waterDrag   = 5.3508,
-      LSR_ERROR          = 1e-13,
-      SEAICEuseDYNAMICS  = .TRUE.,
-      HeffFile           = '',
-#      SEAICE_freeze      = -1.7348,
-      MIN_ATEMP          = -40.,
-      MIN_TICE           = -40.,
-#      SEAICE_clipVelocities = .TRUE.,
-      SEAICEadvSalt      = .FALSE.,
-      SEAICEadvSnow      = .TRUE.,
-      SEAICEuseFlooding  = .TRUE.,
-      SEAICE_saltFrac    = 0.3,
-      ICE2WATR           = 0.92,
-#      SEAICE_deltaTevp   = 1.,
-#      SEAICE_evpTauRelax = 3600.,
-#      SEAICE_evpDampC    = 615.,
-# for backward compatibility only:
- SEAICE_cpAir       = 1.0039560439560439e+03,
-# SEAICE_lhSublim    = 2.8340219780219775e+06,
- SEAICE_lhEvap      = 2.5000000000000000e+06,
- SEAICE_lhFusion    =  3.340219780219775e+05,
- SEAICE_rhoAir      = 1.3E0,
-      SEAICEuseFluxForm  = .FALSE.,
-      DIFF1 = 0.004,
-# For backward compatibility only:
-# emissivities should be inherited from exf and setting them here does
-# not set a good example
- SEAICE_snow_emiss     = 0.97001763668430343479,
- SEAICE_ice_emiss      = 0.97001763668430343479,
-#
-#- to reproduce old results with former #defined SEAICE_SOLVE4TEMP_LEGACY code
- useMaykutSatVapPoly = .TRUE.,
- postSolvTempIter  =  0,
-#
-# more compatibility settings
- SEAICE_frazilFrac  = 1.,
- SEAICE_mcPheePiston = .00833333333333333333,
- SEAICE_multDim     = 7,
+#- seaice dynamics params:
+# LSR_ERROR          = 1.E-12,
+  SEAICE_no_slip     = .TRUE.,
+  SEAICE_drag        = 0.001,
+# Depending on vertical resolution this angle should have a value > 0
+#  (e.g., 25deg for drF(1)=10m)
+# SEAICE_waterTurnAngle = 0.0,
+#- seaice state & transport params:
+  SEAICE_salt0       = 4.0,
+  SEAICEadvScheme    = 7,
+# for adjoint simulations you will need
+# SEAICEadvScheme    = 30,
+#- seaice thermodyn params:
+  SEAICE_multDim     = 7,
+  SEAICE_wetAlbTemp  = 0.0,
+# this value should be default for the McPhee parameterization
+  SEAICE_mcPheeTaper = 0.92,
+#- seaice I/O params:
+  SEAICEwriteState   = .TRUE.,
+ &
+
+ &SEAICE_PARM03
+  SItrNumInUse       = 2,
+  SItrName(1)        = 'age',
+  SItrMate(1)        = 'AREA',
+  SItrUnit(1)        = 's',
+  SItrName(2)        = 'one',
  &
