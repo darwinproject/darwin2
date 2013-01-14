@@ -43,6 +43,7 @@ C     !LOCAL VARIABLES:
 C     == Local variables ==
       CHARACTER*(MAX_LEN_FNAM) fn
       LOGICAL glf
+      _RL     timList(1)
       INTEGER prec, irec, ifld
       INTEGER listDim, nWrFlds
       PARAMETER( listDim = 2 )
@@ -88,11 +89,12 @@ C--------------------------
 C     uses this specific S/R to write (with more informations) only meta
 C     files
         glf  = globalFiles
+        timList(1) = myTime
         irec = ABS(irec)
         CALL MDS_WR_METAFILES( fn, prec, glf, .FALSE.,
      &                         0, 0, nR, ' ',
      &                         nWrFlds, wrFldList,
-     &                         1, myTime,
+     &                         1, timList, oneRL,
      &                         irec, myIter, myThid )
 #endif /* ALLOW_MDSIO */
 C--------------------------
