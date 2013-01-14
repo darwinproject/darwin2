@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_write_pickup.F,v 1.1 2011/04/13 18:56:24 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_write_pickup.F,v 1.2 2013/01/14 16:50:46 jmc Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -43,6 +43,7 @@ C     !LOCAL VARIABLES:
 C     == Local variables ==
       CHARACTER*(MAX_LEN_FNAM) fn
       LOGICAL glf
+      _RL     timList(1)
       INTEGER prec, irec, ifld
       INTEGER listDim, nWrFlds
       PARAMETER( listDim = 2 )
@@ -88,11 +89,12 @@ C--------------------------
 C     uses this specific S/R to write (with more informations) only meta
 C     files
         glf  = globalFiles
+        timList(1) = myTime
         irec = ABS(irec)
         CALL MDS_WR_METAFILES( fn, prec, glf, .FALSE.,
      &                         0, 0, nR, ' ',
      &                         nWrFlds, wrFldList,
-     &                         1, myTime,
+     &                         1, timList, oneRL,
      &                         irec, myIter, myThid )
 #endif /* ALLOW_MDSIO */
 C--------------------------
