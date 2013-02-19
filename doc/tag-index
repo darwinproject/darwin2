@@ -4,7 +4,11 @@ $Name$
     Notes on tags used in darwin
     ============================
 
+ctrb_darwin2_ckpt64d_20130219
+o fixes for attenuation with dynamic chlorophyll and ninespecies initializaion
+
 ctrb_darwin2_ckpt64c_20130120
+o switch baltic verification exp to labsea seaice settings
 
 ctrb_darwin2_ckpt64b_20121224
 
