@@ -4,6 +4,9 @@ $Name$
     Notes on tags used in darwin
     ============================
 
+ctrb_darwin2_ckpt64e_20130305
+o new baltic exp output after bug fix with noslip in seaice package
+
 ctrb_darwin2_ckpt64d_20130219
 o fixes for attenuation with dynamic chlorophyll and ninespecies initializaion
 
