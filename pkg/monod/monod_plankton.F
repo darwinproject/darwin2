@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_plankton.F,v 1.10 2012/11/16 19:50:22 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_plankton.F,v 1.11 2013/03/27 20:51:06 stephd Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -1237,40 +1237,40 @@ c accumulate particulate and dissolved detritus
      &                     ExportFracZ(nz)*( mortzoo(nz)*
      &                     mortZTempFunction*zooN(nz)
      &                     +  mortzoo2(nz)*
-     &                     mortZ2TempFunction*zooN(nz)**2 )
+     &                     mortZ2TempFunction*zooN(nz)*zooP(nz) )
                totzoo_don=totzoo_don+
      &                    (1. _d 0-ExportFracZ(nz))*(
      &                     mortzoo(nz)*
      &                     mortZTempFunction*zooN(nz)+
      &                     mortzoo2(nz)*
-     &                     mortZ2TempFunction*zooN(nz)**2 )
+     &                     mortZ2TempFunction*zooN(nz)*zooP(nz) )
                totzoo_pofe=totzoo_pofe+
      &                     ExportFracZ(nz)*( mortzoo(nz)*
      &                     mortZTempFunction*zooFe(nz)
      &                     +  mortzoo2(nz)*
-     &                     mortZ2TempFunction*zooFe(nz)**2 )
+     &                     mortZ2TempFunction*zooFe(nz)*zooP(nz) )
                totzoo_dofe=totzoo_dofe+
      &                   (1. _d 0-ExportFracZ(nz))*(
      &                    mortzoo(nz)*
      &                    mortZTempFunction*zooFe(nz) +
      &                    mortzoo2(nz)*
-     &                    mortZ2TempFunction*zooFe(nz)**2 )
+     &                    mortZ2TempFunction*zooFe(nz)*zooP(nz) )
                totzoo_posi=totzoo_posi+
      &                     ( mortzoo(nz)*
      &                       mortZTempFunction*zooSi(nz)+
      &                       mortzoo2(nz)*
-     &                       mortZ2TempFunction*zooSi(nz)**2 )
+     &                       mortZ2TempFunction*zooSi(nz)*zooP(nz) )
 #ifdef ALLOW_CARBON
                totzoo_poc=totzoo_poc+
      &                    ExportFracZ(nz)*( mortzoo(nz)*
      &                         mortZTempFunction*zooClocal(nz)
      &                      +  mortzoo2(nz)*
-     &                         mortZ2TempFunction*zooClocal(nz)**2 )
+     &                       mortZ2TempFunction*zooClocal(nz)*zooP(nz) )
                totzoo_doc=totzoo_doc+
      &           (1. _d 0-ExportFracZ(nz))*( mortzoo(nz)*
      &                         mortZTempFunction*zooClocal(nz)
      &                      +  mortzoo2(nz)*
-     &                         mortZ2TempFunction*zooClocal(nz)**2 )
+     &                       mortZ2TempFunction*zooClocal(nz)*zooP(nz) )
 #endif
             enddo
 
@@ -1654,17 +1654,17 @@ C zooplankton stoichiometry varies according to food source
      &                           - mortzoo(nz)*
      &                             mortZTempFunction*zooN(nz)
      &                           - mortzoo2(nz)*
-     &                             mortZ2TempFunction*zooN(nz)**2
+     &                             mortZ2TempFunction*zooN(nz)*zooP(nz)
               dzooFedt(nz) = dzooFedt(nz)
      &                           - mortzoo(nz)*
      &                             mortZTempFunction*zooFe(nz)
      &                           - mortzoo2(nz)*
-     &                             mortZ2TempFunction*zooFe(nz)**2
+     &                             mortZ2TempFunction*zooFe(nz)*zooP(nz)
               dzooSidt(nz) = dzooSidt(nz)
      &                           - mortzoo(nz)*
      &                             mortZTempFunction*zooSi(nz)
      &                           - mortzoo2(nz)*
-     &                             mortZ2TempFunction*zooSi(nz)**2
+     &                             mortZ2TempFunction*zooSi(nz)*zooP(nz)
             enddo
 
 
@@ -1784,7 +1784,7 @@ c loss of O2 by remineralization
      &                           - mortzoo(nz)*
      &                             mortZTempFunction*zooClocal(nz)
      &                           - mortzoo2(nz)*
-     &                             mortZ2TempFunction*zooClocal(nz)**2
+     &                         mortZ2TempFunction*zooClocal(nz)*zooP(nz)
             enddo
 #else
             do nz=1,nzmax
@@ -1792,7 +1792,7 @@ c loss of O2 by remineralization
      &                           - mortzoo(nz)*
      &                             mortZTempFunction*zooClocal(nz)
      &                           - mortzoo2(nz)*
-     &                             mortZ2TempFunction*zooClocal(nz)**2
+     &                         mortZ2TempFunction*zooClocal(nz)*zooP(nz)
             enddo
 #endif
 
