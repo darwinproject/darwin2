@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_plankton.F,v 1.11 2013/03/27 20:51:06 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_plankton.F,v 1.12 2013/03/28 17:00:34 stephd Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -1040,7 +1040,7 @@ c sum all palatability*phyto and find phyto specific grazing rate
 #endif
            do np=1,npmax
             tmpz=max(0. _d 0,(allphyto(nz)-phygrazmin) )
-            grazphy(np,nz)=grazemax(nz)*
+            grazphy(np,nz)=grazemax(nz)*zooTempFunction(nz)*
 #ifdef SER_GRAZ
 c as in Vallina et al, 2011
      &          (((palat(np,nz)*phyto(np)/allphyto(nz))*phyto(np))/
