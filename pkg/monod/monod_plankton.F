@@ -1040,7 +1040,7 @@ c sum all palatability*phyto and find phyto specific grazing rate
 #endif
            do np=1,npmax
             tmpz=max(0. _d 0,(allphyto(nz)-phygrazmin) )
-            grazphy(np,nz)=grazemax(nz)*
+            grazphy(np,nz)=grazemax(nz)*zooTempFunction(nz)*
 #ifdef SER_GRAZ
 c as in Vallina et al, 2011
      &          (((palat(np,nz)*phyto(np)/allphyto(nz))*phyto(np))/
