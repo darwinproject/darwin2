@@ -1337,7 +1337,8 @@ c phospate uptake by each phytoplankton
                if (debug.eq.14) print*,'grow', grow(np), pcarbon(np)
 #ifdef DYNAMIC_CHL
 c geider 97 for dChl/dt (source part) Eq. 3
-               if (acclim(np).gt. 0. _d 0) then
+               if (acclim(np).gt. 0. _d 0.and. 
+     &                                 alpha_I(np).gt. 0. _d 0) then
                 rhochl(np)=chl2cmax(np) *
      &                      (grow(np)/(alpha_I(np)*acclim(np)) )
                else
