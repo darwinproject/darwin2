@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_plankton.F,v 1.12 2013/03/28 17:00:34 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_plankton.F,v 1.13 2013/03/28 18:14:17 stephd Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -1337,7 +1337,8 @@ c phospate uptake by each phytoplankton
                if (debug.eq.14) print*,'grow', grow(np), pcarbon(np)
 #ifdef DYNAMIC_CHL
 c geider 97 for dChl/dt (source part) Eq. 3
-               if (acclim(np).gt. 0. _d 0) then
+               if (acclim(np).gt. 0. _d 0.and. 
+     &                                 alpha_I(np).gt. 0. _d 0) then
                 rhochl(np)=chl2cmax(np) *
      &                      (grow(np)/(alpha_I(np)*acclim(np)) )
                else
