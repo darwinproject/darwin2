@@ -4,6 +4,11 @@ $Name$
     Notes on tags used in darwin
     ============================
 
+ctrb_darwin2_ckpt64f_20130405
+o make sure not dividing by zero at zero light with dynamic chlorophyll
+o add temperature function to grazing rate (note was only in OLD_GRAZE before)
+o fix bug in zooplankton quadratic mortality - now conserves zooplankton quota
+
 ctrb_darwin2_ckpt64e_20130305
 o new baltic exp output after bug fix with noslip in seaice package
 
