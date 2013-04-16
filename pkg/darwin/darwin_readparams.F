@@ -167,7 +167,7 @@ c default periodic forcing to same as for GCHEM
 
 #ifdef WAVEBANDS
       DO ilam=1,tlam+1
-        darwin_wavebands(ilam) = 0
+        darwin_wavebands(ilam) = -1
       ENDDO
 #ifdef DAR_CALC_ACDOM
       darwin_Sdom = 0.014 _d 0

@@ -56,33 +56,86 @@ c      _RL planck, c, hc, oavo, hcoavo, rlamm
 c local indeces
       integer nabp,i,ilam
 
+C fill in missing waveband information:
+C "representative values" darwin_waves need not be centered within
+C waveband boundaries darwin_wavebands, so both may be given
+C if representative values are not given, compute from waveband
+C boundaries
       do i = 1,tlam
-        pwaves(i) = darwin_waves(i)
+        if (darwin_waves(i) .gt. 0) then
+          pwaves(i) = darwin_waves(i)
+        elseif (darwin_wavebands(i).ge.0 .and.
+     &          darwin_wavebands(i+1).ge.0 ) then
+          pwaves(i) = .5*(darwin_wavebands(i)+darwin_wavebands(i+1))
+        else
+          WRITE(msgBuf,'(3A)') 'WAVEBANDS_INIT_FIXED: ',
+     &    'please provide wavelengths in darwin_waves or ',
+     &    'waveband boundaries in darwin_wavebands.'
+          CALL PRINT_ERROR( msgBuf, myThid )
+          STOP 'ABNORMAL END: S/R WAVEBANDS_INIT_FIXED'
+        endif
       enddo
 
-C band widths used to convert OASIM data to irradiation per nm
-C put boundaries half-way between central values
-C but first and last boundary are at first and last "central" value
-      if (darwin_wavebands(1).EQ.0) then
-        wb_width(1) = .5*(pwaves(2)-pwaves(1))
-        do i=2,tlam-1
-          wb_width(i) = .5*(pwaves(i+1)-pwaves(i-1))
-        enddo
-        wb_width(tlam) = .5*(pwaves(tlam)-pwaves(tlam-1))
-      else
-        do i=1,tlam
-          wb_width(i) = darwin_wavebands(i+1) - darwin_wavebands(i)
-        enddo
-      endif
+C if waveband boundaries not given, compute from representative values
+C these will be used to compute waveband widths
+      do i=1,tlam+1
+        if (darwin_wavebands(i).LT.0) then
+C         put boundaries half-way between central values
+C         but first and last boundary are at first and last "central" value
+          if (i.eq.1) then
+            darwin_wavebands(i) = pwaves(1)
+          elseif (i.le.tlam) then
+            darwin_wavebands(i) = .5*(pwaves(i-1)+pwaves(i))
+          else
+            darwin_wavebands(i) = pwaves(tlam)
+          endif
+        endif
+      enddo
+
+C waveband widths used to compute total PAR and alpha_mean
       wb_totalWidth = 0.0
       do i=1,tlam
+        wb_width(i) = darwin_wavebands(i+1) - darwin_wavebands(i)
         wb_totalWidth = wb_totalWidth + wb_width(i)
+C       allow for zero-width wavebands...
+        if (wb_width(i).LT.0) then
+          WRITE(msgBuf,'(2A,I3)') 'WAVEBANDS_INIT_FIXED: ',
+     &    'negative waveband width encountered, waveband: ',i
+          CALL PRINT_ERROR( msgBuf, myThid )
+          WRITE(msgBuf,'(2A)') 'WAVEBANDS_INIT_FIXED: ',
+     &    'Please check darwin_waves and darwin_wavebands.'
+          CALL PRINT_ERROR( msgBuf, myThid )
+          WRITE(msgBuf,'(A)') 'WAVEBANDS_INIT_FIXED: wavebands:'
+          CALL PRINT_ERROR( msgBuf, myThid )
+          WRITE(msgBuf,'(2A)') 'WAVEBANDS_INIT_FIXED: ',
+     &    ' idx       low   rep      high    width'
+          CALL PRINT_ERROR( msgBuf, myThid )
+          do ilam=1,tlam
+           WRITE(msgBuf,'(A,I4,F10.3,I6,F10.3,F9.3)')
+     &     'WAVEBANDS_INIT_FIXED: ', ilam,darwin_wavebands(ilam),
+     &     pwaves(ilam),darwin_wavebands(ilam+1),wb_width(ilam)
+           CALL PRINT_ERROR( msgBuf, myThid )
+          enddo
+          STOP 'ABNORMAL END: S/R WAVEBANDS_INIT_FIXED'
+        endif
       enddo
+C     ...but require at least one non-zero-width band
       if (wb_totalWidth.LE.0) then
+#ifdef OASIM
+       if (tlam.eq.1) then
+C        in this case it doesn't matter, just make non-zero for
+C        alpha_mean computation
+         wb_width(1) = 1.
+         wb_totalWidth = 1.
+       else
+#else
+       if (.TRUE.) then
+#endif
         WRITE(msgBuf,'(2A)') 'WAVEBANDS_INIT_FIXED: ',
-     &  'please provide wavelengths in darwin_waves.'
+     &  'need to provide waveband boundaries in darwin_wavebands.'
         CALL PRINT_ERROR( msgBuf, myThid )
         STOP 'ABNORMAL END: S/R WAVEBANDS_INIT_FIXED'
+       endif
       endif
 
 
@@ -233,6 +286,10 @@ c   CDOM absorption exponent
       enddo
 
       WRITE(msgBuf,'(A,1P1E20.12)')
+     &      'WAVEBANDS_INIT_FIXED: darwin_aCDOM_fac = ',darwin_aCDOM_fac
+      CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
+     &                    SQUEEZE_RIGHT, 1 )
+      WRITE(msgBuf,'(A,1P1E20.12)')
      &      'WAVEBANDS_INIT_FIXED: darwin_Sdom = ', darwin_Sdom
       CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
      &                    SQUEEZE_RIGHT, 1 )
@@ -261,6 +318,27 @@ c     find waveband index for acdom diagnostic
       CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
      &                    SQUEEZE_RIGHT, 1 )
 #endif
+
+      WRITE(msgBuf,'(A)') 'WAVEBANDS_INIT_FIXED:'
+      CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
+     &                    SQUEEZE_RIGHT, 1 )
+      WRITE(msgBuf,'(A)') 'WAVEBANDS_INIT_FIXED: wavebands:'
+      CALL PRINT_MESSAGE(msgBuf,standardMessageUnit,
+     &                   SQUEEZE_RIGHT,myThid)
+      WRITE(msgBuf,'(2A)') 'WAVEBANDS_INIT_FIXED: ',
+     &   ' idx       low   rep      high    width'
+      CALL PRINT_MESSAGE(msgBuf,standardMessageUnit,
+     &                   SQUEEZE_RIGHT,myThid)
+      do i=1,tlam
+        WRITE(msgBuf,'(A,I4,F10.3,I6,F10.3,F9.3)')
+     &  'WAVEBANDS_INIT_FIXED: ', i,
+     &  darwin_wavebands(i),pwaves(i),darwin_wavebands(i+1),wb_width(i)
+        CALL PRINT_MESSAGE(msgBuf,standardMessageUnit,
+     &                   SQUEEZE_RIGHT,myThid)
+      enddo
+      WRITE(msgBuf,'(A)') 'WAVEBANDS_INIT_FIXED:'
+      CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
+     &                    SQUEEZE_RIGHT, 1 )
 
 #ifdef DAR_RADTRANS
 c  absorption and scattering by particles
@@ -302,23 +380,6 @@ c  absorption and scattering by particles
       endif
 
 c     print a summary
-      WRITE(msgBuf,'(A)') 'WAVEBANDS_INIT_FIXED: waveband widths:'
-      CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
-     &                    SQUEEZE_RIGHT, 1 )
-      WRITE(msgBuf,'(A,A)') 'WAVEBANDS_INIT_FIXED: ',
-     &     ' lam width'
-      CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
-     &                    SQUEEZE_RIGHT, 1 )
-      do ilam = 1,tlam           
-        WRITE(msgBuf,'(A,I4,F15.6)') 'WAVEBANDS_INIT_FIXED: ',
-     &     pwaves(ilam), wb_width(ilam)
-        CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
-     &                      SQUEEZE_RIGHT, 1 )
-      enddo
-      WRITE(msgBuf,'(A)') 'WAVEBANDS_INIT_FIXED:'
-      CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
-     &                    SQUEEZE_RIGHT, 1 )
-c
 #ifndef OASIM
       WRITE(msgBuf,'(A)') 'WAVEBANDS_INIT_FIXED: surface spectrum:'
       CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
