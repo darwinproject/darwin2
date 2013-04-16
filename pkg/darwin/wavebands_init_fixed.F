@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/wavebands_init_fixed.F,v 1.2 2012/08/09 21:18:53 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/wavebands_init_fixed.F,v 1.3 2013/04/16 20:20:27 jahn Exp $
 C $Name:  $
 
 c ANNA wavebands_init_fixed.F reads-in and assigns input paramters for WAVEBANDS. 
@@ -100,7 +100,7 @@ c  Water data files
            WRITE(msgBuf,'(2A)') 'WAVEBANDS_INIT_FIXED: ',
      &     "wavelength for water spectrum doesn't match darwin_waves:"
            CALL PRINT_ERROR( msgBuf, myThid )
-           WRITE(msgBuf,'(2A,I3,A,I4,A,F4.0)') 'WAVEBANDS_INIT_FIXED: ',
+           WRITE(msgBuf,'(2A,I3,A,I4,A,I4)') 'WAVEBANDS_INIT_FIXED: ',
      &     'ilam', ilam, ': ', swlambda, ' versus ', pwaves(ilam)
            CALL PRINT_ERROR( msgBuf, myThid )
            STOP 'ABNORMAL END: S/R WAVEBANDS_INIT_FIXED'
@@ -141,7 +141,7 @@ c ANNA easiest way to 'turn off' PS for growth is to put same values in both abs
            WRITE(msgBuf,'(2A)') 'WAVEBANDS_INIT_FIXED: ',
      &     "wavelength for phyto spectrum doesn't match darwin_waves:"
            CALL PRINT_ERROR( msgBuf, myThid )
-           WRITE(msgBuf,'(2A,I3,A,I4,A,F4.0)') 'WAVEBANDS_INIT_FIXED: ',
+           WRITE(msgBuf,'(2A,I3,A,I4,A,I4)') 'WAVEBANDS_INIT_FIXED: ',
      &     'ilam', ilam, ': ', splambda, ' versus ', pwaves(ilam)
            CALL PRINT_ERROR( msgBuf, myThid )
            STOP 'ABNORMAL END: S/R WAVEBANDS_INIT_FIXED'
@@ -178,7 +178,7 @@ c surface spectrum for initial use
            WRITE(msgBuf,'(2A)') 'WAVEBANDS_INIT_FIXED: ',
      &     "wavelength for surface spectrum doesn't match darwin_waves:"
            CALL PRINT_ERROR( msgBuf, myThid )
-           WRITE(msgBuf,'(2A,I3,A,I4,A,F4.0)') 'WAVEBANDS_INIT_FIXED: ',
+           WRITE(msgBuf,'(2A,I3,A,I4,A,I4)') 'WAVEBANDS_INIT_FIXED: ',
      &     'ilam', ilam, ': ', ssflambda, ' versus ', pwaves(ilam)
            CALL PRINT_ERROR( msgBuf, myThid )
            STOP 'ABNORMAL END: S/R WAVEBANDS_INIT_FIXED'
@@ -277,7 +277,7 @@ c  absorption and scattering by particles
            WRITE(msgBuf,'(2A)') 'WAVEBANDS_INIT_FIXED: ',
      &    "wavelength for particle spectrum doesn't match darwin_waves:"
            CALL PRINT_ERROR( msgBuf, myThid )
-           WRITE(msgBuf,'(2A,I3,A,I4,A,F4.0)') 'WAVEBANDS_INIT_FIXED: ',
+           WRITE(msgBuf,'(2A,I3,A,I4,A,I4)') 'WAVEBANDS_INIT_FIXED: ',
      &     'ilam', ilam, ': ', splambda, ' versus ', pwaves(ilam)
            CALL PRINT_ERROR( msgBuf, myThid )
            STOP 'ABNORMAL END: S/R WAVEBANDS_INIT_FIXED'
