@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_readparams.F,v 1.6 2013/04/16 20:20:16 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_readparams.F,v 1.7 2013/04/16 20:21:21 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -167,7 +167,7 @@ c default periodic forcing to same as for GCHEM
 
 #ifdef WAVEBANDS
       DO ilam=1,tlam+1
-        darwin_wavebands(ilam) = 0
+        darwin_wavebands(ilam) = -1
       ENDDO
 #ifdef DAR_CALC_ACDOM
       darwin_Sdom = 0.014 _d 0
