@@ -49,7 +49,9 @@ c n.b. local PARwl and PARwupl are assigned in darwin_forcing.F and darwin_plank
      &         ,sf
 #endif
 #ifdef DAR_CALC_ACDOM
-     &         ,darwin_Sdom          ! used in acdom calculations
+     &         ,darwin_Sdom          ! slope parameter for aCDOM wavelength dependence
+     &         ,darwin_lambda_aCDOM  ! wavelength where aCDOM is given
+     &         ,darwin_aCDOM_fac     ! ratio of aCDOM to (aphy+aw) at darwin_lambda_aCDOM
      &         ,excdom               ! CDOM exponent
 #else
      &         ,acdom
@@ -57,7 +59,7 @@ c n.b. local PARwl and PARwupl are assigned in darwin_forcing.F and darwin_plank
          COMMON/wavebands_params_i/ap_type
      &         ,pwaves
 #ifdef DAR_CALC_ACDOM
-     &         ,nl450                ! what is this? used in acdom calculations
+     &         ,nlaCDOM              ! waveband index where aCDOM is given
 #endif
 #ifdef DAR_DIAG_ACDOM
      &         ,darwin_diag_acdom_ilam    ! waveband to write to diagnostic
@@ -79,8 +81,10 @@ c n.b. local PARwl and PARwupl are assigned in darwin_forcing.F and darwin_plank
 #endif
 #ifdef DAR_CALC_ACDOM
          _RL darwin_Sdom        ! used in acdom calculations 
+         _RL darwin_lambda_aCDOM  ! wavelength where aCDOM is given
+         _RL darwin_aCDOM_fac     ! ratio of aCDOM to (aphy+aw) at darwin_lambda_aCDOM
          _RL excdom(tlam)         ! CDOM exponent
-         INTEGER nl450                ! what is this? it's the nl number for 450nm used in acdom calculations
+         INTEGER nlaCDOM        ! nl number where aCDOM is given used in acdom calculations
 #else
          _RL acdom(tlam)
 #endif

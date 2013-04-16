@@ -105,11 +105,11 @@ c it's done for RADTRANS and WAVEBANDS_3D
        actot450 = 0.0 _d 0
        atot450 = 0.0 _d 0
        do np = 1,npmax
-        actot450 = actot450  + P_chl(np,k)*aclocal(np,nl450) !nb. n,k swapped from WG
+        actot450 = actot450  + P_chl(np,k)*aclocal(np,nlaCDOM) !nb. n,k swapped from WG
        enddo
-       atot450 = awlocal(nl450) + actot450
+       atot450 = awlocal(nlaCDOM) + actot450
        do ilam = 1,tlam
-        acdomlocal(k,ilam) = 0.2 _d 0 * atot450*excdom(ilam)
+        acdomlocal(k,ilam) = darwin_aCDOM_fac * atot450*excdom(ilam)
        enddo
       enddo
 c      do nl = 1,tlam

@@ -49,7 +49,7 @@ c local variables
       _RL ssf
 c      _RL planck, c, hc, oavo, hcoavo, rlamm
 #ifdef DAR_CALC_ACDOM
-      _RL rlam450,rlam
+      _RL rlam
 #else
       _RL sacdom
 #endif
@@ -278,12 +278,19 @@ c if no file given then CDOM is zero
 #else /* DAR_CALC_ACDOM */
 c for 3-D or for direct comparison to RADTRANS would need the same formulation for CDOM as in radtrans.
 c   CDOM absorption exponent
-      rlam450 = 450.0 _d 0
+      nlaCDOM = 0
       do ilam = 1,tlam
-       if (pwaves(ilam) .eq. 450) nl450 = ilam
+       if (pwaves(ilam) .eq. darwin_lambda_aCDOM) nlaCDOM = ilam
        rlam = float(pwaves(ilam))
-       excdom(ilam) = exp(-darwin_Sdom*(rlam-rlam450))
+       excdom(ilam) = exp(-darwin_Sdom*(rlam-darwin_lambda_aCDOM))
       enddo
+      if (nlaCDOM.eq.0) then
+        WRITE(msgBuf,'(A,I3,A)')
+     &      'WAVEBANDS_INIT_FIXED: no waveband found at ',
+     &      darwin_lambda_aCDOM, ' nm (needed for DAR_CALC_ACDOM).'
+        CALL PRINT_ERROR( msgBuf, myThid )
+        STOP 'ABNORMAL END: S/R WAVEBANDS_INIT_FIXED'
+      endif
 
       WRITE(msgBuf,'(A,1P1E20.12)')
      &      'WAVEBANDS_INIT_FIXED: darwin_aCDOM_fac = ',darwin_aCDOM_fac
@@ -293,8 +300,9 @@ c   CDOM absorption exponent
      &      'WAVEBANDS_INIT_FIXED: darwin_Sdom = ', darwin_Sdom
       CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
      &                    SQUEEZE_RIGHT, 1 )
-      WRITE(msgBuf,'(A,I3)')
-     &      'WAVEBANDS_INIT_FIXED: nl450 = ', nl450
+      WRITE(msgBuf,'(A,I3,A,I4)')
+     &      'WAVEBANDS_INIT_FIXED: nlaCDOM = ', nlaCDOM, ', lambda = ',
+     &      pwaves(nlaCDOM)
       CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
      &                    SQUEEZE_RIGHT, 1 )
 #endif /* DAR_CALC_ACDOM */
@@ -308,6 +316,11 @@ c     find waveband index for acdom diagnostic
           goto 60
         endif
        enddo
+       WRITE(msgBuf,'(2A,I3,A)') 'WAVEBANDS_INIT_FIXED: ',
+     & 'darwin_diag_acdom_ilam =',darwin_diag_acdom_ilam,
+     & ' not found in darwin_waves'
+       CALL PRINT_ERROR( msgBuf, myThid )
+       STOP 'ABNORMAL END: S/R WAVEBANDS_INIT_FIXED'
 60     continue
       endif
 
