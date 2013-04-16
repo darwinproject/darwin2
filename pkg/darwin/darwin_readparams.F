@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_readparams.F,v 1.7 2013/04/16 20:21:21 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_readparams.F,v 1.8 2013/04/16 20:21:57 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -78,7 +78,7 @@ CEOP
 #ifdef WAVEBANDS
      &          ,darwin_wavebands
 #ifdef DAR_CALC_ACDOM
-     &          ,darwin_Sdom
+     &          ,darwin_Sdom, darwin_lambda_aCDOM, darwin_aCDOM_fac
 #endif
 #ifdef DAR_DIAG_ACDOM
      &          ,darwin_diag_acdom_ilam
@@ -171,6 +171,8 @@ c default periodic forcing to same as for GCHEM
       ENDDO
 #ifdef DAR_CALC_ACDOM
       darwin_Sdom = 0.014 _d 0
+      darwin_lambda_aCDOM = 450 _d 0
+      darwin_aCDOM_fac = 0.2 _d 0
 #endif
 #ifdef DAR_DIAG_ACDOM
 c value >= 100 will be converted to index in wavebands_init_fixed      

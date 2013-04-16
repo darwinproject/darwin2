@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_acdom.F,v 1.2 2012/05/31 21:08:25 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_acdom.F,v 1.3 2013/04/16 20:21:57 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -105,11 +105,11 @@ c it's done for RADTRANS and WAVEBANDS_3D
        actot450 = 0.0 _d 0
        atot450 = 0.0 _d 0
        do np = 1,npmax
-        actot450 = actot450  + P_chl(np,k)*aclocal(np,nl450) !nb. n,k swapped from WG
+        actot450 = actot450  + P_chl(np,k)*aclocal(np,nlaCDOM) !nb. n,k swapped from WG
        enddo
-       atot450 = awlocal(nl450) + actot450
+       atot450 = awlocal(nlaCDOM) + actot450
        do ilam = 1,tlam
-        acdomlocal(k,ilam) = 0.2 _d 0 * atot450*excdom(ilam)
+        acdomlocal(k,ilam) = darwin_aCDOM_fac * atot450*excdom(ilam)
        enddo
       enddo
 c      do nl = 1,tlam
