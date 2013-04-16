@@ -368,7 +368,7 @@ C--   Print a summary of parameter values:
       CALL PRINT_MESSAGE( msgBuf, iUnit, SQUEEZE_RIGHT, myThid )
 
 #if defined(WAVEBANDS) || defined(OASIM)
-      CALL WRITE_1D_I( darwin_waves, tlam, 0,
+      CALL WRITE_1D_RL( darwin_waves, tlam, 0,
      &   'darwin_waves =',
      &'   /* "central" wavelengths of wavebands */')
 #endif
