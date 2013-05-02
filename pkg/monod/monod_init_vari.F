@@ -104,6 +104,7 @@ c initialize total number of functional groups tried
 
         _END_MASTER( myThid )
 
+       IF (nIter0.EQ.PTRACERS_Iter0) THEN
 c reduce amount of diaz 
 #ifdef ALLOW_DIAZ
         do np = 1, npmax
@@ -123,6 +124,7 @@ c reduce amount of diaz
          endif
         enddo
 #endif
+       ENDIF
 
         _BEGIN_MASTER( myThid )
 
