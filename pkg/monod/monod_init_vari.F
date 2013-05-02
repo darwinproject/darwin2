@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_vari.F,v 1.7 2012/10/23 16:39:32 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_vari.F,v 1.8 2013/05/02 19:39:53 stephd Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -104,6 +104,7 @@ c initialize total number of functional groups tried
 
         _END_MASTER( myThid )
 
+       IF (nIter0.EQ.PTRACERS_Iter0) THEN
 c reduce amount of diaz 
 #ifdef ALLOW_DIAZ
         do np = 1, npmax
@@ -123,6 +124,7 @@ c reduce amount of diaz
          endif
         enddo
 #endif
+       ENDIF
 
         _BEGIN_MASTER( myThid )
 
