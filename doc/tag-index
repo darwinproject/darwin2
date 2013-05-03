@@ -1,8 +1,12 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.35 2013/04/05 15:14:34 jahn Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.36 2013/05/03 20:24:28 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
+
+ctrb_darwin2_ckpt64g_20130503
+o fix bug, diaz biomass was been reduced every pickup, should only have been
+  at initialization
 
 ctrb_darwin2_ckpt64f_20130405
 o make sure not dividing by zero at zero light with dynamic chlorophyll
