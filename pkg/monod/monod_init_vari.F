@@ -104,9 +104,9 @@ c initialize total number of functional groups tried
 
         _END_MASTER( myThid )
 
-       IF (nIter0.EQ.PTRACERS_Iter0) THEN
 c reduce amount of diaz 
 #ifdef ALLOW_DIAZ
+       IF (nIter0.EQ.PTRACERS_Iter0) THEN
         do np = 1, npmax
          if (diazotroph(np) .eq. 1. _d 0) then
          DO bj = myByLo(myThid), myByHi(myThid)
@@ -123,8 +123,8 @@ c reduce amount of diaz
          ENDDO
          endif
         enddo
-#endif
        ENDIF
+#endif
 
         _BEGIN_MASTER( myThid )
 
