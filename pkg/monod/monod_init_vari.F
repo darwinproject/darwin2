@@ -325,12 +325,13 @@ c       myProcId and myThid
         ENDDO
        ENDDO
       ENDDO
+#endif
+
       IF ( .NOT. ( startTime .EQ. baseTime .AND.  nIter0 .EQ. 0
      &     .AND. pickupSuff .EQ. ' ') ) THEN
 COJ should probably initialize from a file when nIter0 .EQ. 0
         CALL DARWIN_READ_PICKUP( nIter0, myThid )
       ENDIF
-#endif
 c
 #ifdef ALLOW_TIMEAVE
 c set arrays to zero if first timestep

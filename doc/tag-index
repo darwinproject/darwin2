@@ -4,9 +4,14 @@ $Name$
     Notes on tags used in darwin
     ============================
 
+o fix bug, write chlorophyll to pickup when using GEIDER without DYNAMIC_CHL
+
 ctrb_darwin2_ckpt64g_20130503
 o fix bug, diaz biomass was been reduced every pickup, should only have been
   at initialization
+o make reference waveband for aCDOM a runtime parameter
+o compute missing waveband information from provided values
+o fix some types in log message writing
 
 ctrb_darwin2_ckpt64f_20130405
 o make sure not dividing by zero at zero light with dynamic chlorophyll
