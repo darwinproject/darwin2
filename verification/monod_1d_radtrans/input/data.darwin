@@ -7,8 +7,8 @@
 #darwin_waterabsorbFile='abw_13wg.dat',
  darwin_waterabsorbFile='abw25par.dat',
 #darwin_phytoabsorbFile='a1_psc_13.dat',
- darwin_phytoabsorbFile='phyto_optics_1bb.txt',
- darwin_particleabsorbFile='optics_detritus_3bb.txt',
+ darwin_phytoabsorbFile='phyto_optics_1bb.dat',
+ darwin_particleabsorbFile='optics_detritus_3bb.dat',
 #darwin_surfacespecFile='surfspec_13amt6.dat',
 #darwin_acdomFile='aCDOM13amtVK2006.dat',
  /
