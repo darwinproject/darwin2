@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_vari.F,v 1.9 2013/05/03 19:24:02 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_vari.F,v 1.10 2013/05/15 14:42:54 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -325,12 +325,13 @@ c       myProcId and myThid
         ENDDO
        ENDDO
       ENDDO
+#endif
+
       IF ( .NOT. ( startTime .EQ. baseTime .AND.  nIter0 .EQ. 0
      &     .AND. pickupSuff .EQ. ' ') ) THEN
 COJ should probably initialize from a file when nIter0 .EQ. 0
         CALL DARWIN_READ_PICKUP( nIter0, myThid )
       ENDIF
-#endif
 c
 #ifdef ALLOW_TIMEAVE
 c set arrays to zero if first timestep
