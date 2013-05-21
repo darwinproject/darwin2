@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_vari.F,v 1.10 2013/05/15 14:42:54 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_vari.F,v 1.11 2013/05/21 20:31:39 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -191,7 +191,7 @@ c  no temp/nutrient limitation
 #endif
         _END_MASTER( myThid )
 
-#ifdef DYNAMIC_CHL
+#ifdef GEIDER
 C this initializes fields...
         call MONOD_CHECK_CHL(myThid)
 #endif
