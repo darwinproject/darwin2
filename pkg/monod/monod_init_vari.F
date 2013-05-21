@@ -191,7 +191,7 @@ c  no temp/nutrient limitation
 #endif
         _END_MASTER( myThid )
 
-#ifdef DYNAMIC_CHL
+#ifdef GEIDER
 C this initializes fields...
         call MONOD_CHECK_CHL(myThid)
 #endif
