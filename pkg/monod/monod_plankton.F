@@ -1797,11 +1797,11 @@ c loss of O2 by remineralization
             enddo
 #endif
 
+#endif /* ALLOW_CARBON */
+
 #ifdef ALLOW_CDOM
             dcdomdt = totphy_cdomp + totzoo_cdomp +  preminP_cdom
      &                  -cdomp_degrd
-#endif
-
 #endif
 
             if (debug.eq.10) print*,'dDOPdt', dDOPdt
