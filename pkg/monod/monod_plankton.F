@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_plankton.F,v 1.13 2013/03/28 18:14:17 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_plankton.F,v 1.14 2013/06/12 17:48:20 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -1797,11 +1797,11 @@ c loss of O2 by remineralization
             enddo
 #endif
 
+#endif /* ALLOW_CARBON */
+
 #ifdef ALLOW_CDOM
             dcdomdt = totphy_cdomp + totzoo_cdomp +  preminP_cdom
      &                  -cdomp_degrd
-#endif
-
 #endif
 
             if (debug.eq.10) print*,'dDOPdt', dDOPdt

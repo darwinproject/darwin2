@@ -1,8 +1,10 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.39 2013/05/28 20:31:53 jahn Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.40 2013/06/12 17:48:20 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
+
+o fix bug that prevented ALLOW_CDOM to be used without ALLOW_CARBON
 
 ctrb_darwin2_ckpt64h_20130528
 o initialize non-dynamic Chlorophyll like dynamic Chlorophyll
