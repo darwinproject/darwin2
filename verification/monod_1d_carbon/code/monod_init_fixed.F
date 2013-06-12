@@ -108,6 +108,8 @@ c critical oxygen for O2/NO3 remineralization
       O2crit = 6.0 _d 0    !(Lipschultz et al 1990, DSR 37, 1513-1541)
 c ratio of no3 to p in denitrification process
       denit_np = 120.0 _d 0
+      denit_no3 = 104 _d 0
+      no3crit = 1 _d -2
 
 c
 c oxidation rates for ammonium and nitrite
