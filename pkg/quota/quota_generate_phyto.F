@@ -107,7 +107,7 @@ c Small Euk
         enddo
 c Diatoms
         do jp=10,15
-          biovol(jp)    = 128.0 _d 0 * factor**(jp-11)
+          biovol(jp)    = 128.0 _d 0 * factor**(jp-10)
           autotrophy(jp)= 1.0 _d 0
           use_NO3(jp)   = 1
           use_Si(jp)    = 0
@@ -116,7 +116,7 @@ c Diatoms
         enddo
 c Specialist grazers
         do jp=16,16
-          biovol(jp)    = 8.0 _d 0 * factor**(jp-26)
+          biovol(jp)    = 8.0 _d 0 * factor**(jp-16)
           autotrophy(jp)= 0.00 _d 0
           use_NO3(jp)   = 0
           use_Si(jp)    = 0
