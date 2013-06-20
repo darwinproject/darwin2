@@ -309,10 +309,22 @@ c         CALL TIMEAVE_RESET(SURave,   1,  bi, bj, myThid)
 
 #ifdef CHECK_CONS
 coj find unused units for darwin_cons output
-        CALL MDSFINDUNIT( DAR_cons_unit1, mythid )
-        open(DAR_cons_unit1,file='darwin_cons_C.txt',status='unknown')
-        CALL MDSFINDUNIT( DAR_cons_unit2, mythid )
-        open(DAR_cons_unit2,file='darwin_cons_N.txt',status='unknown')
+        CALL MDSFINDUNIT( DAR_cons_unitC, mythid )
+        open(DAR_cons_unitC,file='darwin_cons_C.txt',status='unknown')
+        CALL MDSFINDUNIT( DAR_cons_unitN, mythid )
+        open(DAR_cons_unitN,file='darwin_cons_N.txt',status='unknown')
+#ifdef PQUOTA
+        CALL MDSFINDUNIT( DAR_cons_unitP, mythid )
+        open(DAR_cons_unitP,file='darwin_cons_P.txt',status='unknown')
+#endif
+#ifdef FQUOTA
+        CALL MDSFINDUNIT( DAR_cons_unitF, mythid )
+        open(DAR_cons_unitF,file='darwin_cons_Fe.txt',status='unknown')
+#endif
+#ifdef SQUOTA
+        CALL MDSFINDUNIT( DAR_cons_unitS, mythid )
+        open(DAR_cons_unitS,file='darwin_cons_Si.txt',status='unknown')
+#endif
 #endif
 
 c test....................

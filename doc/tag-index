@@ -4,6 +4,7 @@ $Name$
     Notes on tags used in darwin
     ============================
 
+o quota: fix CHECK_CONS io units
 o fix bug in initialization of plankton volumes in quota package
 o fix bug that prevented ALLOW_CDOM to be used without ALLOW_CARBON
 

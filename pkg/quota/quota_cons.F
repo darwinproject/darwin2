@@ -146,24 +146,24 @@ c------------------------------------------------------------
 
       _GLOBAL_SUM_RL(tmptotC,myThid)
       print*,'tmptotC',tmptotC
-      write(DAR_cons_unit1,*), myIter, tmptotC, tmptotC/voltot
+      write(DAR_cons_unitC,*), myIter, tmptotC, tmptotC/voltot
       _GLOBAL_SUM_RL(tmptotN,myThid)
       print*,'tmptotN',tmptotN
-      write(DAR_cons_unit2,*), myIter, tmptotN, tmptotN/voltot
+      write(DAR_cons_unitN,*), myIter, tmptotN, tmptotN/voltot
 #ifdef PQUOTA
       _GLOBAL_SUM_RL(tmptotP,myThid)
       print*,'tmptotP',tmptotP
-      write(DAR_cons_unit2,*), myIter, tmptotP, tmptotP/voltot
+      write(DAR_cons_unitP,*), myIter, tmptotP, tmptotP/voltot
 #endif
 #ifdef FQUOTA
       _GLOBAL_SUM_RL(tmptotF,myThid)
       print*,'tmptotF',tmptotF
-      write(DAR_cons_unit2,*), myIter, tmptotF, tmptotF/voltot
+      write(DAR_cons_unitF,*), myIter, tmptotF, tmptotF/voltot
 #endif
 #ifdef SQUOTA
       _GLOBAL_SUM_RL(tmptotS,myThid)
       print*,'tmptotS',tmptotS
-      write(DAR_cons_unit2,*), myIter, tmptotS, tmptotS/voltot
+      write(DAR_cons_unitS,*), myIter, tmptotS, tmptotS/voltot
 #endif
       print*,'-----------------------------------'
       _END_MASTER(myThid)
