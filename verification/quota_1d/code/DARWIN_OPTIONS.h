@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/verification/quota_1d/code/DARWIN_OPTIONS.h,v 1.4 2012/07/03 06:51:48 benw Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/verification/quota_1d/code/DARWIN_OPTIONS.h,v 1.5 2013/06/20 21:47:35 jahn Exp $
 C $Name:  $
 
 #ifndef DARWIN_OPTIONS_H
@@ -28,7 +28,7 @@ C common
 #undef  FLUX_NUTS
 #define PORT_RAND
 #undef  OLDSEED
-#undef  CHECK_CONS
+#define CHECK_CONS
 
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 #ifdef ALLOW_MONOD
