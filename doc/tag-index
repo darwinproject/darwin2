@@ -1,9 +1,10 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.41 2013/06/12 17:53:27 jahn Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.42 2013/06/20 21:47:20 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
 
+o quota: fix CHECK_CONS io units
 o fix bug in initialization of plankton volumes in quota package
 o fix bug that prevented ALLOW_CDOM to be used without ALLOW_CARBON
 
