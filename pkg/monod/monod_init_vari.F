@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_vari.F,v 1.11 2013/05/21 20:31:39 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_vari.F,v 1.12 2013/06/21 12:49:47 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -465,21 +465,21 @@ c         CALL TIMEAVE_RESET(SURave,   1,  bi, bj, myThid)
 #ifdef CHECK_CONS
        IF ( myProcId.EQ.0 .AND. myThid.EQ.1 ) THEN
 coj find unused units for darwin_cons output
-        CALL MDSFINDUNIT( DAR_cons_unit1, mythid )
-        open(DAR_cons_unit1,file='darwin_cons_P.txt',status='unknown')
-        CALL MDSFINDUNIT( DAR_cons_unit2, mythid )
-        open(DAR_cons_unit2,file='darwin_cons_N.txt',status='unknown')
-        CALL MDSFINDUNIT( DAR_cons_unit3, mythid )
-        open(DAR_cons_unit3,file='darwin_cons_Fe.txt',status='unknown')
-        CALL MDSFINDUNIT( DAR_cons_unit4, mythid )
-        open(DAR_cons_unit4,file='darwin_cons_Si.txt',status='unknown')
+        CALL MDSFINDUNIT( DAR_cons_unitP, mythid )
+        open(DAR_cons_unitP,file='darwin_cons_P.txt',status='unknown')
+        CALL MDSFINDUNIT( DAR_cons_unitN, mythid )
+        open(DAR_cons_unitN,file='darwin_cons_N.txt',status='unknown')
+        CALL MDSFINDUNIT( DAR_cons_unitF, mythid )
+        open(DAR_cons_unitF,file='darwin_cons_Fe.txt',status='unknown')
+        CALL MDSFINDUNIT( DAR_cons_unitS, mythid )
+        open(DAR_cons_unitS,file='darwin_cons_Si.txt',status='unknown')
 #ifdef ALLOW_CARBON
-        CALL MDSFINDUNIT( DAR_cons_unit5, mythid )
-        open(DAR_cons_unit5,file='darwin_cons_C.txt',status='unknown')
-        CALL MDSFINDUNIT( DAR_cons_unit6, mythid )
-        open(DAR_cons_unit6,file='darwin_cons_A.txt',status='unknown')
-        CALL MDSFINDUNIT( DAR_cons_unit7, mythid )
-        open(DAR_cons_unit7,file='darwin_cons_O.txt',status='unknown')
+        CALL MDSFINDUNIT( DAR_cons_unitC, mythid )
+        open(DAR_cons_unitC,file='darwin_cons_C.txt',status='unknown')
+        CALL MDSFINDUNIT( DAR_cons_unitA, mythid )
+        open(DAR_cons_unitA,file='darwin_cons_A.txt',status='unknown')
+        CALL MDSFINDUNIT( DAR_cons_unitO, mythid )
+        open(DAR_cons_unitO,file='darwin_cons_O.txt',status='unknown')
 #endif
 c      myProcId and myThid
        ENDIF
