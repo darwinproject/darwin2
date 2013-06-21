@@ -175,14 +175,14 @@ c       print*,'tmptotO',tmptotO
 #endif
 
        IF ( myProcId.EQ.0 .AND. myThid.EQ.1 ) THEN
-        write(DAR_cons_unit1,*), myIter, tmptotP, tmptotP/voltot
-        write(DAR_cons_unit2,*), myIter, tmptotN, tmptotN/voltot
-        write(DAR_cons_unit3,*), myIter, tmptotFe, tmptotFe/voltot
-        write(DAR_cons_unit4,*), myIter, tmptotSi, tmptotSi/voltot
+        write(DAR_cons_unitP,*), myIter, tmptotP, tmptotP/voltot
+        write(DAR_cons_unitN,*), myIter, tmptotN, tmptotN/voltot
+        write(DAR_cons_unitF,*), myIter, tmptotFe, tmptotFe/voltot
+        write(DAR_cons_unitS,*), myIter, tmptotSi, tmptotSi/voltot
 #ifdef ALLOW_CARBON
-        write(DAR_cons_unit5,*), myIter, tmptotC, tmptotC/voltot
-        write(DAR_cons_unit6,*), myIter, tmptotA, tmptotA/voltot
-        write(DAR_cons_unit7,*), myIter, tmptotO, tmptotO/voltot
+        write(DAR_cons_unitC,*), myIter, tmptotC, tmptotC/voltot
+        write(DAR_cons_unitA,*), myIter, tmptotA, tmptotA/voltot
+        write(DAR_cons_unitO,*), myIter, tmptotO, tmptotO/voltot
 #endif
       ENDIF
 
