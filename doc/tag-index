@@ -1,8 +1,10 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.43 2013/06/22 13:42:25 jahn Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.44 2013/07/04 13:55:10 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
+
+ctrb_darwin2_ckpt64j_20130704
 
 ctrb_darwin2_ckpt64i_20130622
 o quota: fix CHECK_CONS io units
