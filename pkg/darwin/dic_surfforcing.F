@@ -42,10 +42,17 @@ C  myTime               :: current time
 c  PTR_DIC              :: DIC tracer field
       INTEGER myIter, myThid
       _RL myTime
+#ifdef pH_3D
+      _RL  PTR_DIC(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr)
+      _RL  PTR_ALK(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr)
+      _RL  PTR_PO4(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr)
+      _RL  PTR_SIL(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr)
+#else
       _RL  PTR_DIC(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RL  PTR_ALK(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RL  PTR_PO4(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       _RL  PTR_SIL(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+#endif
       INTEGER iMin,iMax,jMin,jMax, bi, bj
 
 C !OUTPUT PARAMETERS: ===================================================
@@ -89,9 +96,26 @@ c       ENDDO
 c#endif
 C =================================================================
 C determine inorganic carbon chem coefficients
+#ifdef pH_3D
+       DO kLev=1,Nr
+#endif
         DO j=jmin,jmax
          DO i=imin,imax
 c put bounds on tracers so pH solver doesn't blow up
+#ifdef pH_3D
+             surfdic(i,j) =
+     &           max(400. _d 0 , min(4000. _d 0, PTR_DIC(i,j,kLev)))*1e-3
+     &                          * maskC(i,j,kLev,bi,bj)
+             surfalk(i,j) =
+     &           max(400. _d 0 , min(4000. _d 0, PTR_ALK(i,j,kLev)))*1e-3
+     &                          * maskC(i,j,kLev,bi,bj)
+             surfphos(i,j)  =
+     &           max(1. _d -10, min(10. _d 0, PTR_PO4(i,j,kLev)))*1e-3
+     &                          * maskC(i,j,kLev,bi,bj)
+             surfsi(i,j)   =
+     &           max(1. _d -8, min(500. _d 0, PTR_SIL(i,j,kLev)))*1e-3
+     &                          * maskC(i,j,kLev,bi,bj)
+#else
              surfdic(i,j) = 
      &           max(400. _d 0 , min(4000. _d 0, PTR_DIC(i,j)))*1e-3
      &                          * maskC(i,j,kLev,bi,bj)
@@ -104,6 +128,7 @@ c put bounds on tracers so pH solver doesn't blow up
              surfsi(i,j)   = 
      &           max(1. _d -8, min(500. _d 0, PTR_SIL(i,j)))*1e-3
      &                          * maskC(i,j,kLev,bi,bj)
+#endif
              surfsalt(i,j) = 
      &           max(4. _d 0, min(50. _d 0, salt(i,j,kLev,bi,bj)))
              surftemp(i,j) =
@@ -117,6 +142,7 @@ c put bounds on tracers so pH solver doesn't blow up
      I                       kLev,myThid)
 C====================================================================
 
+       if (kLev.eq.1) then
        DO j=jmin,jmax
         DO i=imin,imax
 C Compute AtmosP and Kwexch_Pre which are re-used for flux of O2
@@ -142,6 +168,7 @@ C Schmidt number is accounted for later
 
         ENDDO
        ENDDO
+       ENDIF
 
 c pCO2 solver...
 C$TAF LOOP = parallel
@@ -161,15 +188,24 @@ C$TAF LOOP = parallel
      I        ak0(i,j,bi,bj), fugf(i,j,bi,bj),
      I        ff(i,j,bi,bj),
      I        bt(i,j,bi,bj),st(i,j,bi,bj),ft(i,j,bi,bj),
+#ifdef pH_3D
+     U        pH(i,j,kLev,bi,bj),pCO2(i,j,kLev,bi,bj),
+#else
      U        pH(i,j,bi,bj),pCO2(i,j,bi,bj),
+#endif
      I        myThid )
           ELSE
+#ifdef pH_3D
+            pCO2(i,j,kLev,bi,bj)=0. _d 0
+#else
             pCO2(i,j,bi,bj)=0. _d 0
+#endif
           ENDIF
         ENDDO
        ENDDO
 
 
+       if (kLev.eq.1) then
        DO j=jmin,jmax
         DO i=imin,imax
 
@@ -201,7 +237,11 @@ C Converting pCO2 to [CO2] using ff, as in CALC_PCO2
               FluxCO2(i,j,bi,bj) = 
      &         Kwexch(i,j)*( 
      &         ak0(i,j,bi,bj)*pCO2sat(i,j) - 
+#ifdef pH_3D
+     &         ff(i,j,bi,bj)*pCO2(i,j,1,bi,bj)
+#else
      &         ff(i,j,bi,bj)*pCO2(i,j,bi,bj) 
+#endif
      &         ) 
 #else
 C Corrected by Val Bennington Nov 2010 per G.A. McKinley's finding
@@ -210,7 +250,11 @@ c Flux = kw*rho*(ff*pCO2atm-k0*FugFac*pCO2ocean)
                FluxCO2(i,j,bi,bj) =
      &          Kwexch(i,j)*(
      &            ff(i,j,bi,bj)*pCO2sat(i,j) -
+#ifdef pH_3D
+     &            pCO2(i,j,1,bi,bj)*fugf(i,j,bi,bj)
+#else
      &            pCO2(i,j,bi,bj)*fugf(i,j,bi,bj)
+#endif
      &            *ak0(i,j,bi,bj) )
      &
 #endif
@@ -255,6 +299,10 @@ C update tendency
      &               )
           ENDDO
          ENDDO
+        ENDIF
+#ifdef pH_3D
+        ENDDO
+#endif
 
         RETURN
         END

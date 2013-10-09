@@ -40,8 +40,13 @@ c set arrays to zero if first timestep
           CALL TIMEAVE_RESET(SURave,   1,  bi, bj, myThid)
           CALL TIMEAVE_RESET(SURCave,   1,  bi, bj, myThid)
           CALL TIMEAVE_RESET(SUROave,   1,  bi, bj, myThid)
+#ifdef pH_3D
+          CALL TIMEAVE_RESET(pCO2ave,   Nr,  bi, bj, myThid)
+          CALL TIMEAVE_RESET(pHave,   Nr,  bi, bj, myThid)
+#else
           CALL TIMEAVE_RESET(pCO2ave,   1,  bi, bj, myThid)
           CALL TIMEAVE_RESET(pHave,   1,  bi, bj, myThid)
+#endif
           print*,'QQ start timeave'
           do k=1,Nr
             DIC_TimeAve(bi,bj,k)=0.d0

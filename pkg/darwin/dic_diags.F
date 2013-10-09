@@ -65,10 +65,17 @@ C      Normalize by integrated time
      &                 bi,bj,myThid)
          CALL TIMEAVE_NORMALIZ(SUROave,dic_timeave, 1 ,
      &                 bi,bj,myThid)
+#ifdef pH_3D
+         CALL TIMEAVE_NORMALIZ(pCO2ave,dic_timeave, Nr,
+     &                 bi,bj,myThid)
+         CALL TIMEAVE_NORMALIZ(pHave,dic_timeave, Nr,
+     &                 bi,bj,myThid)
+#else
          CALL TIMEAVE_NORMALIZ(pCO2ave,dic_timeave, 1 ,
      &                 bi,bj,myThid)
          CALL TIMEAVE_NORMALIZ(pHave,dic_timeave, 1 ,
      &                 bi,bj,myThid)
+#endif
         ENDDO
        ENDDO
 
@@ -90,10 +97,17 @@ c mmol/s to GtC/y
      &        myIter,myThid)
          CALL WRITE_FLD_XY_RL('DIC_SurOtave.',suff,SUROave,
      &        myIter,myThid)
+#ifdef pH_3D
+         CALL WRITE_FLD_XYZ_RL('DIC_pHtave.',suff,pHave,
+     &        myIter,myThid)
+         CALL WRITE_FLD_XYZ_RL('DIC_pCO2tave.',suff,pCO2ave,
+     &        myIter,myThid)
+#else
          CALL WRITE_FLD_XY_RL('DIC_pHtave.',suff,pHave,
      &        myIter,myThid)
          CALL WRITE_FLD_XY_RL('DIC_pCO2tave.',suff,pCO2ave,
      &        myIter,myThid)
+#endif
        ENDIF
 
 #ifdef ALLOW_MNC
@@ -121,8 +135,13 @@ C      Reset averages to zero
          CALL TIMEAVE_RESET(SURave,1,bi,bj,myThid)
          CALL TIMEAVE_RESET(SURCave,1,bi,bj,myThid)
          CALL TIMEAVE_RESET(SUROave,1,bi,bj,myThid)
+#ifdef pH_3D
+         CALL TIMEAVE_RESET(pCO2ave,Nr,bi,bj,myThid)
+         CALL TIMEAVE_RESET(pHave,Nr,bi,bj,myThid)
+#else
          CALL TIMEAVE_RESET(pCO2ave,1,bi,bj,myThid)
          CALL TIMEAVE_RESET(pHave,1,bi,bj,myThid)
+#endif
          do k=1,Nr
            DIC_TimeAve(bi,bj,k)=0.d0
          enddo

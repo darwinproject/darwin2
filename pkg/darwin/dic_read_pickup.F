@@ -60,10 +60,18 @@ C--   First check if pickup file exist
 
       IF ( fileExist ) THEN
 C--   Read pickup file
+#ifdef pH_3D
+        CALL READ_REC_3D_RL( fn, fp, Nr, pH, 1, myIter, myThid )
+#else
         CALL READ_REC_3D_RL( fn, fp, 1, pH, 1, myIter, myThid )
+#endif
         pH_isLoaded = .TRUE.
 
+#ifdef pH_3D
+        _EXCH_XYZ_RL( pH, myThid )
+#else
         _EXCH_XY_RL( pH, myThid )
+#endif
       ELSE
         pH_isLoaded = .FALSE.
         IF ( pickupStrictlyMatch ) THEN
