@@ -248,7 +248,8 @@ c
 
         CALL CARBON_COEFFS(
      I                       surftemp,surfsalt,
-     I                       bi,bj,iMin,iMax,jMin,jMax,myThid)
+     I                       bi,bj,iMin,iMax,jMin,jMax,
+     I                       kLev,myThid)
 
 C====================================================================
 
