@@ -173,7 +173,13 @@ C =================================================================
        DO bi=myBxLo(myThid),myBxHi(myThid)
          DO j=1-OLy,sNy+OLy
           DO i=1-Olx,sNx+OLx
+#ifdef pH_3D
+            DO k=1,Nr
+             pH(i,j,k,bi,bj) = 8. _d 0
+            ENDDO
+#else
             pH(i,j,bi,bj) = 8. _d 0
+#endif
           ENDDO
          ENDDO
        ENDDO
@@ -214,6 +220,9 @@ C       Read pH from a pickup file if needed
       DO bj=myByLo(myThid),myByHi(myThid)
        DO bi=myBxLo(myThid),myBxHi(myThid)
 
+#ifdef pH_3D
+       DO kLev=1,Nr
+#endif
 C determine inorganic carbon chem coefficients
         DO j=jMin,jMax
          DO i=iMin,iMax
@@ -222,19 +231,19 @@ c use surface layer values and convert to mol/m3
 c and put bounds on tracers so pH solver doesn't blow up
              surfdic(i,j) =
      &            max(10. _d 0 , 
-     &                min(4000. _d 0, Ptracer(i,j,1,bi,bj,iDIC)))*1e-3
+     &                min(4000. _d 0, Ptracer(i,j,kLev,bi,bj,iDIC)))*1e-3
      &                          * maskC(i,j,kLev,bi,bj)
              surfalk(i,j) =
      &            max(10. _d 0 , 
-     &                min(4000. _d 0, Ptracer(i,j,1,bi,bj,iALK)))*1e-3
+     &                min(4000. _d 0, Ptracer(i,j,kLev,bi,bj,iALK)))*1e-3
      &                          * maskC(i,j,kLev,bi,bj)
              surfphos(i,j)  =
      &            max(1. _d -10, 
-     &                min(10. _d 0, Ptracer(i,j,1,bi,bj,iPO4)))*1e-3
+     &                min(10. _d 0, Ptracer(i,j,kLev,bi,bj,iPO4)))*1e-3
      &                          * maskC(i,j,kLev,bi,bj)
              surfsi(i,j)   =
      &            max(1. _d -8, 
-     &                min(500. _d 0, Ptracer(i,j,1,bi,bj,iSi)))*1e-3
+     &                min(500. _d 0, Ptracer(i,j,kLev,bi,bj,iSi)))*1e-3
      &                          * maskC(i,j,kLev,bi,bj)
              surfsalt(i,j) =
      &            max(4. _d 0, min(50. _d 0, salt(i,j,kLev,bi,bj)))
@@ -278,7 +287,11 @@ C$TAF STORE surfalk(i,j), surfphos(i,j), surfsi(i,j)   = dic_surf
      I        ak0(i,j,bi,bj), fugf(i,j,bi,bj),
      I        ff(i,j,bi,bj),
      I        bt(i,j,bi,bj),st(i,j,bi,bj),ft(i,j,bi,bj),
+#ifdef pH_3D
+     U        pH(i,j,kLev,bi,bj),pCO2(i,j,kLev,bi,bj),
+#else
      U        pH(i,j,bi,bj),pCO2(i,j,bi,bj),
+#endif
      I        myThid )
              ENDDO
             ENDIF
@@ -286,12 +299,23 @@ C$TAF STORE surfalk(i,j), surfphos(i,j), surfsi(i,j)   = dic_surf
           ENDDO
           iprt = MIN(20,sNx)
           jprt = MIN(20,sNy)
+#ifdef pH_3D
+          print*,'QQ first guess pH',kLev, pH(iprt,jprt,kLev,bi,bj),
+     &        theta(iprt,jprt,kLev,bi,bj), salt(iprt,jprt,kLev,bi,bj),
+     &        surfdic(iprt,jprt), surfphos(iprt,jprt),
+     &        surfsi(iprt,jprt),surfalk(iprt,jprt)
+#else
           print*,'QQ first guess pH', pH(iprt,jprt,bi,bj),
      &        theta(iprt,jprt,1,bi,bj), salt(iprt,jprt,1,bi,bj),
      &        surfdic(iprt,jprt), surfphos(iprt,jprt),
      &        surfsi(iprt,jprt),surfalk(iprt,jprt)
-
+#endif
         ENDIF
+
+#ifdef pH_3D
+        ENDDO
+#endif
+
 
 C     end bi,bj loops
        ENDDO

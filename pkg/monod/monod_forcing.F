@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_forcing.F,v 1.14 2012/10/25 15:58:24 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_forcing.F,v 1.15 2013/10/09 17:15:08 stephd Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -892,7 +892,11 @@ c taking from igsm dic run - fed through Tflux array
 c               pCO2local=surfaceForcingT(i,j,bi,bj)
 c or from darwin carbon module
 #ifdef ALLOW_CARBON
+#ifdef pH_3D
+               pCO2local=pCO2(i,j,k,bi,bj)
+#else
                pCO2local=pCO2(i,j,bi,bj)
+#endif
 #else
                pCO2local=280. _d -6
 #endif
@@ -1549,11 +1553,20 @@ Coj            no Eu at surface (yet)
      &                              FluxCO2(i,j,bi,bj)*dtplankton
               SUROave(i,j,bi,bj)   =SUROave(i,j,bi,bj)+
      &                              flxO2(i,j)*dtplankton
+             endif
+#ifdef pH_3D
+              pCO2ave(i,j,k,bi,bj)   =pCO2ave(i,j,k,bi,bj)+
+     &                              pCO2(i,j,k,bi,bj)*dtplankton
+              pHave(i,j,k,bi,bj)     =pHave(i,j,k,bi,bj)+
+     &                              pH(i,j,k,bi,bj)*dtplankton
+#else
+             if (k.eq.1) then
               pCO2ave(i,j,bi,bj)   =pCO2ave(i,j,bi,bj)+
      &                              pCO2(i,j,bi,bj)*dtplankton
               pHave(i,j,bi,bj)     =pHave(i,j,bi,bj)+
      &                              pH(i,j,bi,bj)*dtplankton
              endif
+#endif
 #endif
           endif  
 c end if hFac>0
@@ -1699,10 +1712,17 @@ c ANNA end TAVE
      &                         0,1,2,bi,bj,myThid )
         CALL DIAGNOSTICS_FILL( flxO2(1-Olx,1-Oly), 'DICOFLX ',
      &                         0,1,2,bi,bj,myThid )
+#ifdef pH_3D
+        CALL DIAGNOSTICS_FILL( pCO2(1-Olx,1-Oly,1,bi,bj), 'DICPCO2 ',
+     &                         0,Nr,2,bi,bj,myThid )
+        CALL DIAGNOSTICS_FILL( pH(1-Olx,1-Oly,1,bi,bj), 'DICPHAV ',
+     &                         0,Nr,2,bi,bj,myThid )
+#else
         CALL DIAGNOSTICS_FILL( pCO2(1-Olx,1-Oly,bi,bj), 'DICPCO2 ',
      &                         0,1,2,bi,bj,myThid )
         CALL DIAGNOSTICS_FILL( pH(1-Olx,1-Oly,bi,bj), 'DICPHAV ',
      &                         0,1,2,bi,bj,myThid )
+#endif
 #endif /* ALLOW_CARBON */
        ENDIF
 #endif /* ALLOW_DIAGNOSTICS */

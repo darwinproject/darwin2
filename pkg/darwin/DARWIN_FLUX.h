@@ -9,8 +9,13 @@ C          when coming from atmospheric model
      &              wind, Kwexch_Pre
       _RL  AtmospCO2(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
       _RL  AtmosP(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+#ifdef pH_3D
+      _RL  pH(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr,nSx,nSy)
+      _RL  pCO2(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr,nSx,nSy)
+#else
       _RL  pH(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
       _RL  pCO2(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+#endif
       _RL  FluxCO2(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
       _RL  wind(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
       _RL  Kwexch_Pre(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
@@ -80,8 +85,13 @@ C schmidt number coefficients
       _RL SURave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
       _RL SURCave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
       _RL SUROave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+#ifdef pH_3D
+      _RL pCO2ave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr,nSx,nSy)
+      _RL pHave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr,nSx,nSy)
+#else
       _RL pCO2ave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
       _RL pHave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+#endif
       _RL DIC_timeave(nSx,nSy,nR)
 
 #endif

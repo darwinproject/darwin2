@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/dic_write_pickup.F,v 1.2 2013/01/14 16:50:46 jmc Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/dic_write_pickup.F,v 1.3 2013/10/09 17:14:37 stephd Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -65,8 +65,13 @@ C-    switch to 2-D fields:
 C       record number < 0 : a hack not to write meta files now:
         j = j + 1
         nj = nj-1
+#ifdef pH_3D
+        CALL WRITE_REC_3D_RL( fn, prec, Nr, pH, nj, myIter, myThid )
+        IF (j.LE.listDim) wrFldList(j) = 'DIC_pH3d'
+#else
         CALL WRITE_REC_3D_RL( fn, prec, 1, pH, nj, myIter, myThid )
         IF (j.LE.listDim) wrFldList(j) = 'DIC_pH2d'
+#endif
 
 C--------------------------
         nWrFlds = j

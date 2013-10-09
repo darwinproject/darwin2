@@ -48,6 +48,21 @@ CEOP
       CALL MNC_CW_ADD_VATTR_TEXT('dic_SURO_ave','description',
      &     '', myThid)
 
+#ifdef pH_3D
+      CALL MNC_CW_ADD_VNAME(
+     &     'dic_pH_ave', 'Cen_xy_Hn__C__t', 4,5, myThid)
+      CALL MNC_CW_ADD_VATTR_TEXT(
+     &     'dic_pH_ave','units','--', myThid)
+      CALL MNC_CW_ADD_VATTR_TEXT('dic_pH_ave','description',
+     &     '', myThid)
+
+      CALL MNC_CW_ADD_VNAME(
+     &     'dic_pCO2_ave', 'Cen_xy_Hn__C__t', 4,5, myThid)
+      CALL MNC_CW_ADD_VATTR_TEXT(
+     &     'dic_pCO2_ave','units','--', myThid)
+      CALL MNC_CW_ADD_VATTR_TEXT('dic_pCO2_ave','description',
+     &     '', myThid)
+#else
       CALL MNC_CW_ADD_VNAME(
      &     'dic_pH_ave', 'Cen_xy_Hn__-__t', 3,4, myThid)
       CALL MNC_CW_ADD_VATTR_TEXT(
@@ -61,7 +76,7 @@ CEOP
      &     'dic_pCO2_ave','units','--', myThid)
       CALL MNC_CW_ADD_VATTR_TEXT('dic_pCO2_ave','description',
      &     '', myThid)
-
+#endif
 
       ENDIF
         RETURN
