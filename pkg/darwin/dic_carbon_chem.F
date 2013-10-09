@@ -634,7 +634,8 @@ c=================================================================
 CStartOfInterFace
       SUBROUTINE CARBON_COEFFS(
      I                   ttemp,stemp,
-     I                   bi,bj,iMin,iMax,jMin,jMax,myThid)
+     I                   bi,bj,iMin,iMax,jMin,jMax,
+     I                   kLevel, myThid)
 C
 C     /==========================================================\
 C     | SUBROUTINE CARBON_COEFFS                                 |
@@ -642,6 +643,9 @@ C     | determine coefficients for surface carbon chemistry      |
 C     | adapted from OCMIP2:  SUBROUTINE CO2CALC                 |
 C     | mick follows, oct 1999                                   |
 c     | minor changes to tidy, swd aug 2002                      |
+c     | MODIFIED FOR PRESSURE DEPENDENCE                         |
+c     | Karsten Friis and Mick Follows 2004                      |
+c     | added 2013 (steph)                                       |
 C     \==========================================================/
 C INPUT
 C       diclocal = total inorganic carbon (mol/m^3) 
@@ -663,6 +667,9 @@ c       given in mol/m^3; output arguments "co2star" and "dco2star"
 c       are likewise be in mol/m^3.
 C
 C Apr 2011: fix vapour bug (following Bennington)
+C Oct 2013: c NOW INCLUDES:
+c PRESSURE DEPENDENCE of K1, K2, solubility product of calcite
+c based on Takahashi, GEOSECS Atlantic Report, Vol. 1 (1981)
 C--------------------------------------------------------------------------
         IMPLICIT NONE
 C     == GLobal variables ==
@@ -681,6 +688,7 @@ C general
         _RL  ttemp(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
         _RL  stemp(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
         INTEGER bi,bj,iMin,iMax,jMin,jMax
+        INTEGER kLevel
         INTEGER myThid
 CEndOfInterface
 
@@ -706,6 +714,22 @@ C LOCAL VARIABLES
         _RL  invtk
         _RL  is
         _RL  is2
+c add pressure dependency
+        _RL  bdepth
+        _RL  cdepth
+        _RL  pressc
+c calcite stuff
+        _RL  Ksp_T_Calc
+        _RL  xvalue
+        _RL  zdum
+        _RL  tmpa1
+        _RL  tmpa2
+        _RL  tmpa3
+        _RL  logKspc
+        _RL  dv
+        _RL  dk
+        _RL  pfactor
+        _RL  bigR
 c add Bennington
         _RL  P1atm
         _RL  Rgas
@@ -715,6 +739,7 @@ c add Bennington
         _RL  B
         INTEGER i
         INTEGER j
+        INTEGER k
 
 C.....................................................................
 C OCMIP note:
@@ -726,6 +751,26 @@ C of this code was based on the code by dickson in Version 2 of
 C "Handbook of Methods C for the Analysis of the Various Parameters of 
 C the Carbon Dioxide System in Seawater", DOE, 1994 (SOP No. 3, p25-26). 
 C....................................................................
+
+c determine pressure (bar) from depth
+c 1 BAR at z=0m (atmos pressure)
+c use UPPER surface of cell so top layer pressure = 0 bar
+c for surface exchange coeffs
+
+c if surface, calculate at interface pressure, 
+c else calculate at mid-depth pressure
+        if (Klevel.gt.1) then
+         bdepth = 0.0d0
+         cdepth = 0.0d0
+         pressc = 1.01325 _d 0
+         do k = 1,Klevel
+             cdepth = bdepth + 0.5d0*drF(k)
+             bdepth = bdepth + drF(k)
+             pressc = 1.0d0 + 0.1d0*cdepth
+         end do
+        else
+          pressc = 1.01325 _d 0 
+        endif
 
         do i=imin,imax
          do j=jmin,jmax
@@ -750,7 +795,7 @@ C added by Val Bennington Nov 2010
 C Fugacity Factor needed for non-ideality in ocean
 C ff used for atmospheric correction for water vapor and pressure
 C Weiss (1974) Marine Chemistry
-           P1atm = 1.01325 _d 0 ! bars
+           P1atm = pressc ! bars
            Rgas = 83.1451 _d 0 ! bar*cm3/(mol*K)
            RT = Rgas*tk
            delta = (57.7 _d 0 - 0.118 _d 0*tk)
@@ -779,6 +824,22 @@ C Millero p.664 (1995) using Mehrbach et al. data on seawater scale
      &          0.0118 _d 0 * s + 0.000116 _d 0*s2))
            ak2(i,j,bi,bj)=10.**(-1. _d 0*(1394.7 _d 0*invtk+ 4.777 _d 0-
      &          0.0184 _d 0*s + 0.000118 _d 0*s2))
+C
+C NOW PRESSURE DEPENDENCE:
+c Following Takahashi (1981) GEOSECS report - quoting Culberson and 
+c Pytkowicz (1968)
+           if (kLevel.gt.1) then
+c pressc = pressure in bars
+           ak1(i,j,bi,bj) = ak1(i,j,bi,bj)*
+     &             exp( (24.2-0.085*t)*(pressc-1.0)/(83.143*tk) )
+c FIRST GO FOR K2: According to GEOSECS (1982) report
+c          ak2(i,j,bi,bj) = ak2(i,j,bi,bj)*
+c    &             exp( (26.4-0.040*t)*(pressc-1.0)/(83.143*tk) )
+c SECOND GO FOR K2: corrected coeff according to CO2sys documentation
+c                   E. Lewis and D. Wallace (1998) ORNL/CDIAC-105
+           ak2(i,j,bi,bj) = ak2(i,j,bi,bj)*
+     &             exp( (16.4-0.040*t)*(pressc-1.0)/(83.143*tk) )
+           endif 
 C------------------------------------------------------------------------
 C kb = [H][BO2]/[HBO2]
 C Millero p.669 (1995) using data from dickson (1990)
@@ -787,6 +848,18 @@ C Millero p.669 (1995) using data from dickson (1990)
      &          (148.0248 _d 0 + 137.1942 _d 0*sqrts + 1.62142 _d 0*s) +
      &          (-24.4344 _d 0 - 25.085 _d 0*sqrts - 0.2474 _d 0*s) *
      &          dlogtk + 0.053105 _d 0*sqrts*tk)
+           if (kLevel.gt.1) then
+C Mick and Karsten - Dec 04
+C ADDING pressure dependence based on Millero (1995), p675
+C with additional info from CO2sys documentation (E. Lewis and 
+C D. Wallace, 1998 - see endnotes for commentary on Millero, 95)
+            bigR = 83.145
+            dv = -29.48 + 0.1622*t + 2.608d-3*t*t
+            dk = -2.84d-3
+            pfactor = - (dv/(bigR*tk))*pressc
+     &                + (0.5*dk/(bigR*tk))*pressc*pressc
+            akb(i,j,bi,bj) = akb(i,j,bi,bj)*exp(pfactor)
+           endif
 C------------------------------------------------------------------------
 C k1p = [H][H2PO4]/[H3PO4]
 C DOE(1994) eq 7.2.20 with footnote using data from Millero (1974)
@@ -847,302 +920,6 @@ C Morris & Riley (1966)
 C Riley (1965)
            ft(i,j,bi,bj) = 0.000067 _d 0 * scl/18.9984 _d 0
 C------------------------------------------------------------------------
-         else
-c add Bennington
-            fugf(i,j,bi,bj)=0. _d 0
-            ff(i,j,bi,bj)=0. _d 0
-            ak0(i,j,bi,bj)= 0. _d 0
-            ak1(i,j,bi,bj)= 0. _d 0
-            ak2(i,j,bi,bj)= 0. _d 0
-            akb(i,j,bi,bj)= 0. _d 0
-            ak1p(i,j,bi,bj) = 0. _d 0
-            ak2p(i,j,bi,bj) = 0. _d 0
-            ak3p(i,j,bi,bj) = 0. _d 0
-            aksi(i,j,bi,bj) = 0. _d 0
-            akw(i,j,bi,bj) = 0. _d 0
-            aks(i,j,bi,bj)= 0. _d 0
-            akf(i,j,bi,bj)= 0. _d 0
-            bt(i,j,bi,bj) = 0. _d 0
-            st(i,j,bi,bj) = 0. _d 0
-            ft(i,j,bi,bj) = 0. _d 0
-         endif
-         end do
-        end do
-
-        return
-        end
-
-c=================================================================
-c *******************************************************************
-c=================================================================
-CStartOfInterFace
-      SUBROUTINE CARBON_COEFFS_PRESSURE_DEP(
-     I                   ttemp,stemp,
-     I                   bi,bj,iMin,iMax,jMin,jMax,
-     I                   Klevel,myThid)
-C
-C     /==========================================================\
-C     | SUBROUTINE CARBON_COEFFS                                 |
-C     | determine coefficients for surface carbon chemistry      |
-C     | adapted from OCMIP2:  SUBROUTINE CO2CALC                 |
-C     | mick follows, oct 1999                                   |
-c     | minor changes to tidy, swd aug 2002                      |
-c     | MODIFIED FOR PRESSURE DEPENDENCE                         |
-c     | Karsten Friis and Mick Follows 2004                      |
-C     \==========================================================/
-C INPUT
-C       diclocal = total inorganic carbon (mol/m^3)
-C             where 1 T = 1 metric ton = 1000 kg
-C       ta  = total alkalinity (eq/m^3)
-C       pt  = inorganic phosphate (mol/^3)
-C       sit = inorganic silicate (mol/^3)
-C       t   = temperature (degrees C)
-C       s   = salinity (PSU)
-C OUTPUT
-C IMPORTANT: Some words about units - (JCO, 4/4/1999)
-c     - Models carry tracers in mol/m^3 (on a per volume basis)
-c     - Conversely, this routine, which was written by observationalists
-c       (C. Sabine and R. Key), passes input arguments in umol/kg
-c       (i.e., on a per mass basis)
-c     - I have changed things slightly so that input arguments are in mol/m^3,
-c     - Thus, all input concentrations (diclocal, ta, pt, and st) should be
-c       given in mol/m^3; output arguments "co2star" and "dco2star"
-c       are likewise be in mol/m^3.
-c
-c
-c NOW INCLUDES:
-c PRESSURE DEPENDENCE of K1, K2, solubility product of calcite
-c based on Takahashi, GEOSECS Atlantic Report, Vol. 1 (1981)
-c
-C--------------------------------------------------------------------------
-        IMPLICIT NONE
-C     == GLobal variables ==
-#include "SIZE.h"
-#include "DYNVARS.h"
-#include "EEPARAMS.h"
-#include "PARAMS.h"
-#include "GRID.h"
-#include "FFIELDS.h"
-#include "DARWIN_FLUX.h"
-C     == Routine arguments ==
-C ttemp and stemp are local theta and salt arrays
-C dont really need to pass T and S in, could use theta, salt in
-C common block in DYNVARS.h, but this way keeps subroutine more
-C general
-        _RL  ttemp(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr,nSx,nSy)
-        _RL  stemp(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr,nSx,nSy)
-        INTEGER bi,bj,iMin,iMax,jMin,jMax
-c K is depth index
-        INTEGER Klevel
-        INTEGER myThid
-CEndOfInterface
-
-
-
-C LOCAL VARIABLES
-        _RL  t
-        _RL  s
-        _RL  ta
-        _RL  pt
-        _RL  sit
-        _RL  tk
-        _RL  tk100
-        _RL  tk1002
-        _RL  dlogtk
-        _RL  sqrtis
-        _RL  sqrts
-        _RL  s15
-        _RL  scl
-        _RL  x1
-        _RL  x2
-        _RL  s2
-        _RL  xacc
-        _RL  invtk
-        _RL  is
-        _RL  is2
-        INTEGER i
-        INTEGER j
-        INTEGER k
-        _RL  bdepth
-        _RL  cdepth
-        _RL  pressc
-        _RL  Ksp_T_Calc
-        _RL  xvalue
-        _RL  zdum
-        _RL  tmpa1
-        _RL  tmpa2
-        _RL  tmpa3
-        _RL  logKspc
-        _RL  dv
-        _RL  dk
-        _RL  pfactor
-        _RL  bigR
-
-C.....................................................................
-C OCMIP note:
-C Calculate all constants needed to convert between various measured
-C carbon species. References for each equation are noted in the code.
-C Once calculated, the constants are
-C stored and passed in the common block "const". The original version
-C of this code was based on the code by dickson in Version 2 of
-C "Handbook of Methods C for the Analysis of the Various Parameters of
-C the Carbon Dioxide System in Seawater", DOE, 1994 (SOP No. 3, p25-26).
-C....................................................................
-
-c determine pressure (bar) from depth
-c 1 BAR at z=0m (atmos pressure)
-c use UPPER surface of cell so top layer pressure = 0 bar
-c for surface exchange coeffs
-
-cmick..............................
-c        write(6,*)'Klevel ',klevel
-
-        bdepth = 0.0d0
-        cdepth = 0.0d0
-        pressc = 1.0d0
-        do k = 1,Klevel
-            cdepth = bdepth + 0.5d0*drF(k)
-            bdepth = bdepth + drF(k)
-            pressc = 1.0d0 + 0.1d0*cdepth
-        end do
-cmick...................................................
-c        write(6,*)'depth,pressc ',cdepth,pressc
-cmick....................................................
-
-
-
-        do i=imin,imax
-         do j=jmin,jmax
-          if (hFacC(i,j,Klevel,bi,bj).gt.0.d0) then
-           t = ttemp(i,j,Klevel,bi,bj)
-           s = max(4. _d 0, stemp(i,j,Klevel,bi,bj))
-C terms used more than once
-           tk = 273.15 + t
-           tk100 = tk/100.0
-           tk1002=tk100*tk100
-           invtk=1.0/tk
-           dlogtk=log(tk)
-           is=19.924*s/(1000.-1.005*s)
-           is2=is*is
-           sqrtis=sqrt(is)
-           s2=s*s
-           sqrts=sqrt(s)
-           s15=s**1.5
-           scl=s/1.80655
-
-C------------------------------------------------------------------------
-C f = k0(1-pH2O)*correction term for non-ideality
-C Weiss & Price (1980, Mar. Chem., 8, 347-359; Eq 13 with table 6 values)
-           ff(i,j,bi,bj) = exp(-162.8301 + 218.2968/tk100  +
-     &          90.9241*log(tk100) - 1.47696*tk1002 +
-     &          s * (.025695 - .025225*tk100 +
-     &          0.0049867*tk1002))
-C------------------------------------------------------------------------
-C K0 from Weiss 1974
-           ak0(i,j,bi,bj) = exp(93.4517/tk100 - 60.2409 + 
-     &        23.3585 * log(tk100) +
-     &        s * (0.023517 - 0.023656*tk100 + 
-     &        0.0047036*tk1002))
-C------------------------------------------------------------------------
-C k1 = [H][HCO3]/[H2CO3]
-C k2 = [H][CO3]/[HCO3]
-C Millero p.664 (1995) using Mehrbach et al. data on seawater scale 
-           ak1(i,j,bi,bj)=10**(-1*(3670.7*invtk - 
-     &          62.008 + 9.7944*dlogtk -
-     &          0.0118 * s + 0.000116*s2))
-           ak2(i,j,bi,bj)=10**(-1*(1394.7*invtk + 4.777 - 
-     &          0.0184*s + 0.000118*s2))
-C NOW PRESSURE DEPENDENCE:
-c Following Takahashi (1981) GEOSECS report - quoting Culberson and 
-c Pytkowicz (1968)
-c pressc = pressure in bars
-           ak1(i,j,bi,bj) = ak1(i,j,bi,bj)*
-     &             exp( (24.2-0.085*t)*(pressc-1.0)/(83.143*tk) )
-c FIRST GO FOR K2: According to GEOSECS (1982) report
-c          ak2(i,j,bi,bj) = ak2(i,j,bi,bj)*
-c    &             exp( (26.4-0.040*t)*(pressc-1.0)/(83.143*tk) )
-c SECOND GO FOR K2: corrected coeff according to CO2sys documentation
-c                   E. Lewis and D. Wallace (1998) ORNL/CDIAC-105
-           ak2(i,j,bi,bj) = ak2(i,j,bi,bj)*
-     &             exp( (16.4-0.040*t)*(pressc-1.0)/(83.143*tk) )
-C------------------------------------------------------------------------
-C kb = [H][BO2]/[HBO2]
-C Millero p.669 (1995) using data from dickson (1990)
-           akb(i,j,bi,bj)=exp((-8966.90 - 2890.53*sqrts - 77.942*s +
-     &          1.728*s15 - 0.0996*s2)*invtk +
-     &          (148.0248 + 137.1942*sqrts + 1.62142*s) +
-     &          (-24.4344 - 25.085*sqrts - 0.2474*s) *
-     &          dlogtk + 0.053105*sqrts*tk)
-C Mick and Karsten - Dec 04
-C ADDING pressure dependence based on Millero (1995), p675
-C with additional info from CO2sys documentation (E. Lewis and 
-C D. Wallace, 1998 - see endnotes for commentary on Millero, 95)
-           bigR = 83.145 
-           dv = -29.48 + 0.1622*t + 2.608d-3*t*t
-           dk = -2.84d-3
-           pfactor = - (dv/(bigR*tk))*pressc 
-     &               + (0.5*dk/(bigR*tk))*pressc*pressc
-           akb(i,j,bi,bj) = akb(i,j,bi,bj)*exp(pfactor)
-C------------------------------------------------------------------------
-C k1p = [H][H2PO4]/[H3PO4]
-C DOE(1994) eq 7.2.20 with footnote using data from Millero (1974)
-           ak1p(i,j,bi,bj) = exp(-4576.752*invtk + 115.525 - 
-     &          18.453*dlogtk +
-     &          (-106.736*invtk + 0.69171)*sqrts +
-     &          (-0.65643*invtk - 0.01844)*s)
-C------------------------------------------------------------------------
-C k2p = [H][HPO4]/[H2PO4]
-C DOE(1994) eq 7.2.23 with footnote using data from Millero (1974))
-           ak2p(i,j,bi,bj) = exp(-8814.715*invtk + 172.0883 - 
-     &          27.927*dlogtk +
-     &          (-160.340*invtk + 1.3566) * sqrts +
-     &          (0.37335*invtk - 0.05778) * s)
-C------------------------------------------------------------------------
-C k3p = [H][PO4]/[HPO4]
-C DOE(1994) eq 7.2.26 with footnote using data from Millero (1974)
-           ak3p(i,j,bi,bj) = exp(-3070.75*invtk - 18.141 + 
-     &          (17.27039*invtk + 2.81197) *
-     &          sqrts + (-44.99486*invtk - 0.09984) * s)
-C------------------------------------------------------------------------
-C ksi = [H][SiO(OH)3]/[Si(OH)4]
-C Millero p.671 (1995) using data from Yao and Millero (1995)
-           aksi(i,j,bi,bj) = exp(-8904.2*invtk + 117.385 - 
-     &          19.334*dlogtk +
-     &          (-458.79*invtk + 3.5913) * sqrtis +
-     &          (188.74*invtk - 1.5998) * is +
-     &          (-12.1652*invtk + 0.07871) * is2 +
-     &          log(1.0-0.001005*s))
-C------------------------------------------------------------------------
-C kw = [H][OH]
-C Millero p.670 (1995) using composite data
-           akw(i,j,bi,bj) = exp(-13847.26*invtk + 148.9652 - 
-     &          23.6521*dlogtk + 
-     &          (118.67*invtk - 5.977 + 1.0495 * dlogtk) *
-     &          sqrts - 0.01615 * s)
-C------------------------------------------------------------------------
-C ks = [H][SO4]/[HSO4]
-C dickson (1990, J. chem. Thermodynamics 22, 113)
-           aks(i,j,bi,bj)=exp(-4276.1*invtk + 141.328 - 
-     &          23.093*dlogtk +
-     &          (-13856*invtk + 324.57 - 47.986*dlogtk)*sqrtis +
-     &          (35474*invtk - 771.54 + 114.723*dlogtk)*is -
-     &          2698*invtk*is**1.5 + 1776*invtk*is2 +
-     &          log(1.0 - 0.001005*s))
-C------------------------------------------------------------------------
-C kf = [H][F]/[HF]
-C dickson and Riley (1979) -- change pH scale to total
-           akf(i,j,bi,bj)=exp(1590.2*invtk - 12.641 + 1.525*sqrtis +
-     &          log(1.0 - 0.001005*s) +
-     &          log(1.0 + (0.1400/96.062)*(scl)/aks(i,j,bi,bj)))
-C------------------------------------------------------------------------
-C Calculate concentrations for borate, sulfate, and fluoride
-C Uppstrom (1974)
-           bt(i,j,bi,bj) = 0.000232 * scl/10.811
-C Morris & Riley (1966)
-           st(i,j,bi,bj) = 0.14 * scl/96.062
-C Riley (1965)
-           ft(i,j,bi,bj) = 0.000067 * scl/18.9984
-C------------------------------------------------------------------------
 C solubility product for calcite
 C
 c Following Takahashi (1982) GEOSECS handbook
@@ -1186,26 +963,25 @@ c alternative pressure dependence from Ingle (1975)
 
            Ksp_TP_Calc(i,j,bi,bj) = Ksp_T_Calc*10**(xvalue)
 
-
-
-
 C------------------------------------------------------------------------
          else
-            ff(i,j,bi,bj)=0.d0
-            ak0(i,j,bi,bj)= 0.d0
-            ak1(i,j,bi,bj)= 0.d0
-            ak2(i,j,bi,bj)= 0.d0
-            akb(i,j,bi,bj)= 0.d0
-            ak1p(i,j,bi,bj) = 0.d0
-            ak2p(i,j,bi,bj) = 0.d0
-            ak3p(i,j,bi,bj) = 0.d0
-            aksi(i,j,bi,bj) = 0.d0
-            akw(i,j,bi,bj) = 0.d0
-            aks(i,j,bi,bj)= 0.d0
-            akf(i,j,bi,bj)= 0.d0
-            bt(i,j,bi,bj) = 0.d0
-            st(i,j,bi,bj) = 0.d0
-            ft(i,j,bi,bj) = 0.d0
+c add Bennington
+            fugf(i,j,bi,bj)=0. _d 0
+            ff(i,j,bi,bj)=0. _d 0
+            ak0(i,j,bi,bj)= 0. _d 0
+            ak1(i,j,bi,bj)= 0. _d 0
+            ak2(i,j,bi,bj)= 0. _d 0
+            akb(i,j,bi,bj)= 0. _d 0
+            ak1p(i,j,bi,bj) = 0. _d 0
+            ak2p(i,j,bi,bj) = 0. _d 0
+            ak3p(i,j,bi,bj) = 0. _d 0
+            aksi(i,j,bi,bj) = 0. _d 0
+            akw(i,j,bi,bj) = 0. _d 0
+            aks(i,j,bi,bj)= 0. _d 0
+            akf(i,j,bi,bj)= 0. _d 0
+            bt(i,j,bi,bj) = 0. _d 0
+            st(i,j,bi,bj) = 0. _d 0
+            ft(i,j,bi,bj) = 0. _d 0
             Ksp_TP_Calc(i,j,bi,bj) = 0.d0
          endif
          end do

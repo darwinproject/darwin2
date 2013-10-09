@@ -113,7 +113,8 @@ c put bounds on tracers so pH solver doesn't blow up
 
          CALL CARBON_COEFFS(
      I                       surftemp,surfsalt,
-     I                       bi,bj,iMin,iMax,jMin,jMax,myThid)
+     I                       bi,bj,iMin,iMax,jMin,jMax,
+     I                       kLev,myThid)
 C====================================================================
 
        DO j=jmin,jmax
