@@ -1,8 +1,14 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.48 2013/08/26 22:29:42 jahn Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.49 2013/10/24 12:40:25 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
+
+ctrb_darwin2_ckpt64o_20131024
+o changes so that pH and pCO2 can be calculated for full water column
+  by defining pH_3D in DARWIN_OPTIONS.h. Includes 3D diags and pickup
+o clean up carbon_coeffs so it can be pressure dependent or not (pass
+  depth information); remove redundant subroutine
 
 ctrb_darwin2_ckpt64n_20130826
 
