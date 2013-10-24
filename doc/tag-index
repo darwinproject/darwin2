@@ -4,6 +4,12 @@ $Name$
     Notes on tags used in darwin
     ============================
 
+ctrb_darwin2_ckpt64o_20131024
+o changes so that pH and pCO2 can be calculated for full water column
+  by defining pH_3D in DARWIN_OPTIONS.h. Includes 3D diags and pickup
+o clean up carbon_coeffs so it can be pressure dependent or not (pass
+  depth information); remove redundant subroutine
+
 ctrb_darwin2_ckpt64n_20130826
 
 ctrb_darwin2_ckpt64m_20130820
