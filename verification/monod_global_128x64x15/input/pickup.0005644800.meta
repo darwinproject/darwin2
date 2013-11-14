@@ -6,3 +6,7 @@
  dataprec = [ 'float64' ];
  nrecords = [   123 ];
  timeStepNumber = [    5644800 ];
+ nFlds = [   11 ];
+ fldList = {
+ 'Uvel    ' 'Vvel    ' 'Theta   ' 'Salt    ' 'GuNm1   ' 'GvNm1   ' 'GtNm1   ' 'GsNm1   ' 'EtaN    ' 'dEtaHdt ' 'EtaH    '
+ };
