@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/MONOD_SIZE.h,v 1.4 2012/07/26 20:43:36 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/MONOD_SIZE.h,v 1.5 2013/11/14 17:18:35 jahn Exp $
 C $Name:  $
 
 c MONOD_SIZE.h
@@ -118,7 +118,7 @@ c
       PARAMETER (nTOT =iTOT)
 #endif
       PARAMETER (nDarwin=nTOT-1)
-#else   ! ALL NUTRIENT CYCLES
+#else  /* ALL NUTRIENT CYCLES */
       PARAMETER (nCompZooMax=4)
       PARAMETER (strideCompZoo=1)
       PARAMETER (strideTypeZoo=nCompZooMax)
