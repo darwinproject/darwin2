@@ -118,7 +118,7 @@ c
       PARAMETER (nTOT =iTOT)
 #endif
       PARAMETER (nDarwin=nTOT-1)
-#else   ! ALL NUTRIENT CYCLES
+#else  /* ALL NUTRIENT CYCLES */
       PARAMETER (nCompZooMax=4)
       PARAMETER (strideCompZoo=1)
       PARAMETER (strideTypeZoo=nCompZooMax)
