@@ -4,7 +4,7 @@ $Name$
     Notes on tags used in darwin
     ============================
 
-ctrb_darwin2_ckpt64p_20131118
+ctrb_darwin2_ckpt64q_20131118
 o remove kLev argument from tracer_meanarea
 
 ctrb_darwin2_ckpt64p_20131024
