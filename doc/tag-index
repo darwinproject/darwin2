@@ -1,10 +1,10 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.51 2013/11/18 16:09:33 jahn Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.52 2013/11/18 16:15:12 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
 
-ctrb_darwin2_ckpt64p_20131118
+ctrb_darwin2_ckpt64q_20131118
 o remove kLev argument from tracer_meanarea
 
 ctrb_darwin2_ckpt64p_20131024
