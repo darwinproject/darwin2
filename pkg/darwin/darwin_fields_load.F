@@ -445,7 +445,7 @@ C
        CALL EXCH_3D_RS   (oasim_ed0, tlam, myThid)
        CALL EXCH_3D_RS   (oasim_ed1, tlam, myThid)
        CALL EXCH_3D_RS   (oasim_es0, tlam, myThid)
-       CALL EXCH_3D_RS   (oasim_es0, tlam, myThid)
+       CALL EXCH_3D_RS   (oasim_es1, tlam, myThid)
 #endif
 
 
