@@ -39,6 +39,8 @@ C     /--------------------------------------------------------------\
 C     |  initialise common block biochemical parameters               |
 C     \--------------------------------------------------------------/
 
+      _BEGIN_MASTER(myThid)
+
       WRITE(msgBuf,'(A)')
      &'// ======================================================='
       CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
@@ -397,10 +399,10 @@ COJ set up diagnostics
 #endif /* ALLOW_DIAGNOSTICS */
 COJ
 
+      _END_MASTER(myThid)
 
-
-        RETURN
-        END
+      RETURN
+      END
 C============================================================================
 #endif
 #endif

@@ -41,32 +41,34 @@ c ANNA define params for WAVEBANDS
 #endif
 
 
-C !INPUT PARAMETERS: ===================================================
-C  myThid               :: thread number
+C     !INPUT PARAMETERS: ===================================================
+C     myThid               :: thread number
       INTEGER myThid
+CEOP
 
-C     === Functions ===
+C     !FUNCTIONS:
       _RL DARWIN_RANDOM
       EXTERNAL DARWIN_RANDOM
 
 C     !LOCAL VARIABLES:
-C     === Local variables ===
 C     msgBuf    - Informational/error meesage buffer
       CHARACTER*(MAX_LEN_MBUF) msgBuf
       INTEGER IniUnit1, IniUnit2
 
-        INTEGER bi, bj, k, i, j, iPAR
+      INTEGER bi, bj, k, i, j, iPAR
  
-        INTEGER np
-        INTEGER nz
+      INTEGER np
+      INTEGER nz
 c ANNA need nl for wavebands
 #ifdef WAVEBANDS
-        integer ilam
-        integer nl
-        _RL cu_area
+      INTEGER ilam
+      INTEGER nl
+      _RL cu_area
 #endif
 
-CEOP
+C ----------------------------------------------------------------------
+C Scalar bits first
+      _BEGIN_MASTER( myThid )
 
         WRITE(msgBuf,'(A)')
      &  '// ======================================================='
@@ -80,15 +82,9 @@ CEOP
         CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
      &                      SQUEEZE_RIGHT, myThid )
 
-c test....................
-c       write(6,*)'testing in npzd2fe_init_vari '
-c test....................
-     
-
 c set up ecosystem coefficients
 c
 c seed randomization
-        _BEGIN_MASTER( myThid )
 
         CALL DARWIN_RANDOM_INIT(darwin_seed, myThid)
 
@@ -101,32 +97,6 @@ c initialize total number of functional groups tried
             call MONOD_GENERATE_PHYTO(MyThid, np)
 #endif
          end do
-
-        _END_MASTER( myThid )
-
-c reduce amount of diaz 
-#ifdef ALLOW_DIAZ
-       IF (nIter0.EQ.PTRACERS_Iter0) THEN
-        do np = 1, npmax
-         if (diazotroph(np) .eq. 1. _d 0) then
-         DO bj = myByLo(myThid), myByHi(myThid)
-          DO bi = myBxLo(myThid), myBxHi(myThid)
-           DO j=1-Oly,sNy+Oly
-            DO i=1-Olx,sNx+Olx
-             DO k=1,nR
-               Ptracer(i,j,k,bi,bj,iPhy+np-1) =  
-     &                Ptracer(i,j,k,bi,bj,iPhy+np-1)/10. _d 0
-             ENDDO
-            ENDDO
-           ENDDO
-          ENDDO
-         ENDDO
-         endif
-        enddo
-       ENDIF
-#endif
-
-        _BEGIN_MASTER( myThid )
 
 c initialize zooplankton
          call MONOD_GENERATE_ZOO(MyThid)
@@ -188,12 +158,6 @@ c  no temp/nutrient limitation
            enddo
 #endif
 #endif
-#endif
-        _END_MASTER( myThid )
-
-#ifdef GEIDER
-C this initializes fields...
-        call MONOD_CHECK_CHL(myThid)
 #endif
 
          IF ( myProcId.EQ.0 .AND. myThid.EQ.1 ) THEN
@@ -291,8 +255,74 @@ c ANNA outputs mQyield as 10^(4) mmol C (uEin)-1
          close(IniUnit1)
  110     format(3f4.0,f6.2,4f4.0,f5.1,4f7.3,2e11.2,2f9.4,f6.1,2i5)
  111     format(3f4.0,f6.2,4f4.0,f5.1,4f7.3,2f6.1,2f9.4,f6.1,2i5)
+
+#ifdef CHECK_CONS
+coj find unused units for darwin_cons output
+        CALL MDSFINDUNIT( DAR_cons_unitP, mythid )
+        open(DAR_cons_unitP,file='darwin_cons_P.txt',status='unknown')
+        CALL MDSFINDUNIT( DAR_cons_unitN, mythid )
+        open(DAR_cons_unitN,file='darwin_cons_N.txt',status='unknown')
+        CALL MDSFINDUNIT( DAR_cons_unitF, mythid )
+        open(DAR_cons_unitF,file='darwin_cons_Fe.txt',status='unknown')
+        CALL MDSFINDUNIT( DAR_cons_unitS, mythid )
+        open(DAR_cons_unitS,file='darwin_cons_Si.txt',status='unknown')
+#ifdef ALLOW_CARBON
+        CALL MDSFINDUNIT( DAR_cons_unitC, mythid )
+        open(DAR_cons_unitC,file='darwin_cons_C.txt',status='unknown')
+        CALL MDSFINDUNIT( DAR_cons_unitA, mythid )
+        open(DAR_cons_unitA,file='darwin_cons_A.txt',status='unknown')
+        CALL MDSFINDUNIT( DAR_cons_unitO, mythid )
+        open(DAR_cons_unitO,file='darwin_cons_O.txt',status='unknown')
+#endif
+#endif
+
 c       myProcId and myThid
         ENDIF
+
+        WRITE(msgBuf,'(A)')
+     &  '// ======================================================='
+        CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
+     &                      SQUEEZE_RIGHT, myThid )
+        WRITE(msgBuf,'(A)') '// Darwin init variables >>> END <<<'
+        CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
+     &                      SQUEEZE_RIGHT, myThid )
+        WRITE(msgBuf,'(A)')
+     &  '// ======================================================='
+        CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
+     &                      SQUEEZE_RIGHT, myThid )
+
+      _END_MASTER( myThid )
+      _BARRIER
+
+C ----------------------------------------------------------------------
+C From here on we do actual 3d stuff appropriate for init_varia
+
+c reduce amount of diaz
+#ifdef ALLOW_DIAZ
+       IF (nIter0.EQ.PTRACERS_Iter0) THEN
+        do np = 1, npmax
+         if (diazotroph(np) .eq. 1. _d 0) then
+         DO bj = myByLo(myThid), myByHi(myThid)
+          DO bi = myBxLo(myThid), myBxHi(myThid)
+           DO j=1-Oly,sNy+Oly
+            DO i=1-Olx,sNx+Olx
+             DO k=1,nR
+               Ptracer(i,j,k,bi,bj,iPhy+np-1) =
+     &                Ptracer(i,j,k,bi,bj,iPhy+np-1)/10. _d 0
+             ENDDO
+            ENDDO
+           ENDDO
+          ENDDO
+         ENDDO
+         endif
+        enddo
+       ENDIF
+#endif
+
+#ifdef GEIDER
+C this initializes fields...
+        call MONOD_CHECK_CHL(myThid)
+#endif
 
          CALL LEF_ZERO( fice,myThid )
          CALL LEF_ZERO( inputFe,myThid )
@@ -450,10 +480,6 @@ c ANNA end TAVE
 #endif
 #endif
 c         CALL TIMEAVE_RESET(SURave,   1,  bi, bj, myThid)
-          WRITE(msgbuf,'(A)')
-     &      'QQ start timeave'
-          CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
-     &                        SQUEEZE_RIGHT , mythid)
 
           do k=1,Nr
             DAR_TimeAve(bi,bj,k)=0. _d 0
@@ -461,44 +487,6 @@ c         CALL TIMEAVE_RESET(SURave,   1,  bi, bj, myThid)
          ENDDO
         ENDDO
 #endif /* ALLOW_TIMEAVE */
-
-#ifdef CHECK_CONS
-       IF ( myProcId.EQ.0 .AND. myThid.EQ.1 ) THEN
-coj find unused units for darwin_cons output
-        CALL MDSFINDUNIT( DAR_cons_unitP, mythid )
-        open(DAR_cons_unitP,file='darwin_cons_P.txt',status='unknown')
-        CALL MDSFINDUNIT( DAR_cons_unitN, mythid )
-        open(DAR_cons_unitN,file='darwin_cons_N.txt',status='unknown')
-        CALL MDSFINDUNIT( DAR_cons_unitF, mythid )
-        open(DAR_cons_unitF,file='darwin_cons_Fe.txt',status='unknown')
-        CALL MDSFINDUNIT( DAR_cons_unitS, mythid )
-        open(DAR_cons_unitS,file='darwin_cons_Si.txt',status='unknown')
-#ifdef ALLOW_CARBON
-        CALL MDSFINDUNIT( DAR_cons_unitC, mythid )
-        open(DAR_cons_unitC,file='darwin_cons_C.txt',status='unknown')
-        CALL MDSFINDUNIT( DAR_cons_unitA, mythid )
-        open(DAR_cons_unitA,file='darwin_cons_A.txt',status='unknown')
-        CALL MDSFINDUNIT( DAR_cons_unitO, mythid )
-        open(DAR_cons_unitO,file='darwin_cons_O.txt',status='unknown')
-#endif
-c      myProcId and myThid
-       ENDIF
-#endif
-
-c test....................
-c       write(6,*)'finishing darwin_init_vari '
-c test....................
-        WRITE(msgBuf,'(A)')
-     &  '// ======================================================='
-        CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
-     &                      SQUEEZE_RIGHT, myThid )
-        WRITE(msgBuf,'(A)') '// Darwin init variables >>> END <<<'
-        CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
-     &                      SQUEEZE_RIGHT, myThid )
-        WRITE(msgBuf,'(A)')
-     &  '// ======================================================='
-        CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
-     &                      SQUEEZE_RIGHT, myThid )
 
 
          RETURN 

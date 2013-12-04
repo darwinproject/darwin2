@@ -33,6 +33,8 @@ C     !LOCAL VARIABLES:
       _RL planck, c, hc, oavo, hcoavo, rlamm
 #endif
 
+      _BEGIN_MASTER(myThid)
+
 #ifdef ALLOW_SPECTRAL
 c   Quanta conversion
       planck = 6.6256 _d -34   !Plancks constant J sec
@@ -45,6 +47,8 @@ c   Quanta conversion
        WtouEins(ilam) = 1 _d 6*rlamm*hcoavo      !Watts to uEin/s conversion
       enddo
 #endif
+
+      _END_MASTER(myThid)
 
 #ifdef ALLOW_QUOTA
       call QUOTA_INIT_FIXED(myThid)

@@ -115,6 +115,8 @@ CEOP
      &        dic_pCO2, dic_int1, dic_int2, dic_int3, dic_int4
 #endif
 
+      _BEGIN_MASTER(myThid)
+
 C Set defaults values for parameters in DARWIN_IO.h
       darwin_iceFile=' '
       darwin_ironFile=' '
@@ -197,7 +199,6 @@ c value >= 100 will be converted to index in wavebands_init_fixed
 #endif /* WAVEBANDS */
 
 C Open and read the data.darwin file
-      _BEGIN_MASTER(myThid)
       WRITE(msgBuf,'(A)') ' DARWIN_READPARMS: opening data.darwin'
       CALL PRINT_MESSAGE(msgBuf, standardMessageUnit,
      &                   SQUEEZE_RIGHT , 1)
