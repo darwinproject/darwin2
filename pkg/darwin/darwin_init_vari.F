@@ -40,6 +40,16 @@ c seed randomization
       _END_MASTER( myThid )
       _BARRIER
 
+      DO bj = myByLo(myThid), myByHi(myThid)
+       DO bi = myBxLo(myThid), myBxHi(myThid)
+        DO j=1-Oly,sNy+Oly
+         DO i=1-Olx,sNx+Olx
+           FIce(i,j,bi,bj) = 0. _d 0
+         ENDDO
+        ENDDO
+       ENDDO
+      ENDDO
+
 #ifdef ALLOW_QUOTA
       call QUOTA_INIT_VARI(myThid )
 #endif

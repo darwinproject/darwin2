@@ -4,6 +4,9 @@ C $Name$
 #include "CPP_OPTIONS.h"
 #include "PTRACERS_OPTIONS.h"
 #include "DARWIN_OPTIONS.h"
+#ifdef ALLOW_EXF
+#include "EXF_OPTIONS.h"
+#endif
 
 #ifdef ALLOW_PTRACERS
 #ifdef ALLOW_DARWIN
@@ -37,8 +40,8 @@ c#include "GCHEM.h"
 #ifdef ALLOW_THSICE
 #include "THSICE_VARS.h"
 #endif
-#ifdef ALLOW_OFFLINE
-#include "OFFLINE.h"
+#ifdef ALLOW_EXF
+#include "EXF_FIELDS.h"
 #endif
 #ifdef OASIM
 #include "SPECTRAL.h"
@@ -458,25 +461,25 @@ C
         DO bi = myBxLo(myThid), myBxHi(myThid)
          DO j=1-Oly,sNy+Oly
           DO i=1-Olx,sNx+Olx
-cQQ need to include ice model here, if used
-#ifdef ALLOW_THSICE
-             FIce(i,j,bi,bj) = iceMask(i,j,bi,bj)
-#else
-#ifdef ALLOW_SEAICE
-             FIce(i,j,bi,bj) = AREA(i,j,bi,bj)
-#else
-           IF ( darwin_iceFile .NE. ' '  ) THEN
-            fice(i,j,bi,bj)   = bWght*fice0(i,j,bi,bj)
-     &                         +aWght*fice1(i,j,bi,bj)
-           ELSE
-            fice(i,j,bi,bj)  = 0. _d 0
+           IF ( darwin_useiceFile ) THEN
+            FIce(i,j,bi,bj) = bWght*fice0(i,j,bi,bj)
+     &                       +aWght*fice1(i,j,bi,bj)
+           ENDIF
+#ifdef ALLOW_EXF
+#ifdef EXF_SEAICE_FRACTION
+           IF ( darwin_useareamask ) THEN
+            FIce(i,j,bi,bj) = areamask(i,j,bi,bj)
            ENDIF
 #endif
 #endif
-c or use offline fields if provided
-#ifdef ALLOW_OFFLINE
-           IF (IceFile      .NE. ' ') THEN
-             fice(i,j,bi,bj)  = ICEM(i,j,bi,bj)
+#ifdef ALLOW_THSICE
+           IF ( darwin_useiceMask ) THEN
+            FIce(i,j,bi,bj) = iceMask(i,j,bi,bj)
+           ENDIF
+#endif
+#ifdef ALLOW_SEAICE
+           IF ( darwin_useAREA ) THEN
+            FIce(i,j,bi,bj) = AREA(i,j,bi,bj)
            ENDIF
 #endif
 

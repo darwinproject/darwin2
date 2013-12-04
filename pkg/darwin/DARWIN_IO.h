@@ -81,6 +81,18 @@ C  darwin_seed          :: seed for the random number generator
       _RL darwin_dustFrac
       INTEGER darwin_seed
 
+      COMMON/DARWIN_IO_L/
+     &  darwin_useiceFile,
+     &  darwin_useareamask,
+     &  darwin_useiceMask,
+     &  darwin_useAREA,
+     &  darwin_haveIce
+      LOGICAL darwin_useiceFile
+      LOGICAL darwin_useareamask
+      LOGICAL darwin_useiceMask
+      LOGICAL darwin_useAREA
+      LOGICAL darwin_haveIce
+
 c INPUT:
 c    fice           - ice fraction
 c    inputFe        - aeolian input of iron
