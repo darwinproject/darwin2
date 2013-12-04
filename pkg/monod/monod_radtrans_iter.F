@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_radtrans_iter.F,v 1.2 2012/07/30 15:21:51 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_radtrans_iter.F,v 1.3 2013/12/04 21:18:32 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -104,7 +104,7 @@ CEOP
       rmuu = darwin_rmuu
 
 c     find deepest wet layer
-      kbot = kmax
+      kbot = MIN(kmax, Nr)
       DO WHILE (H(kbot).EQ.0 .AND. kbot.GT.1)
         kbot = kbot - 1
       ENDDO
