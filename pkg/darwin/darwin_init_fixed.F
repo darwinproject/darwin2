@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_init_fixed.F,v 1.1 2011/04/13 18:56:24 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_init_fixed.F,v 1.2 2013/12/04 21:21:32 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -33,6 +33,8 @@ C     !LOCAL VARIABLES:
       _RL planck, c, hc, oavo, hcoavo, rlamm
 #endif
 
+      _BEGIN_MASTER(myThid)
+
 #ifdef ALLOW_SPECTRAL
 c   Quanta conversion
       planck = 6.6256 _d -34   !Plancks constant J sec
@@ -45,6 +47,8 @@ c   Quanta conversion
        WtouEins(ilam) = 1 _d 6*rlamm*hcoavo      !Watts to uEin/s conversion
       enddo
 #endif
+
+      _END_MASTER(myThid)
 
 #ifdef ALLOW_QUOTA
       call QUOTA_INIT_FIXED(myThid)

@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_fixed.F,v 1.9 2012/07/26 21:40:10 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_fixed.F,v 1.10 2013/12/04 21:21:32 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -38,6 +38,8 @@ C     msgBuf    - Informational/error meesage buffer
 C     /--------------------------------------------------------------\
 C     |  initialise common block biochemical parameters               |
 C     \--------------------------------------------------------------/
+
+      _BEGIN_MASTER(myThid)
 
       WRITE(msgBuf,'(A)')
      &'// ======================================================='
@@ -397,10 +399,10 @@ COJ set up diagnostics
 #endif /* ALLOW_DIAGNOSTICS */
 COJ
 
+      _END_MASTER(myThid)
 
-
-        RETURN
-        END
+      RETURN
+      END
 C============================================================================
 #endif
 #endif
