@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/wavebands_init_vari.F,v 1.1 2011/04/13 18:56:25 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/wavebands_init_vari.F,v 1.2 2013/12/04 21:19:12 jahn Exp $
 C $Name:  $
 
 c ANNA wavebands_init_vari.F assigns actual values to choices made by coin-flips in darwin_generate_phyto.F
@@ -35,6 +35,10 @@ C     myThid     :: my Thread Id number
 CEOP
 
 #ifdef WAVEBANDS
+
+C     !FUNCTIONS:
+      LOGICAL MASTER_CPU_THREAD
+      EXTERNAL MASTER_CPU_THREAD
 
 C     !LOCAL VARIABLES:
 C     == Local variables ==
@@ -86,6 +90,7 @@ c ANNA create output files for WAVEBANDS
 c ANNA see format_helps folder for more info on file structures
 
 c file for ap_types assigned via coin flips
+        IF (MASTER_CPU_THREAD(myThid)) THEN
          CALL MDSFINDUNIT( IniUnit1, mythid )
          open(IniUnit1,file='p-ini-char-aptype.dat',
      &        status='unknown')
@@ -100,6 +105,7 @@ c file for ap_types assigned via coin flips
          close(IniUnit1)
          close(IniUnit2)
 120      format(2i5)
+        ENDIF
 
 c file of total absorption spectra
 c rows = pwaves, columns = np      
@@ -108,6 +114,7 @@ c rows = pwaves, columns = np
              outfile(np,ilam) = aphy_chl(np,ilam)
            enddo
           enddo
+        IF (MASTER_CPU_THREAD(myThid)) THEN
          CALL MDSFINDUNIT( IniUnit3, mythid )
          open(IniUnit3,file='p-ini-char-apspec.dat',
      &        status='unknown')
@@ -125,6 +132,7 @@ c rows = pwaves, columns = np
 c make sure outfile is defined above with the correct size
          close(IniUnit3)
          close(IniUnit4)
+        ENDIF
 
 c file for absorption spectra of PS's only
 c rows = pwaves, columns = np
@@ -133,6 +141,7 @@ c rows = pwaves, columns = np
              outfile_ps(np,ilam) = aphy_chl_ps(np,ilam)
            enddo
           enddo
+        IF (MASTER_CPU_THREAD(myThid)) THEN
          CALL MDSFINDUNIT( IniUnit5, mythid )
          open( IniUnit5,file='p-ini-char-apspec-psc.dat',
      &         status='unknown')
@@ -150,9 +159,11 @@ c rows = pwaves, columns = np
          close(IniUnit5)
          close(IniUnit6)
 130      format(9999f10.4)
+        ENDIF
 
 
 c file for wavebands used
+        IF (MASTER_CPU_THREAD(myThid)) THEN
 c        open(23,file='pwaves-check.dat',status='new')
          CALL MDSFINDUNIT( IniUnit7, mythid )
          open( IniUnit7,file='pwaves-check.dat',
@@ -160,9 +171,9 @@ c        open(23,file='pwaves-check.dat',status='new')
          write(IniUnit7,140)pwaves
          close(IniUnit7) 
 140      format(i5)
+        ENDIF
 
-
-#endif
+#endif /* WAVEBANDS */
 
          return
          end

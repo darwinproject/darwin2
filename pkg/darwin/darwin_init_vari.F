@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_init_vari.F,v 1.4 2011/12/07 20:04:00 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_init_vari.F,v 1.5 2013/12/04 21:19:12 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -25,9 +25,12 @@ CEOP
 
 #ifdef ALLOW_DARWIN
 
-C     !LOCAL VARIABLES:
-C     === Local variables ===
-CEOP
+C !FUNCTIONS: ==========================================================
+      LOGICAL MASTER_CPU_THREAD
+      EXTERNAL MASTER_CPU_THREAD
+
+C !LOCAL VARIABLES: ====================================================
+      INTEGER i,j,bi,bj
 
 c set up ecosystem coefficients
 c
@@ -46,14 +49,15 @@ c seed randomization
 
 #ifdef CALC_RATE_TOTALS
 c find unused units for darwin_rate output
-      CALL MDSFINDUNIT( DAR_ratetot_unit, mythid )
-      open(DAR_ratetot_unit,file='darwin_ratetot.txt',status='unknown')
+      IF (MASTER_CPU_THREAD(myThid)) THEN
+       CALL MDSFINDUNIT( DAR_ratetot_unit, mythid )
+       open(DAR_ratetot_unit,file='darwin_ratetot.txt',status='unknown')
 #ifdef ALLOW_CARBON
-      CALL MDSFINDUNIT( DAR_fluxtot_unit, mythid )
-      open(DAR_fluxtot_unit,file='darwin_fluxtot.txt',status='unknown')
+       CALL MDSFINDUNIT( DAR_fluxtot_unit, mythid )
+       open(DAR_fluxtot_unit,file='darwin_fluxtot.txt',status='unknown')
 #endif
+      ENDIF
 #endif
-
 
 #endif /* ALLOW_DARWIN */
 
