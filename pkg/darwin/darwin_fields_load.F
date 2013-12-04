@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_fields_load.F,v 1.6 2013/11/22 21:04:07 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_fields_load.F,v 1.7 2013/12/04 21:21:49 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -255,6 +255,8 @@ C      data for the period ahead and the period behind myTime.
      &                      SQUEEZE_RIGHT, myThid )
 
         _END_MASTER(myThid)
+
+       _BARRIER
 
        IF ( darwin_iceFile .NE. ' '  ) THEN
          CALL READ_REC_XY_RS( darwin_iceFile,fice0,intime0,

@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_init_fixed.F,v 1.2 2013/12/04 21:21:32 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_init_fixed.F,v 1.3 2013/12/04 21:21:49 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -56,6 +56,8 @@ c   Quanta conversion
 #ifdef ALLOW_MONOD
       call MONOD_INIT_FIXED(myThid)
 #endif
+
+      _BARRIER
 
 #endif /* ALLOW_DARWIN */
 

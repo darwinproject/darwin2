@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_init_vari.F,v 1.5 2013/12/04 21:19:12 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_init_vari.F,v 1.6 2013/12/04 21:21:49 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -38,6 +38,7 @@ c seed randomization
       _BEGIN_MASTER( myThid )
       CALL DARWIN_RANDOM_INIT(darwin_seed, myThid)
       _END_MASTER( myThid )
+      _BARRIER
 
 #ifdef ALLOW_QUOTA
       call QUOTA_INIT_VARI(myThid )
