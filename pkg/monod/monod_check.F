@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_check.F,v 1.1 2011/04/13 18:56:25 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_check.F,v 1.2 2013/12/04 21:17:46 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -39,10 +39,10 @@ C     msgBuf      - Informational/error meesage buffer
       CALL PRINT_MESSAGE(msgBuf,standardMessageUnit,
      &                   SQUEEZE_RIGHT,myThid)
 
-      if ( nDarwin .GT. PTRACERS_num ) THEN
+      if ( nDarwin .GT. PTRACERS_numInUse ) THEN
         WRITE(msgBuf,'(A,I5,A,I5)')
-     &    'MONOD_CHECK: ERROR: nDarwin > PTRACERS_num: ',
-     &    nDarwin,' vs ',PTRACERS_num
+     &    'MONOD_CHECK: ERROR: nDarwin > PTRACERS_numInUse: ',
+     &    nDarwin,' vs ',PTRACERS_numInUse
         CALL PRINT_ERROR( msgBuf , 1)
         STOP 'ABNORMAL END: S/R MONOD_CHECK'
       ENDIF
