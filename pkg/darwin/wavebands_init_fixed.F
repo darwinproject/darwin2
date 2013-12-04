@@ -56,6 +56,8 @@ c      _RL planck, c, hc, oavo, hcoavo, rlamm
 c local indeces
       integer nabp,i,ilam
 
+      _BEGIN_MASTER(myThid)
+
 C fill in missing waveband information:
 C "representative values" darwin_waves need not be centered within
 C waveband boundaries darwin_wavebands, so both may be given
@@ -510,6 +512,8 @@ c     constants
       pid = DACOS(-1.0D0)
       rad = 180.0D0/pid
 #endif
+
+      _END_MASTER(myThid)
 
 #endif /* WAVEBANDS */
 
