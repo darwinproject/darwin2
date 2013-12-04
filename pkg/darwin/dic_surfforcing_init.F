@@ -152,13 +152,6 @@ c      aWght = DFLOAT( Iftm-Ifprd*(intime0 - 1) ) / DFLOAT( Ifprd )
 
        _END_MASTER(myThid)
 
-#ifdef ALLOW_OFFLINE
-       IF ( useOffLine ) THEN
-         otime=nIter0*deltaTclock
-         CALL OFFLINE_FIELDS_LOAD( otime, nIter0, myThid )
-       ENDIF
-#endif
-
 c end periodicExternalForcing
       ENDIF
 
