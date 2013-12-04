@@ -1,8 +1,15 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.52 2013/11/18 16:15:12 jahn Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.53 2013/12/04 21:53:22 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
+
+o read seaice fraction through exf instead of offline package
+  - need to define EXF_SEAICE_FRACTION in EXF_OPTIONS.h for this to work
+  - set areamaskfile in data.exf to a file with multiple time records
+    and provide timing information in areamaskperiod, areamaskstartdate1/2
+o remove call to OFFLINE_FIELDS_LOAD in DIC_SURFFORCING_INIT
+o fix multi-threading
 
 ctrb_darwin2_ckpt64q_20131118
 o remove kLev argument from tracer_meanarea
