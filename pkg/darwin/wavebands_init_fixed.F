@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/wavebands_init_fixed.F,v 1.5 2013/04/16 20:21:57 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/wavebands_init_fixed.F,v 1.6 2013/12/04 21:18:51 jahn Exp $
 C $Name:  $
 
 c ANNA wavebands_init_fixed.F reads-in and assigns input paramters for WAVEBANDS. 
@@ -55,6 +55,8 @@ c      _RL planck, c, hc, oavo, hcoavo, rlamm
 #endif
 c local indeces
       integer nabp,i,ilam
+
+      _BEGIN_MASTER(myThid)
 
 C fill in missing waveband information:
 C "representative values" darwin_waves need not be centered within
@@ -510,6 +512,8 @@ c     constants
       pid = DACOS(-1.0D0)
       rad = 180.0D0/pid
 #endif
+
+      _END_MASTER(myThid)
 
 #endif /* WAVEBANDS */
 
