@@ -57,6 +57,8 @@ c   Quanta conversion
       call MONOD_INIT_FIXED(myThid)
 #endif
 
+      _BARRIER
+
 #endif /* ALLOW_DARWIN */
 
       RETURN

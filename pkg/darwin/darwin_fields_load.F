@@ -256,6 +256,8 @@ C      data for the period ahead and the period behind myTime.
 
         _END_MASTER(myThid)
 
+       _BARRIER
+
        IF ( darwin_iceFile .NE. ' '  ) THEN
          CALL READ_REC_XY_RS( darwin_iceFile,fice0,intime0,
      &        myIter,myThid ) 

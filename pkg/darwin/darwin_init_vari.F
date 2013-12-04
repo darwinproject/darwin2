@@ -38,6 +38,7 @@ c seed randomization
       _BEGIN_MASTER( myThid )
       CALL DARWIN_RANDOM_INIT(darwin_seed, myThid)
       _END_MASTER( myThid )
+      _BARRIER
 
 #ifdef ALLOW_QUOTA
       call QUOTA_INIT_VARI(myThid )
