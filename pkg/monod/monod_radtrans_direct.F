@@ -106,10 +106,11 @@ C !LOCAL VARIABLES: ====================================================
       rmuu = darwin_rmuu
 
 c     find deepest wet layer
-      kbot = kmax
-      DO WHILE (H(kbot).EQ.0 .AND. kbot.GT.0)
+      kbot = MIN(kmax, Nr)
+      DO WHILE (H(kbot).EQ.0 .AND. kbot.GT.1)
         kbot = kbot - 1
       ENDDO
+      IF (H(kbot).EQ.0) kbot = kbot - 1
 
       DO nl = 1,tlam
        DO k=1,Nr

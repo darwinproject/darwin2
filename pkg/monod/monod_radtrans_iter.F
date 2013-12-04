@@ -104,7 +104,7 @@ CEOP
       rmuu = darwin_rmuu
 
 c     find deepest wet layer
-      kbot = kmax
+      kbot = MIN(kmax, Nr)
       DO WHILE (H(kbot).EQ.0 .AND. kbot.GT.1)
         kbot = kbot - 1
       ENDDO
