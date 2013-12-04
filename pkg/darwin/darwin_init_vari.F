@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_init_vari.F,v 1.6 2013/12/04 21:21:49 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_init_vari.F,v 1.7 2013/12/04 21:27:54 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -39,6 +39,16 @@ c seed randomization
       CALL DARWIN_RANDOM_INIT(darwin_seed, myThid)
       _END_MASTER( myThid )
       _BARRIER
+
+      DO bj = myByLo(myThid), myByHi(myThid)
+       DO bi = myBxLo(myThid), myBxHi(myThid)
+        DO j=1-Oly,sNy+Oly
+         DO i=1-Olx,sNx+Olx
+           FIce(i,j,bi,bj) = 0. _d 0
+         ENDDO
+        ENDDO
+       ENDDO
+      ENDDO
 
 #ifdef ALLOW_QUOTA
       call QUOTA_INIT_VARI(myThid )

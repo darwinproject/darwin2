@@ -1,7 +1,10 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_init_fixed.F,v 1.3 2013/12/04 21:21:49 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_init_fixed.F,v 1.4 2013/12/04 21:27:54 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
+#ifdef ALLOW_EXF
+#include "EXF_OPTIONS.h"
+#endif
 
 C !INTERFACE: ==========================================================
       SUBROUTINE DARWIN_INIT_FIXED(myThid )
@@ -15,6 +18,11 @@ C !USES: ===============================================================
 #include "SIZE.h"
 #include "EEPARAMS.h"
 #include "PARAMS.h"
+#ifdef ALLOW_EXF
+#include "EXF_PARAM.h"
+#endif
+#include "DARWIN_SIZE.h"
+#include "DARWIN_IO.h"
 #ifdef ALLOW_SPECTRAL
 #include "SPECTRAL_SIZE.h"
 #include "SPECTRAL_PARAMS.h"
@@ -28,6 +36,7 @@ CEOP
 #ifdef ALLOW_DARWIN
 
 C     !LOCAL VARIABLES:
+      CHARACTER*(MAX_LEN_MBUF) msgBuf
 #ifdef ALLOW_SPECTRAL
       INTEGER ilam
       _RL planck, c, hc, oavo, hcoavo, rlamm
@@ -46,6 +55,51 @@ c   Quanta conversion
        rlamm = darwin_waves(ilam)*1 _d -9  !lambda in m
        WtouEins(ilam) = 1 _d 6*rlamm*hcoavo      !Watts to uEin/s conversion
       enddo
+#endif
+
+C which ice area fraction to use (by preference):
+C 1. read from darwin_iceFile if given
+C 2. read from areamaskfile through exf if given
+C 3. use iceMask from THSICE if compiled and used
+C 4. use AREA from seaice if compiled and used
+      darwin_useiceFile  = .FALSE.
+      darwin_useareamask = .FALSE.
+      darwin_useiceMask  = .FALSE.
+      darwin_useAREA     = .FALSE.
+      darwin_haveIce     = .FALSE.
+      IF ( darwin_iceFile .NE. ' '  ) THEN
+        darwin_useiceFile  = .TRUE.
+        darwin_haveIce = .TRUE.
+      ENDIF
+#ifdef ALLOW_EXF
+      IF (.NOT.darwin_haveIce.AND.useEXF.AND.areamaskFile.NE.' ') THEN
+        darwin_useareamask = .TRUE.
+        darwin_haveIce = .TRUE.
+#ifndef EXF_SEAICE_FRACTION
+        WRITE(msgBuf,'(2A)') 'S/R DARWIN_INIT_FIXED:',
+     &    ' you specified an areamaskfile but EXF_SEAICE_FRACTION'
+        CALL PRINT_ERROR( msgBuf , 1)
+        WRITE(msgBuf,'(2A)') 'S/R DARWIN_INIT_FIXED:',
+     &    ' is not defined.  You need to define it in EXF_OPTIONS.h'
+        CALL PRINT_ERROR( msgBuf , 1)
+        WRITE(msgBuf,'(2A)') 'S/R DARWIN_INIT_FIXED:',
+     &    ' in order to use areamaskfile.'
+        CALL PRINT_ERROR( msgBuf , 1)
+        STOP 'DARWIN_INIT_FIXED'
+#endif
+      ENDIF
+#endif
+#ifdef ALLOW_THSICE
+      IF ( .NOT.darwin_haveIce .AND. useTHSICE ) THEN
+        darwin_useiceMask = .TRUE.
+        darwin_haveIce = .TRUE.
+      ENDIF
+#endif
+#ifdef ALLOW_SEAICE
+      IF ( .NOT.darwin_haveIce .AND. useSEAICE ) THEN
+        darwin_useAREA = .TRUE.
+        darwin_haveIce = .TRUE.
+      ENDIF
 #endif
 
       _END_MASTER(myThid)

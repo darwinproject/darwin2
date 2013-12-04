@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/DARWIN_IO.h,v 1.7 2013/06/20 21:47:20 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/DARWIN_IO.h,v 1.8 2013/12/04 21:27:54 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -80,6 +80,18 @@ C  darwin_seed          :: seed for the random number generator
       _RL darwin_ironFileConv
       _RL darwin_dustFrac
       INTEGER darwin_seed
+
+      COMMON/DARWIN_IO_L/
+     &  darwin_useiceFile,
+     &  darwin_useareamask,
+     &  darwin_useiceMask,
+     &  darwin_useAREA,
+     &  darwin_haveIce
+      LOGICAL darwin_useiceFile
+      LOGICAL darwin_useareamask
+      LOGICAL darwin_useiceMask
+      LOGICAL darwin_useAREA
+      LOGICAL darwin_haveIce
 
 c INPUT:
 c    fice           - ice fraction
