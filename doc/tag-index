@@ -1,9 +1,10 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.53 2013/12/04 21:53:22 jahn Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.54 2013/12/10 17:02:29 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
 
+ctrb_darwin2_ckpt64r_20131210
 o read seaice fraction through exf instead of offline package
   - need to define EXF_SEAICE_FRACTION in EXF_OPTIONS.h for this to work
   - set areamaskfile in data.exf to a file with multiple time records
