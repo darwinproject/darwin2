@@ -300,9 +300,7 @@ c         CALL TIMEAVE_RESET(SURave,   1,  bi, bj, myThid)
           CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
      &                        SQUEEZE_RIGHT , mythid)
 
-          do k=1,Nr
-            DAR_TimeAve(bi,bj,k)=0. _d 0
-          enddo
+          DAR_TimeAve(bi,bj) = 0. _d 0
          ENDDO
         ENDDO
 #endif /* ALLOW_TIMEAVE */

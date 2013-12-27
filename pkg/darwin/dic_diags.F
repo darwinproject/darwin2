@@ -2,17 +2,11 @@
 #include "PTRACERS_OPTIONS.h"
 #include "DARWIN_OPTIONS.h"
 
-#ifdef ALLOW_PTRACERS
-#ifdef ALLOW_DARWIN
-
-#ifdef ALLOW_CARBON
-
 CBOP
-CStartOfInterface
       SUBROUTINE DIC_DIAGS( myTime, myIter, myThid )
 C     /==========================================================\
-C     | SUBROUTINE DIC_BIOTIC_DIAGS                                  |
-C     | o Do DIC diagnostic output                           |
+C     | SUBROUTINE DIC_BIOTIC_DIAGS                              |
+C     | o Do DIC diagnostic output                               |
 C     |==========================================================|
 C     \==========================================================/
       IMPLICIT NONE
@@ -21,11 +15,15 @@ C     === Global variables ===
 #include "SIZE.h"
 #include "EEPARAMS.h"
 #include "PARAMS.h"
+#ifdef ALLOW_DARWIN
 #include "DARWIN_SIZE.h"
 #include "DARWIN_FLUX.h"
 #include "DARWIN_IO.h"
+#endif
+#ifdef ALLOW_PTRACERS
 #include "PTRACERS_SIZE.h"
 #include "PTRACERS_PARAMS.h"
+#endif
 C     == Routine arguments ==
 C     myTime - Current time of simulation ( s )
 C     myIter - Iteration number
@@ -33,8 +31,12 @@ C     myThid -  Number of this instance of INI_FORCING
       _RL     myTime
       INTEGER myIter
       INTEGER myThid
-CEndOfInterface
+CEOP
 
+#ifdef ALLOW_PTRACERS
+#ifdef ALLOW_DARWIN
+#ifdef ALLOW_CARBON
+#ifdef ALLOW_TIMEAVE
 
 C     == Local variables ==
       LOGICAL  DIFFERENT_MULTIPLE
@@ -50,8 +52,6 @@ C     == Local variables ==
         pf(1:1) = 'R'
       ENDIF
 
-#ifdef ALLOW_TIMEAVE
-
 C     Dump files and restart average computation if needed
       IF ( DIFFERENT_MULTIPLE(taveFreq,myTime,deltaTClock).
      &                               and.myIter.ne.nIter0 ) THEN
@@ -59,21 +59,21 @@ C     Dump files and restart average computation if needed
 C      Normalize by integrated time
        DO bj = myByLo(myThid), myByHi(myThid)
         DO bi = myBxLo(myThid), myBxHi(myThid)
-         CALL TIMEAVE_NORMALIZ(SURave,dic_timeave, 1 ,
+         CALL TIMEAVE_NORMALIZE(SURave,dic_timeave, 1 ,
      &                 bi,bj,myThid)
-         CALL TIMEAVE_NORMALIZ(SURCave,dic_timeave, 1 ,
+         CALL TIMEAVE_NORMALIZE(SURCave,dic_timeave, 1 ,
      &                 bi,bj,myThid)
-         CALL TIMEAVE_NORMALIZ(SUROave,dic_timeave, 1 ,
+         CALL TIMEAVE_NORMALIZE(SUROave,dic_timeave, 1 ,
      &                 bi,bj,myThid)
 #ifdef pH_3D
-         CALL TIMEAVE_NORMALIZ(pCO2ave,dic_timeave, Nr,
+         CALL TIMEAVE_NORMALIZE(pCO2ave,dic_timeave, Nr,
      &                 bi,bj,myThid)
-         CALL TIMEAVE_NORMALIZ(pHave,dic_timeave, Nr,
+         CALL TIMEAVE_NORMALIZE(pHave,dic_timeave, Nr,
      &                 bi,bj,myThid)
 #else
-         CALL TIMEAVE_NORMALIZ(pCO2ave,dic_timeave, 1 ,
+         CALL TIMEAVE_NORMALIZE(pCO2ave,dic_timeave, 1 ,
      &                 bi,bj,myThid)
-         CALL TIMEAVE_NORMALIZ(pHave,dic_timeave, 1 ,
+         CALL TIMEAVE_NORMALIZE(pHave,dic_timeave, 1 ,
      &                 bi,bj,myThid)
 #endif
         ENDDO
@@ -144,20 +144,18 @@ C      Reset averages to zero
          CALL TIMEAVE_RESET(pCO2ave,1,bi,bj,myThid)
          CALL TIMEAVE_RESET(pHave,1,bi,bj,myThid)
 #endif
-         do k=1,Nr
-           DIC_TimeAve(bi,bj,k)=0.d0
-         enddo
+         DIC_TimeAve(bi,bj)=0.d0
         ENDDO
        ENDDO
 
       ENDIF
 
-#endif /*TIMEAVE*/
+#endif /* ALLOW_TIMEAVE */
+#endif /* ALLOW_CARBON */
+#endif /* ALLOW_DARWIN */
+#endif /* ALLOW_PTRACERS */
 
       RETURN
       END
-#endif  /*ALLOW_CARBON*/
 
-#endif  /*DARWIN*/
-#endif  /*ALLOW_PTRACERS*/
 c ==================================================================

@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/quota/quota_forcing.F,v 1.2 2012/07/02 09:47:43 benw Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/quota/quota_forcing.F,v 1.3 2013/12/27 17:29:00 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -459,10 +459,7 @@ c determine iron partitioning  - solve for free iron
 c
 #ifdef ALLOW_TIMEAVE
 c save averages
-       do k=1,nR
-         dar_timeave(bi,bj,k) = dar_timeave(bi,bj,k)
-     &                        + dtplankton
-       enddo
+       dar_timeave(bi,bj) = dar_timeave(bi,bj) + dtplankton
 #endif
 c
 c -----------------------------------------------------

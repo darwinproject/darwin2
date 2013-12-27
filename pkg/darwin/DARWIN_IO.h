@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/DARWIN_IO.h,v 1.8 2013/12/04 21:27:54 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/DARWIN_IO.h,v 1.9 2013/12/27 17:29:00 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -220,7 +220,7 @@ c ANNA end TAVE
        _RL  NfixPave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy,npmax)
 #endif
 #endif
-       _RL  DAR_timeave(nSx,nSy,nR)
+       _RL  DAR_timeave(nSx,nSy)
 
 #ifdef CHECK_CONS
       COMMON /DARWIN_CHECK_CONS/

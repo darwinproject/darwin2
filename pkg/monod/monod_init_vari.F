@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_vari.F,v 1.13 2013/12/04 21:21:33 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_vari.F,v 1.14 2013/12/27 17:29:00 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -481,9 +481,7 @@ c ANNA end TAVE
 #endif
 c         CALL TIMEAVE_RESET(SURave,   1,  bi, bj, myThid)
 
-          do k=1,Nr
-            DAR_TimeAve(bi,bj,k)=0. _d 0
-          enddo
+          DAR_timeAve(bi,bj)=0. _d 0
          ENDDO
         ENDDO
 #endif /* ALLOW_TIMEAVE */

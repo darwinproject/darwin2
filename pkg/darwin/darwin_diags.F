@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_diags.F,v 1.8 2013/12/04 21:19:12 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_diags.F,v 1.9 2013/12/27 17:29:00 jahn Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -32,6 +32,8 @@ C     myThid -  Number of this instance of INI_FORCING
       INTEGER myThid
 CEndOfInterface
 
+#ifdef ALLOW_DARWIN
+#ifdef ALLOW_TIMEAVE
 
 C     == Local variables ==
       LOGICAL  DIFFERENT_MULTIPLE
@@ -50,15 +52,11 @@ C     Functions
 
       _RL Nfixtot, PPtot, Denittot
 
-#ifdef ALLOW_DARWIN
-
       IF ( writeBinaryPrec .EQ. precFloat64 ) THEN
         pf(1:1) = 'D'
       ELSE
         pf(1:1) = 'R'
       ENDIF
-
-#ifdef ALLOW_TIMEAVE
 
 #ifdef ALLOW_QUOTA
       iPhy = ibiomass
@@ -67,111 +65,111 @@ C     Functions
 C     Dump files and restart average computation if needed
       IF ( DIFFERENT_MULTIPLE(taveFreq,myTime,deltaTClock).
      &                               and.myIter.ne.nIter0 ) THEN
-         
+
 C      Normalize by integrated time
        DO bj = myByLo(myThid), myByHi(myThid)
         DO bi = myBxLo(myThid), myBxHi(myThid)
-         CALL TIMEAVE_NORMALIZ(PARave, DAR_timeave, nR ,
+         CALL TIMEAVE_NORMALIZE(PARave, DAR_timeave, nR ,
      &                 bi,bj,myThid)
-         CALL TIMEAVE_NORMALIZ(PPave, DAR_timeave, nR ,
+         CALL TIMEAVE_NORMALIZE(PPave, DAR_timeave, nR ,
      &                 bi,bj,myThid)
 #ifdef QUOTA_DIAG_LIMIT
          do np=1,npmax
-           CALL TIMEAVE_NORMALIZ(Nlimave(1-Olx,1-Oly,1,1,1,np),
+           CALL TIMEAVE_NORMALIZE(Nlimave(1-Olx,1-Oly,1,1,1,np),
      &                          DAR_timeave, nR ,bi,bj,myThid)
-           CALL TIMEAVE_NORMALIZ(Flimave(1-Olx,1-Oly,1,1,1,np),
+           CALL TIMEAVE_NORMALIZE(Flimave(1-Olx,1-Oly,1,1,1,np),
      &                          DAR_timeave, nR ,bi,bj,myThid)
-           CALL TIMEAVE_NORMALIZ(Ilimave(1-Olx,1-Oly,1,1,1,np),
+           CALL TIMEAVE_NORMALIZE(Ilimave(1-Olx,1-Oly,1,1,1,np),
      &                          DAR_timeave, nR ,bi,bj,myThid)
          enddo
-         CALL TIMEAVE_NORMALIZ(Tlimave,DAR_timeave, nR ,
+         CALL TIMEAVE_NORMALIZE(Tlimave,DAR_timeave, nR ,
      &                                           bi,bj,myThid)
 #endif
 #ifndef ALLOW_QUOTA
-         CALL TIMEAVE_NORMALIZ(Chlave, DAR_timeave, nR ,
+         CALL TIMEAVE_NORMALIZE(Chlave, DAR_timeave, nR ,
      &                 bi,bj,myThid)
 #endif
-         CALL TIMEAVE_NORMALIZ(Nfixave, DAR_timeave, nR ,
+         CALL TIMEAVE_NORMALIZE(Nfixave, DAR_timeave, nR ,
      &                 bi,bj,myThid)
-         CALL TIMEAVE_NORMALIZ(Denitave, DAR_timeave, nR ,
+         CALL TIMEAVE_NORMALIZE(Denitave, DAR_timeave, nR ,
      &                 bi,bj,myThid)
 
 #ifdef DAR_DIAG_PARW
          do ii = 1,tlam
-          CALL TIMEAVE_NORMALIZ(PARwave(1-Olx,1-Oly,1,1,1,ii),
+          CALL TIMEAVE_NORMALIZE(PARwave(1-Olx,1-Oly,1,1,1,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
          enddo
          do np = 1,npmax
-          CALL TIMEAVE_NORMALIZ(chl2cave(1-Olx,1-Oly,1,1,1,np),
+          CALL TIMEAVE_NORMALIZE(chl2cave(1-Olx,1-Oly,1,1,1,np),
      &                          DAR_timeave,nR,bi,bj,myThid)
          enddo
 #endif
 #ifdef DAR_DIAG_ACDOM
-         CALL TIMEAVE_NORMALIZ(aCDOMave, DAR_timeave, nR ,
+         CALL TIMEAVE_NORMALIZE(aCDOMave, DAR_timeave, nR ,
      &                 bi,bj,myThid)
 #endif
 #ifdef DAR_DIAG_IRR
          do ii = 1,tlam
-          CALL TIMEAVE_NORMALIZ(Edave(1-Olx,1-Oly,1,1,1,ii),
+          CALL TIMEAVE_NORMALIZE(Edave(1-Olx,1-Oly,1,1,1,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
-          CALL TIMEAVE_NORMALIZ(Esave(1-Olx,1-Oly,1,1,1,ii),
+          CALL TIMEAVE_NORMALIZE(Esave(1-Olx,1-Oly,1,1,1,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
-          CALL TIMEAVE_NORMALIZ(Euave(1-Olx,1-Oly,1,1,1,ii),
+          CALL TIMEAVE_NORMALIZE(Euave(1-Olx,1-Oly,1,1,1,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
-          CALL TIMEAVE_NORMALIZ(Estave(1-Olx,1-Oly,1,1,1,ii),
+          CALL TIMEAVE_NORMALIZE(Estave(1-Olx,1-Oly,1,1,1,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
-          CALL TIMEAVE_NORMALIZ(Eutave(1-Olx,1-Oly,1,1,1,ii),
+          CALL TIMEAVE_NORMALIZE(Eutave(1-Olx,1-Oly,1,1,1,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
          enddo
 #endif
 #ifdef DAR_DIAG_IRR_AMPS
          do ii = 1,tlam
-          CALL TIMEAVE_NORMALIZ(amp1ave(1-Olx,1-Oly,1,1,1,ii),
+          CALL TIMEAVE_NORMALIZE(amp1ave(1-Olx,1-Oly,1,1,1,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
-          CALL TIMEAVE_NORMALIZ(amp2ave(1-Olx,1-Oly,1,1,1,ii),
+          CALL TIMEAVE_NORMALIZE(amp2ave(1-Olx,1-Oly,1,1,1,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
          enddo
 #endif
 #ifdef DAR_DIAG_ABSORP
          do ii = 1,tlam
-          CALL TIMEAVE_NORMALIZ(aave(1-Olx,1-Oly,1,1,1,ii),
+          CALL TIMEAVE_NORMALIZE(aave(1-Olx,1-Oly,1,1,1,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
          enddo
 #endif
 #ifdef DAR_DIAG_SCATTER
          do ii = 1,tlam
-          CALL TIMEAVE_NORMALIZ(btave(1-Olx,1-Oly,1,1,1,ii),
+          CALL TIMEAVE_NORMALIZE(btave(1-Olx,1-Oly,1,1,1,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
-          CALL TIMEAVE_NORMALIZ(bbave(1-Olx,1-Oly,1,1,1,ii),
+          CALL TIMEAVE_NORMALIZE(bbave(1-Olx,1-Oly,1,1,1,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
          enddo
 #endif
 #ifdef DAR_DIAG_PART_SCATTER
          do ii = 1,tlam
-          CALL TIMEAVE_NORMALIZ(apartave(1-Olx,1-Oly,1,1,1,ii),
+          CALL TIMEAVE_NORMALIZE(apartave(1-Olx,1-Oly,1,1,1,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
-          CALL TIMEAVE_NORMALIZ(btpartave(1-Olx,1-Oly,1,1,1,ii),
+          CALL TIMEAVE_NORMALIZE(btpartave(1-Olx,1-Oly,1,1,1,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
-          CALL TIMEAVE_NORMALIZ(bbpartave(1-Olx,1-Oly,1,1,1,ii),
+          CALL TIMEAVE_NORMALIZE(bbpartave(1-Olx,1-Oly,1,1,1,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
          enddo
 #endif
 #ifdef DAR_RADTRANS
-         CALL TIMEAVE_NORMALIZ(rmudave(1-Olx,1-Oly,1,1),
+         CALL TIMEAVE_NORMALIZE(rmudave(1-Olx,1-Oly,1,1),
      &                         DAR_timeave,1,bi,bj,myThid)
 #endif
 #ifdef DAR_DIAG_EK
          do np = 1,npmax
-          CALL TIMEAVE_NORMALIZ(Ekave(1-Olx,1-Oly,1,1,1,np),
+          CALL TIMEAVE_NORMALIZE(Ekave(1-Olx,1-Oly,1,1,1,np),
      &                          DAR_timeave,nR,bi,bj,myThid)
-          CALL TIMEAVE_NORMALIZ(EkoverEave(1-Olx,1-Oly,1,1,1,np),
+          CALL TIMEAVE_NORMALIZE(EkoverEave(1-Olx,1-Oly,1,1,1,np),
      &                          DAR_timeave,nR,bi,bj,myThid)
-          CALL TIMEAVE_NORMALIZ(acclimave(1-Olx,1-Oly,1,1,1,np),
+          CALL TIMEAVE_NORMALIZE(acclimave(1-Olx,1-Oly,1,1,1,np),
      &                          DAR_timeave,nR,bi,bj,myThid)
           do ii = 1,tlam
-            CALL TIMEAVE_NORMALIZ(Ek_nlave(1-Olx,1-Oly,1,1,1,np,ii),
+            CALL TIMEAVE_NORMALIZE(Ek_nlave(1-Olx,1-Oly,1,1,1,np,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
-            CALL TIMEAVE_NORMALIZ(
+            CALL TIMEAVE_NORMALIZE(
      &                       EkoverE_nlave(1-Olx,1-Oly,1,1,1,np,ii),
      &                          DAR_timeave,nR,bi,bj,myThid)
           enddo
@@ -181,10 +179,10 @@ C      Normalize by integrated time
 c ANNA_TAVE
 #ifdef WAVES_DIAG_PCHL
          do np=1,npmax
-           CALL TIMEAVE_NORMALIZ(Pchlave(1-Olx,1-Oly,1,1,1,np), 
+           CALL TIMEAVE_NORMALIZE(Pchlave(1-Olx,1-Oly,1,1,1,np),
      &                          DAR_timeave, nR ,
      &                 bi,bj,myThid)
-c           CALL TIMEAVE_NORMALIZ(Pchlave(1-Olx,1-Oly,1,1,1,np),
+c           CALL TIMEAVE_NORMALIZE(Pchlave(1-Olx,1-Oly,1,1,1,np),
 c     &                          DAR_timeave, nR ,
 c     &                 bi,bj,myThid)
          enddo
@@ -193,35 +191,35 @@ c ANNA end TAVE
 
 #ifdef DAR_DIAG_RSTAR
          do np=1,npmax
-           CALL TIMEAVE_NORMALIZ(Rstarave(1-Olx,1-Oly,1,1,1,np), 
+           CALL TIMEAVE_NORMALIZE(Rstarave(1-Olx,1-Oly,1,1,1,np),
      &                          DAR_timeave, nR ,
      &                 bi,bj,myThid)
-           CALL TIMEAVE_NORMALIZ(RNstarave(1-Olx,1-Oly,1,1,1,np),
+           CALL TIMEAVE_NORMALIZE(RNstarave(1-Olx,1-Oly,1,1,1,np),
      &                          DAR_timeave, nR ,
      &                 bi,bj,myThid)
          enddo
 #endif
 #ifdef DAR_DIAG_DIVER
-          CALL TIMEAVE_NORMALIZ(Diver1ave(1-Olx,1-Oly,1,1,1),
+          CALL TIMEAVE_NORMALIZE(Diver1ave(1-Olx,1-Oly,1,1,1),
      &                          DAR_timeave, nR ,
      &                 bi,bj,myThid)
-          CALL TIMEAVE_NORMALIZ(Diver2ave(1-Olx,1-Oly,1,1,1),
+          CALL TIMEAVE_NORMALIZE(Diver2ave(1-Olx,1-Oly,1,1,1),
      &                          DAR_timeave, nR ,
      &                 bi,bj,myThid)
-          CALL TIMEAVE_NORMALIZ(Diver3ave(1-Olx,1-Oly,1,1,1),
+          CALL TIMEAVE_NORMALIZE(Diver3ave(1-Olx,1-Oly,1,1,1),
      &                          DAR_timeave, nR ,
      &                 bi,bj,myThid)
-          CALL TIMEAVE_NORMALIZ(Diver4ave(1-Olx,1-Oly,1,1,1),
+          CALL TIMEAVE_NORMALIZE(Diver4ave(1-Olx,1-Oly,1,1,1),
      &                          DAR_timeave, nR ,
      &                 bi,bj,myThid)
 #endif
 c
 #ifdef DAR_DIAG_GROW
          do np=1,npmax
-           CALL TIMEAVE_NORMALIZ(Growave(1-Olx,1-Oly,1,1,1,np),
+           CALL TIMEAVE_NORMALIZE(Growave(1-Olx,1-Oly,1,1,1,np),
      &                          DAR_timeave, nR ,
      &                 bi,bj,myThid)
-           CALL TIMEAVE_NORMALIZ(Growsqave(1-Olx,1-Oly,1,1,1,np),
+           CALL TIMEAVE_NORMALIZE(Growsqave(1-Olx,1-Oly,1,1,1,np),
      &                          DAR_timeave, nR ,
      &                 bi,bj,myThid)
          enddo
@@ -230,7 +228,7 @@ c
 c
 #ifdef DAR_DIAG_NFIXP
          do np=1,npmax
-           CALL TIMEAVE_NORMALIZ(NfixPave(1-Olx,1-Oly,1,1,1,np),
+           CALL TIMEAVE_NORMALIZE(NfixPave(1-Olx,1-Oly,1,1,1,np),
      &                          DAR_timeave, nR ,
      &                 bi,bj,myThid)
          enddo
@@ -257,10 +255,10 @@ c
        _END_MASTER( myThid )
 #endif
 
-       
+
        IF ( PTRACERS_timeave_mdsio )  THEN
          WRITE(suff,'(I10.10)') myIter
-         CALL WRITE_FLD_XYZ_RL('DAR_PARtave.',suff,PARave,         
+         CALL WRITE_FLD_XYZ_RL('DAR_PARtave.',suff,PARave,
      &        myIter,myThid)
          CALL WRITE_FLD_XYZ_RL('DAR_PPtave.',suff,PPave,
      &        myIter,myThid)
@@ -828,7 +826,7 @@ C      Reset averages to zero
            enddo
          enddo
 #endif
-c ANNA_TAVE 
+c ANNA_TAVE
 #ifdef WAVES_DIAG_PCHL
          do np=1,npmax
            CALL TIMEAVE_RESET(Pchlave(1-OLx,1-OLy,1,1,1,np),
@@ -872,17 +870,14 @@ c
          enddo
 #endif
 #endif
-         do k=1,Nr
-           DAR_TimeAve(bi,bj,k)=0.d0
-         enddo
+         DAR_TimeAve(bi,bj)=0.d0
         ENDDO
        ENDDO
-         
+
       ENDIF
 
 #endif /* ALLOW_TIMEAVE */
-      
 #endif /* ALLOW_DARWIN */
-      
+
       RETURN
       END

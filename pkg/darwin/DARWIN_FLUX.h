@@ -92,6 +92,6 @@ C schmidt number coefficients
       _RL pCO2ave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
       _RL pHave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
 #endif
-      _RL DIC_timeave(nSx,nSy,nR)
+      _RL DIC_timeave(nSx,nSy)
 
 #endif

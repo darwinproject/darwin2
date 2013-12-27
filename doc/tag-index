@@ -1,8 +1,10 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.54 2013/12/10 17:02:29 jahn Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.55 2013/12/27 17:29:00 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
+
+o use simpler (no level index) cumulative-time counter for timeave
 
 ctrb_darwin2_ckpt64r_20131210
 o read seaice fraction through exf instead of offline package
