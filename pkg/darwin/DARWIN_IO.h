@@ -220,7 +220,7 @@ c ANNA end TAVE
        _RL  NfixPave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy,npmax)
 #endif
 #endif
-       _RL  DAR_timeave(nSx,nSy,nR)
+       _RL  DAR_timeave(nSx,nSy)
 
 #ifdef CHECK_CONS
       COMMON /DARWIN_CHECK_CONS/

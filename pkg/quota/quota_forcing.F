@@ -459,10 +459,7 @@ c determine iron partitioning  - solve for free iron
 c
 #ifdef ALLOW_TIMEAVE
 c save averages
-       do k=1,nR
-         dar_timeave(bi,bj,k) = dar_timeave(bi,bj,k)
-     &                        + dtplankton
-       enddo
+       dar_timeave(bi,bj) = dar_timeave(bi,bj) + dtplankton
 #endif
 c
 c -----------------------------------------------------

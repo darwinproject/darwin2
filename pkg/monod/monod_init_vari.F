@@ -481,9 +481,7 @@ c ANNA end TAVE
 #endif
 c         CALL TIMEAVE_RESET(SURave,   1,  bi, bj, myThid)
 
-          do k=1,Nr
-            DAR_TimeAve(bi,bj,k)=0. _d 0
-          enddo
+          DAR_timeAve(bi,bj)=0. _d 0
          ENDDO
         ENDDO
 #endif /* ALLOW_TIMEAVE */

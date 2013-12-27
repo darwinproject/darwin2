@@ -4,6 +4,8 @@ $Name$
     Notes on tags used in darwin
     ============================
 
+o use simpler (no level index) cumulative-time counter for timeave
+
 ctrb_darwin2_ckpt64r_20131210
 o read seaice fraction through exf instead of offline package
   - need to define EXF_SEAICE_FRACTION in EXF_OPTIONS.h for this to work
