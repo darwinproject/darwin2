@@ -81,7 +81,7 @@ c set up diagnostics
 COJ set up diagnostics
 #ifdef ALLOW_DIAGNOSTICS
       IF ( useDIAGNOSTICS ) THEN
-        CALL DARWIN_DIAGNOSTICS_INIT( myThid )
+        CALL QUOTA_DIAGNOSTICS_INIT( myThid )
       ENDIF
 #endif /* ALLOW_DIAGNOSTICS */
 COJ
