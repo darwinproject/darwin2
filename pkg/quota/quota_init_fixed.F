@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/quota/quota_init_fixed.F,v 1.2 2012/07/02 09:53:21 benw Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/quota/quota_init_fixed.F,v 1.3 2014/01/17 17:59:30 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -81,7 +81,7 @@ c set up diagnostics
 COJ set up diagnostics
 #ifdef ALLOW_DIAGNOSTICS
       IF ( useDIAGNOSTICS ) THEN
-        CALL DARWIN_DIAGNOSTICS_INIT( myThid )
+        CALL QUOTA_DIAGNOSTICS_INIT( myThid )
       ENDIF
 #endif /* ALLOW_DIAGNOSTICS */
 COJ
