@@ -4,6 +4,9 @@ $Name$
     Notes on tags used in darwin
     ============================
 
+ctrb_darwin2_ckpt64t_20140202
+o fix stray call to darwin_diagnostics_init
+
 ctrb_darwin2_ckpt64s_20140105
 o use simpler (no level index) cumulative-time counter for timeave
 
