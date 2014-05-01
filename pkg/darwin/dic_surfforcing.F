@@ -104,29 +104,29 @@ C determine inorganic carbon chem coefficients
 c put bounds on tracers so pH solver doesn't blow up
 #ifdef pH_3D
              surfdic(i,j) =
-     &           max(400. _d 0 , min(4000. _d 0, PTR_DIC(i,j,kLev)))*1e-3
-     &                          * maskC(i,j,kLev,bi,bj)
+     &           max(400. _d 0 , min(4000. _d 0, PTR_DIC(i,j,kLev)))*
+     &                  1 _d -3 * maskC(i,j,kLev,bi,bj)
              surfalk(i,j) =
-     &           max(400. _d 0 , min(4000. _d 0, PTR_ALK(i,j,kLev)))*1e-3
-     &                          * maskC(i,j,kLev,bi,bj)
+     &           max(400. _d 0 , min(4000. _d 0, PTR_ALK(i,j,kLev)))*
+     &                  1 _d -3 * maskC(i,j,kLev,bi,bj)
              surfphos(i,j)  =
-     &           max(1. _d -10, min(10. _d 0, PTR_PO4(i,j,kLev)))*1e-3
-     &                          * maskC(i,j,kLev,bi,bj)
+     &           max(1. _d -10, min(10. _d 0, PTR_PO4(i,j,kLev)))*
+     &                  1 _d -3 * maskC(i,j,kLev,bi,bj)
              surfsi(i,j)   =
-     &           max(1. _d -8, min(500. _d 0, PTR_SIL(i,j,kLev)))*1e-3
-     &                          * maskC(i,j,kLev,bi,bj)
+     &           max(1. _d -8, min(500. _d 0, PTR_SIL(i,j,kLev)))*
+     &                  1 _d -3 * maskC(i,j,kLev,bi,bj)
 #else
              surfdic(i,j) = 
-     &           max(400. _d 0 , min(4000. _d 0, PTR_DIC(i,j)))*1e-3
+     &           max(400. _d 0 , min(4000. _d 0, PTR_DIC(i,j)))*1 _d -3
      &                          * maskC(i,j,kLev,bi,bj)
              surfalk(i,j) = 
-     &           max(400. _d 0 , min(4000. _d 0, PTR_ALK(i,j)))*1e-3
+     &           max(400. _d 0 , min(4000. _d 0, PTR_ALK(i,j)))*1 _d -3
      &                          * maskC(i,j,kLev,bi,bj)
              surfphos(i,j)  = 
-     &           max(1. _d -10, min(10. _d 0, PTR_PO4(i,j)))*1e-3
+     &           max(1. _d -10, min(10. _d 0, PTR_PO4(i,j)))*1 _d -3
      &                          * maskC(i,j,kLev,bi,bj)
              surfsi(i,j)   = 
-     &           max(1. _d -8, min(500. _d 0, PTR_SIL(i,j)))*1e-3
+     &           max(1. _d -8, min(500. _d 0, PTR_SIL(i,j)))*1 _d -3
      &                          * maskC(i,j,kLev,bi,bj)
 #endif
              surfsalt(i,j) = 
