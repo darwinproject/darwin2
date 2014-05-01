@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_plankton.F,v 1.14 2013/06/12 17:48:20 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_plankton.F,v 1.15 2014/05/01 16:19:32 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -1080,6 +1080,39 @@ c sum over phy for impact on zoo, and all remainder to go to POM
            sumgrazlossPIC(nz)=0. _d 0
 #endif
            do np=1,npmax
+#ifdef FIX_ZOO_QUOTAS
+              sumgrazzoo(nz)=sumgrazzoo(nz)+
+     &             asseff(np,nz)*grazphy(np,nz)*zooP(nz)
+              sumgrazloss(nz)=sumgrazloss(nz)+
+     &             (1. _d 0-asseff(np,nz))*grazphy(np,nz)*zooP(nz)
+              sumgrazzooN(nz)=sumgrazzooN(nz)+
+     &             asseff(np,nz)*grazphy(np,nz)*zooP(nz)*R_NP_zoo(nz)
+              sumgrazlossN(nz)=sumgrazlossN(nz)+
+     &             (R_NP(np)-asseff(np,nz)*R_NP_zoo(nz))*
+     &             grazphy(np,nz)*zooP(nz)
+              sumgrazzooFe(nz)=sumgrazzooFe(nz)+
+     &             asseff(np,nz)*grazphy(np,nz)*
+     &                                      zooP(nz)*R_FeP_zoo(nz)
+              sumgrazlossFe(nz)=sumgrazlossFe(nz)+
+     &             (R_FeP(np)-asseff(np,nz)*R_FeP_zoo(nz))*
+     &             grazphy(np,nz)*zooP(nz)
+              sumgrazzooSi(nz)=sumgrazzooSi(nz)+
+     &             asseff(np,nz)*grazphy(np,nz)*
+     &                                     zooP(nz)*R_SiP_zoo(nz)
+              sumgrazlossSi(nz)=sumgrazlossSi(nz)+
+     &             (R_SiP(np)-asseff(np,nz)*R_SiP_zoo(nz))*
+     &             grazphy(np,nz)*zooP(nz)
+#ifdef ALLOW_CARBON
+              sumgrazzooC(nz)=sumgrazzooC(nz)+
+     &             asseff(np,nz)*grazphy(np,nz)*zooP(nz)*R_PC_zoo(nz)
+              sumgrazlossC(nz)=sumgrazlossC(nz)+
+     &             (R_PC(np)-asseff(np,nz)*R_PC_zoo(nz))*
+     &             grazphy(np,nz)*zooP(nz)
+              sumgrazlossPIC(nz)=sumgrazlossPIC(nz)+
+     &             (1. _d 0)*grazphy(np,nz)*
+     &                           zooP(nz)*R_PC(np)*R_PICPOC(np)
+#endif
+#else
               sumgrazzoo(nz)=sumgrazzoo(nz)+
      &             asseff(np,nz)*grazphy(np,nz)*zooP(nz)
               sumgrazloss(nz)=sumgrazloss(nz)+
@@ -1110,6 +1143,7 @@ c sum over phy for impact on zoo, and all remainder to go to POM
               sumgrazlossPIC(nz)=sumgrazlossPIC(nz)+
      &             (1. _d 0)*grazphy(np,nz)*
      &                           zooP(nz)*R_PC(np)*R_PICPOC(np)
+#endif
 #endif
            enddo
           enddo

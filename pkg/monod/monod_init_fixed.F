@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_fixed.F,v 1.10 2013/12/04 21:21:32 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_fixed.F,v 1.11 2014/05/01 16:19:32 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -239,6 +239,12 @@ c set nutrient ratios for phyto
        val_RFeP_diaz=30.0 _d 0 * val_RFeP
        val_R_PC=120.0 _d 0
        val_R_PICPOC=0.8 _d 0
+#endif
+#ifdef FIX_ZOO_QUOTAS
+       val_R_NP_zoo=val_R_NP
+       val_RFeP_zoo=val_RFeP
+       val_R_SiP_zoo=0.0 _d 0
+       val_R_PC_zoo=val_R_PC
 #endif
 c
 #ifdef OLD_GRAZE

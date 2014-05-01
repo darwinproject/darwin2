@@ -138,6 +138,12 @@ c
 c common block variables (in m and m3)
            zoo_esd(nz)=dm* 1. _d -6
            zoo_vol(nz)=volp* 1. _d -18
+#ifdef FIX_ZOO_QUOTAS
+           R_NP_zoo(nz)=val_R_NP_zoo
+           R_FeP_zoo(nz)=val_RFeP_zoo
+           R_SiP_zoo(nz)=val_R_SiP_zoo
+           R_PC_zoo(nz)=val_R_PC_zoo
+#endif
 c palatibity according to "allometry"
 c big grazers preferentially eat big phyto etc...
            do np=1,npmax

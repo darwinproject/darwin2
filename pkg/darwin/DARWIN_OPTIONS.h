@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/DARWIN_OPTIONS.h,v 1.6 2012/08/23 21:49:33 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/DARWIN_OPTIONS.h,v 1.7 2014/05/01 16:19:32 jahn Exp $
 C $Name:  $
 
 #ifndef DARWIN_OPTIONS_H
@@ -49,6 +49,7 @@ C options for monod package
 C ======================================================================
 #ifdef ALLOW_MONOD
 
+#undef  FIX_ZOO_QUOTAS
 #undef  OLD_GRAZE
 #undef  ALLOW_DIAZ
 #undef  ALLOW_DENIT

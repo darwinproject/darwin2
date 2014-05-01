@@ -1,8 +1,12 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.59 2014/04/11 15:20:48 jahn Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.60 2014/05/01 16:19:32 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
+
+o add option FIX_ZOO_QUOTAS for fixing zooplankton quotas.
+  this is achieved by adjusting sloppy feeding such that zooplankton
+  elemental quota remain fixed.
 
 ctrb_darwin2_ckpt64v_20140411
 

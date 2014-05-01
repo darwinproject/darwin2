@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_vari.F,v 1.14 2013/12/27 17:29:00 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_init_vari.F,v 1.15 2014/05/01 16:19:32 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -317,6 +317,29 @@ c reduce amount of diaz
          endif
         enddo
        ENDIF
+#endif
+
+#ifdef FIX_ZOO_QUOTAS
+        do nz = 1, nzmax
+         DO bj = myByLo(myThid), myByHi(myThid)
+          DO bi = myBxLo(myThid), myBxHi(myThid)
+           DO j=1-Oly,sNy+Oly
+            DO i=1-Olx,sNx+Olx
+             DO k=1,nR
+               Ptracer(i,j,k,bi,bj,iZooN(nz)) =
+     &         Ptracer(i,j,k,bi,bj,iZooP(nz))*R_NP_zoo(nz)
+               Ptracer(i,j,k,bi,bj,iZooFe(nz)) =
+     &         Ptracer(i,j,k,bi,bj,iZooP(nz))*R_FeP_zoo(nz)
+               Ptracer(i,j,k,bi,bj,iZooSi(nz)) =
+     &         Ptracer(i,j,k,bi,bj,iZooP(nz))*R_SiP_zoo(nz)
+               Ptracer(i,j,k,bi,bj,iZooC(nz)) =
+     &         Ptracer(i,j,k,bi,bj,iZooP(nz))*R_PC_zoo(nz)
+             ENDDO
+            ENDDO
+           ENDDO
+          ENDDO
+         ENDDO
+        enddo
 #endif
 
 #ifdef GEIDER
