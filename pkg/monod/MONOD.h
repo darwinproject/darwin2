@@ -36,6 +36,9 @@ c           have been tried
          COMMON/darwin_ecoparam/mu,ksatPO4,ksatNO3,ksatNO2,ksatNH4,
      &          ksatSi,ksatFeT,ksatPAR,
      &          mortzoo,wsink,R_NP,R_FeP,R_SiP,R_PC,R_PICPOC, physize,
+#ifdef FIX_ZOO_QUOTAS
+     &          R_NP_zoo,R_FeP_zoo,R_SiP_zoo,R_PC_zoo,
+#endif
      &          diacoc,diazotroph,zoosize,ExportFracZ,
      &          Kpremin_P, Kpremin_N, Kpremin_Fe, Kpremin_Si,
      &          sig1,sig2,sig3,
@@ -81,6 +84,9 @@ c           have been tried
      &          val_R_SiP_diatom, val_R_NP_diaz, val_RFeP_diaz,
      &          val_R_NP, val_RFeP, val_R_PC,
      &          val_R_PICPOC,
+#ifdef FIX_ZOO_QUOTAS
+     &          val_R_NP_zoo, val_RFeP_zoo, val_R_SiP_zoo, val_R_PC_zoo,
+#endif
      &          ksatNH4fac, ksatNO2fac, val_ksatsi,
      &          ngrowfac, ilight,
      &          phymin, PAR0, diaz_growfac,
@@ -115,6 +121,12 @@ c           have been tried
          _RL R_SiP(npmax)
          _RL R_PC(npmax)
          _RL R_PICPOC(npmax)
+#ifdef FIX_ZOO_QUOTAS
+         _RL R_NP_zoo(nzmax)
+         _RL R_FeP_zoo(nzmax)
+         _RL R_SiP_zoo(nzmax)
+         _RL R_PC_zoo(nzmax)
+#endif
          _RL physize(npmax)
          _RL diacoc(npmax)
          _RL diazotroph(npmax)
@@ -180,6 +192,9 @@ c           have been tried
          _RL ZoomortSmall2, ZoomortBig2
          _RL val_R_SiP_diatom, val_R_NP_diaz, val_RFeP_diaz,
      &          val_R_NP, val_RFeP, val_R_PC, val_R_PICPOC
+#ifdef FIX_ZOO_QUOTAS
+         _RL val_R_SiP_zoo, val_R_NP_zoo, val_RFeP_zoo, val_R_PC_zoo
+#endif
          _RL ngrowfac,ilight
          _RL phymin
          _RL PAR0

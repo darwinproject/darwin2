@@ -319,6 +319,29 @@ c reduce amount of diaz
        ENDIF
 #endif
 
+#ifdef FIX_ZOO_QUOTAS
+        do nz = 1, nzmax
+         DO bj = myByLo(myThid), myByHi(myThid)
+          DO bi = myBxLo(myThid), myBxHi(myThid)
+           DO j=1-Oly,sNy+Oly
+            DO i=1-Olx,sNx+Olx
+             DO k=1,nR
+               Ptracer(i,j,k,bi,bj,iZooN(nz)) =
+     &         Ptracer(i,j,k,bi,bj,iZooP(nz))*R_NP_zoo(nz)
+               Ptracer(i,j,k,bi,bj,iZooFe(nz)) =
+     &         Ptracer(i,j,k,bi,bj,iZooP(nz))*R_FeP_zoo(nz)
+               Ptracer(i,j,k,bi,bj,iZooSi(nz)) =
+     &         Ptracer(i,j,k,bi,bj,iZooP(nz))*R_SiP_zoo(nz)
+               Ptracer(i,j,k,bi,bj,iZooC(nz)) =
+     &         Ptracer(i,j,k,bi,bj,iZooP(nz))*R_PC_zoo(nz)
+             ENDDO
+            ENDDO
+           ENDDO
+          ENDDO
+         ENDDO
+        enddo
+#endif
+
 #ifdef GEIDER
 C this initializes fields...
         call MONOD_CHECK_CHL(myThid)

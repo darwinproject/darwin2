@@ -4,6 +4,10 @@ $Name$
     Notes on tags used in darwin
     ============================
 
+o add option FIX_ZOO_QUOTAS for fixing zooplankton quotas.
+  this is achieved by adjusting sloppy feeding such that zooplankton
+  elemental quota remain fixed.
+
 ctrb_darwin2_ckpt64v_20140411
 
 ctrb_darwin2_ckpt64u_20140308

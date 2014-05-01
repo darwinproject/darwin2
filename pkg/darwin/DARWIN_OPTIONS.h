@@ -49,6 +49,7 @@ C options for monod package
 C ======================================================================
 #ifdef ALLOW_MONOD
 
+#undef  FIX_ZOO_QUOTAS
 #undef  OLD_GRAZE
 #undef  ALLOW_DIAZ
 #undef  ALLOW_DENIT
