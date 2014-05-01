@@ -224,20 +224,20 @@ c use surface layer values and convert to mol/m3
 c and put bounds on tracers so pH solver doesn't blow up
              surfdic(i,j) =
      &            max(10. _d 0 , 
-     &                min(4000. _d 0, Ptracer(i,j,kLev,bi,bj,iDIC)))*1e-3
-     &                          * maskC(i,j,kLev,bi,bj)
+     &                min(4000. _d 0, Ptracer(i,j,kLev,bi,bj,iDIC)))*
+     &                  1 _d -3 * maskC(i,j,kLev,bi,bj)
              surfalk(i,j) =
      &            max(10. _d 0 , 
-     &                min(4000. _d 0, Ptracer(i,j,kLev,bi,bj,iALK)))*1e-3
-     &                          * maskC(i,j,kLev,bi,bj)
+     &                min(4000. _d 0, Ptracer(i,j,kLev,bi,bj,iALK)))*
+     &                  1 _d -3 * maskC(i,j,kLev,bi,bj)
              surfphos(i,j)  =
      &            max(1. _d -10, 
-     &                min(10. _d 0, Ptracer(i,j,kLev,bi,bj,iPO4)))*1e-3
-     &                          * maskC(i,j,kLev,bi,bj)
+     &                min(10. _d 0, Ptracer(i,j,kLev,bi,bj,iPO4)))*
+     &                  1 _d -3 * maskC(i,j,kLev,bi,bj)
              surfsi(i,j)   =
      &            max(1. _d -8, 
-     &                min(500. _d 0, Ptracer(i,j,kLev,bi,bj,iSi)))*1e-3
-     &                          * maskC(i,j,kLev,bi,bj)
+     &                min(500. _d 0, Ptracer(i,j,kLev,bi,bj,iSi)))*
+     &                  1 _d -3 * maskC(i,j,kLev,bi,bj)
              surfsalt(i,j) =
      &            max(4. _d 0, min(50. _d 0, salt(i,j,kLev,bi,bj)))
              surftemp(i,j) =
