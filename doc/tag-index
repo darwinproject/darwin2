@@ -1,9 +1,10 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.60 2014/05/01 16:19:32 jahn Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.61 2014/05/01 16:39:19 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
 
+o replace some single-precision constants in the surface carbon code
 o add option FIX_ZOO_QUOTAS for fixing zooplankton quotas.
   this is achieved by adjusting sloppy feeding such that zooplankton
   elemental quota remain fixed.
