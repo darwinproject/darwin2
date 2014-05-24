@@ -1,8 +1,10 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.62 2014/05/02 21:07:47 jahn Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.63 2014/05/24 14:29:13 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
+
+ctrb_darwin2_ckpt64x_20140524
 
 ctrb_darwin2_ckpt64w_20140502
 o replace some single-precision constants in the surface carbon code
