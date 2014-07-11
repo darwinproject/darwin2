@@ -1,8 +1,10 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.64 2014/06/22 13:32:16 jahn Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.65 2014/07/11 15:14:33 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
+
+ctrb_darwin2_ckpt64z_20140711
 
 ctrb_darwin2_ckpt64y_20140622
 
