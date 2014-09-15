@@ -1,8 +1,11 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.69 2014/08/30 15:07:25 jahn Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.70 2014/09/15 15:57:04 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
+
+ctrb_darwin2_ckpt65d_20140915
+o do not update ptracers on open boundary
 
 ctrb_darwin2_ckpt65c_20140830
 o new output for baltic exp after obcs fixes to gchem_forcing_sep
