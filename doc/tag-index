@@ -4,6 +4,9 @@ $Name$
     Notes on tags used in darwin
     ============================
 
+ctrb_darwin2_ckpt65d_20140915
+o do not update ptracers on open boundary
+
 ctrb_darwin2_ckpt65c_20140830
 o new output for baltic exp after obcs fixes to gchem_forcing_sep
 
