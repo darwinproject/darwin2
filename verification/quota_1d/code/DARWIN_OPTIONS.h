@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/verification/quota_1d/code/DARWIN_OPTIONS.h,v 1.5 2013/06/20 21:47:35 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/verification/quota_1d/code/DARWIN_OPTIONS.h,v 1.6 2015/05/19 14:37:07 benw Exp $
 C $Name:  $
 
 #ifndef DARWIN_OPTIONS_H
@@ -13,24 +13,30 @@ C    !ROUTINE: DARWIN_OPTIONS.h
 C    !INTERFACE:
 
 C    !DESCRIPTION:
-C options for darwin package
+C options for darwin package and sub-packages
 CEOP
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-C common
+C ======================================================================
+C options for top-level darwin package
+C ======================================================================
 
 #define READ_PAR
 #undef  USE_QSW
 #define MINFE
 #undef  NUT_SUPPLY
 #undef  CONS_SUPP
-#undef  RELAX_NUTS
-#undef  FLUX_NUTS
 #define PORT_RAND
 #undef  OLDSEED
-#define CHECK_CONS
+#undef  CALC_RATE_TOTALS
 
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#undef  RELAX_NUTS
+#undef  FLUX_NUTS
+
+#undef  CHECK_CONS
+
+C ======================================================================
+C options for monod package
+C ======================================================================
 #ifdef ALLOW_MONOD
 
 #undef  OLD_GRAZE
@@ -61,8 +67,15 @@ C monod dependencies
 #endif
 
 #endif /* ALLOW_MONOD */
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+C ======================================================================
+C options for quota package
+C ======================================================================
 #ifdef ALLOW_QUOTA
+c PFT or pure trait-based model
+#define ALLOWPFT
+#define SWITCHING
+#define ONEGRAZER
 
 c light & dynamic chlorophyll
 #define  GEIDER
@@ -75,30 +88,36 @@ cbenw - turn on quota model
 #undef PQUOTA
 #undef SQUOTA
 #define FQUOTA
+cbenw - mixotrophy
+#define DIFFLIMIT
+ 
+#define IRON_SED_SOURCE
+#define IRON_SED_SOURCE_VARIABLE
 
-cbenw - switching to enable one zoo debug version
-#define SWITCH3
-
-#undef  QUOTA_DIAG_LIMIT
+#define QUOTA_DIAG_LIMIT
 #undef  UNCERTAINTY
 
-c <><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-c quota dependencies
+C ----------------------------------------------------------------------
+C quota dependencies
+C ----------------------------------------------------------------------
 c
 #ifdef  DYNCHL
 #define GEIDER
 #endif
 c
 #endif /* ALLOW_QUOTA */
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-c common dependencies
+C ======================================================================
+C common dependencies
+C ======================================================================
 c
-#if defined(WAVEBANDS) || defined(OASIM)
-#define ALLOW_SPECTRAL
-#endif
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+C ======================================================================
+C overrides
+C ======================================================================
+C if you want to override dependent options, do it here:
+C
+C #define TEMP_RANGE
 
 #endif /* ALLOW_DARWIN */
 #endif /* DARWIN_OPTIONS_H */
