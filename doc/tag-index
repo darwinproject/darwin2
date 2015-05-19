@@ -3,6 +3,28 @@ $Name$
 
     Notes on tags used in darwin
     ============================
+    
+o new structure getting rid of some redundancies and adding possibility for no PFTs
++ CHANGES THAT DO NOT MODIFY OUTPUT
+	- new flux diagnostics AP and HP (autotrophy and heterotrophy) added
+	- #ALLOWPFT switches between pft and non-pft (strictly trait based) model
+	- changed #SWITCH3 to SWITCHING
+	- added #ONEGRAZER flag which sets grazing pref to one for all prey
+	- switching controlled by ns parameter
+	- added hill number
+	- added Lambda for grazing refuge
+	- plankton swimming removed
++ CHANGES THAT DO MODIFY OUTPUT
+	- onezooplankton grazer made carnivorous
+	- grazing half-sat increased 1 to 5 mmol C / m3
+	- no plankton sinking (P or Z)
+	- max grazing rate in ONEGRAZER configuration dependent on prey size * 1000
+		(i.e. set by size of hypothetical predator for each prey)
+	- mortality made temperature independent for P and Z
+	- basal mortality rate = 0.025 / day
+	- hill number = 0.1
+	- Changed size scaling of Q_Carb and all N and Fe uptake parameters
+	- No size-dependence of man and max quotas (as was already the case for QFe)	
 
 ctrb_darwin2_ckpt65l_20150504
 
