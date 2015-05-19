@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/quota/quota_plankton.F,v 1.3 2015/05/19 14:32:43 benw Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/quota/quota_plankton.F,v 1.4 2015/05/19 15:23:46 benw Exp $
 C $Name:  $
 #include "CPP_OPTIONS.h"
 #include "PTRACERS_OPTIONS.h"
@@ -288,9 +288,6 @@ c             apply ammonium inhibition to NO3 and NO2
               up_inorg(ii,jp) = 0. _d 0
             endif
           enddo ! ii
-#ifdef FQUOTA
-          up_inorg(iNO3,jp) = up_inorg(iNO3,jp) * felimit(jp)
-#endif
         else ! if autotrophy(jp).eq.0
           do ii=1,iimax
             up_inorg(ii,jp) = 0. _d 0
@@ -349,11 +346,11 @@ c PRE-ASSIMILATION grazing of type jpredator by type jprey
             if (food1.gt.0. _d 0) then
               grazing(iCarb,jpred,jprey)                 ! d^-1
      &          = tmp1 ! grazing effort
-!#ifdef ONEGRAZER
-!     &          * graz(jprey) ! prey dependent maximum rate
-!#else
+#ifdef ONEGRAZER
+     &          * graz(jprey) ! prey dependent maximum rate
+#else
      &          * graz(jpred) ! predator dependent maximum rate
-!#endif
+#endif
 #ifdef SWITCHING
      &          *(graz_pref(jpred,jprey)*biomass(iCarb,jprey))**ns/food2
 #else
@@ -478,14 +475,8 @@ c           Exudation of elemental reservoirs
             endif
           endif
 !
-! calculate temperature adjusted mortality rates
+! calculate (temperature adjusted?) mortality rates
           m_ref(jp) = kmort(jp) !* activ_Tempfunction
-#ifdef ALLOWPFT
-          ! Z mortality is t dependent - a la Moore 2002
-          if (pft(jp).eq.6) then
-            m_ref(jp) = kmort(jp) * activ_Tempfunction
-          endif
-#endif
 !
 ! Loss and sinking terms - include silicate and chlorophyll
             dbiomassdt(io,jp) = dbiomassdt(io,jp)
