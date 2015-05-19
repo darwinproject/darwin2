@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/quota/quota_init_fixed.F,v 1.3 2014/01/17 17:59:30 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/quota/quota_init_fixed.F,v 1.4 2015/05/19 14:32:43 benw Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -89,9 +89,16 @@ c-----------------------------------------------------
 c "Standard" parameters
       ! maximum assimilation efficiency
       ass_eff          =  0.70 _d 0
+!     prey switching exponent
+      ns               =  2
+!     hill number for grazing
+      hill             =  0.10 _d 0
+      hill             =  1.00 _d 0
+!     grazing refuge
+      Lambda           = -1.00 _d 0
       ! organic matter sinking rate
       orgsink(1)       =  0.00 _d 0  /pday
-      orgsink(2)       =  10.0 _d 0  /pday
+      orgsink(2)       = 10.00 _d 0  /pday
       ! cost of biosynthesis
       biosynth         =  2.33 _d 0
       ! nitrogen uptake
@@ -117,8 +124,8 @@ c iron sediment source
 c                                            mmol POC/m3/s
 #endif
       ! basic light
-      k_w              =  0.04 _d 0
-      k_chl            =  0.03 _d 0
+      k_w              =  0.04 _d 0 ! m^-1
+      k_chl            =  0.03 _d 0 ! m^-1 (mg chl)^-1
       chl2nmax         =  3.00 _d 0 ! Moore 2002 (labelled as GD98)
 !      chl2nmax         =  5.6 _d 0  ! Geider 1998
 c-----------------------------------------------------
@@ -139,22 +146,18 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccc
       b_graz           = -0.16 _d 0
       be_graz          =  0.02 _d 0
 ! half saturation grazing prey carbon concentration
-!      a_kg             =  2.24 _d +1       ! mmol C m^-3
       a_kg             =  1.00 _d 0       ! mmol C m^-3
+!      a_kg             =  5.00 _d 0       ! mmol C m^-3
       ae_kg            =  3.80 _d 0
       b_kg             =  0.00 _d 0
       be_kg            =  0.03 _d 0
 cccccccccccccccccccccccccccccccccccccccccccccccccccccc
 ! sinking (enter as positive downwards)
+!      a_biosink        =  0.0 _d 0 ! assume sinking either negligable or balanced by motility 
       a_biosink        =  0.28 _d -1 / pday ! m d^-1
       ae_biosink       =  1.00 _d 0
-      b_biosink        =  0.39 _d 0
-      be_biosink       =  0.00 _d 0
-! swimming velocity (enter as positive upwards - converted in quota_generate_phyto.F)
-      a_bioswim        =  0.00 _d 0 / pday ! m d^-1
-      ae_bioswim       =  1.00 _d 0
-      b_bioswim        =  0.18 _d 0
-      be_bioswim       =  0.00 _d 0
+      b_biosink        =  0.39 _d 0 ! from Laws (1975) by "inspection" of Smada (1967)
+      be_biosink       =  0.00 _d 0 
 cccccccccccccccccccccccccccccccccccccccccccccccccccccc
 ! mortality
       a_mort           =  0.02 _d 0 / pday  ! d^-1
@@ -178,11 +181,10 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccc
       ae_qcarbon       =  1.36 _d 0
       b_qcarbon        =  0.94 _d 0
       be_qcarbon       =  0.04 _d 0
-      ! respiration (Note function of cellular C --> aC^b!)
-!      a_respir         =  3.21 _d -11 / pday ! mmol C cell^-1 d^-1
-      a_respir         =  0.00 _d 0
+      ! respiration
+      a_respir         =  0.00 _d 0 / pday   ! d^-1
       ae_respir        =  1.00 _d 0
-      b_respir         =  0.93 _d 0
+      b_respir         =  0.00 _d 0
       be_respir        =  0.00 _d 0
       ! carbon excretion
 !      a_kexc(iCarb)    =  0.32 _d -1 / pday  ! d^-1
@@ -272,39 +274,39 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccc
 #ifdef PQUOTA
 ! phosphate
       ! maximum PO4 uptake rate
-      a_vmaxi(iPO4)    =  0.77 _d -1 / pday ! mmol P (mmol C)^-1 d^-1
+      a_vmaxi(iPO4)    =  0.44 _d -1 / pday ! mmol P (mmol C)^-1 d^-1
       ae_vmaxi(iPO4)   =  1.36 _d 0
-      b_vmaxi(iPO4)    = -0.27 _d 0
+      b_vmaxi(iPO4)    =  0.06 _d 0
       be_vmaxi(iPO4)   =  0.07 _d 0
       ! PO4 half-saturation
-      a_kn(iPO4)       =  0.26 _d -1        ! (mmol N m^-3)
+      a_kn(iPO4)       =  0.04 _d 0        ! (mmol N m^-3)
       ae_kn(iPO4)      =  1.36 _d 0
-      b_kn(iPO4)       =  0.27 _d 0
+      b_kn(iPO4)       =  0.41 _d 0
       be_kn(iPO4)      =  0.08 _d 0
       ! minimum P quota
-      a_qmin(iPhos)    =  2.00 _d -3       ! mmol N (mmol C)^-1
+      a_qmin(iPhos)    =  2.13 _d -3       ! mmol N (mmol C)^-1
       ae_qmin(iPhos)   =  1.00 _d 0
       b_qmin(iPhos)    =  0.00 _d 0
       be_qmin(iPhos)   =  0.00 _d 0
       ! maximum P quota
-      a_qmax(iPhos)    =  0.01 _d 0        ! mmol N (mmol C)^-1
+      a_qmax(iPhos)    =  1.06 _d -2        ! mmol N (mmol C)^-1
       ae_qmax(iPhos)   =  1.20 _d 0
-      b_qmax(iPhos)    =  0.00 _d 0
+      b_qmax(iPhos)    =  0.05 _d 0
       be_qmax(iPhos)   =  0.00 _d 0
       ! P excretion
-      a_kexc(iPhos)    =  0.24 _d -1 / pday ! d^-1
+      a_kexc(iPhos)    =  0.00 _d -1 / pday ! d^-1
       ae_kexc(iPhos)   =  1.36 _d 0
       b_kexc(iPhos)    = -0.33 _d 0
       be_kexc(iPhos)   =  0.09 _d 0
       ! fraction grazing to DOP
-      a_beta_graz(iPhos)  =  1.00 _d 0
+      a_beta_graz(iPhos)  =  0.75 _d 0
       ae_beta_graz(iPhos) =  1.00 _d 0
-      b_beta_graz(iPhos)  = -0.40 _d 0
+      b_beta_graz(iPhos)  = -0.25 _d 0
       be_beta_graz(iPhos) =  0.00 _d 0
       ! fraction mortality to DOP
-      a_beta_mort(iPhos)  =  1.00 _d 0
+      a_beta_mort(iPhos)  =  0.75 _d 0
       ae_beta_mort(iPhos) =  1.00 _d 0
-      b_beta_mort(iPhos)  = -0.40 _d 0
+      b_beta_mort(iPhos)  = -0.25 _d 0
       be_beta_mort(iPhos) =  0.00 _d 0
       ! P remineralisation rate
       remin(iPhos,1)   =  0.02 _d 0  /pday
@@ -313,30 +315,30 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccc
 #ifdef SQUOTA
 ! silicate
       ! maximum Si uptake rate
-      a_vmaxi(iSi)     =  0.77 _d -1 / pday ! mmol Fe (mmol C)^-1 d^-1
+      a_vmaxi(iSi)     =  0.77 _d -1 / pday ! mmol Si (mmol C)^-1 d^-1
       ae_vmaxi(iSi)    =  1.36 _d 0
       b_vmaxi(iSi)     = -0.27 _d 0
       be_vmaxi(iSi)    =  0.07 _d 0
       ! Si half-saturation
-      a_kn(iSi)        =  0.24 _d -1        ! (mmol N m^-3)
+      a_kn(iSi)        =  0.24 _d -1        ! (mmol Si m^-3)
       ae_kn(iSi)       =  1.36 _d 0
       b_kn(iSi)        =  0.27 _d 0
       be_kn(iSi)       =  0.08 _d 0
       ! minimum Si quota
-!      a_qmin(iSili)    =  0.84 _d -1        ! mmol N (mmol C)^-1
+!      a_qmin(iSili)    =  0.84 _d -1        ! mmol Si (mmol C)^-1
 !      ae_qmin(iSili)   =  1.00 _d 0
 !      b_qmin(iSili)    = -0.17 _d 0
 !      be_qmin(iSili)   =  0.00 _d 0
-      a_qmin(iSili)    =  2.00 _d -3       ! mmol N (mmol C)^-1
+      a_qmin(iSili)    =  2.00 _d -3       ! mmol Si (mmol C)^-1
       ae_qmin(iSili)   =  1.00 _d 0
       b_qmin(iSili)    =  0.00 _d 0
       be_qmin(iSili)   =  0.00 _d 0
       ! maximum Si quota
-!      a_qmax(iSili)    =  0.30 _d 0         ! mmol N (mmol C)^-1
+!      a_qmax(iSili)    =  0.30 _d 0         ! mmol Si (mmol C)^-1
 !      ae_qmax(iSili)   =  1.00 _d 0
 !      b_qmax(iSili)    = -0.13 _d 0
 !      be_qmax(iSili)   =  0.00 _d 0
-      a_qmax(iSili)    =  4.00 _d -3       ! mmol N (mmol C)^-1
+      a_qmax(iSili)    =  4.00 _d -3       ! mmol Si (mmol C)^-1
       ae_qmax(iSili)   =  1.20 _d 0
       b_qmax(iSili)    =  0.00 _d 0
       be_qmax(iSili)   =  0.00 _d 0

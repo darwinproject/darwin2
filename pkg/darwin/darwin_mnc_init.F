@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_mnc_init.F,v 1.6 2012/10/23 17:55:30 stephd Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_mnc_init.F,v 1.7 2015/05/19 14:30:15 benw Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -63,35 +63,69 @@ C     Functions
 cbenw limitation diagnostics
 #ifdef QUOTA_DIAG_LIMIT
       do np=1,npmax
-c nitrogen
+c carbon
         DO jj = 1,MAX_LEN_FNAM
-          name(jj:jj) = ' '
+           name(jj:jj) = ' '
         ENDDO
+        WRITE(name,'(a,i3.3)') 'dar_AP_C_',np
+        CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+        WRITE(name,'(a,i3.3)') 'dar_HP_C_',np
+        CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+c nitrogen
+        WRITE(name,'(a,i3.3)') 'dar_AP_N_',np
+        CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+        WRITE(name,'(a,i3.3)') 'dar_HP_N_',np
+        CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
         WRITE(name,'(a,i3.3)') 'dar_Nlim_',np
         CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
         CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
         CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+c phosphorus
+#ifdef PQUOTA
+        WRITE(name,'(a,i3.3)') 'dar_AP_P_',np
+        CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+        WRITE(name,'(a,i3.3)') 'dar_HP_P_',np
+        CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+        WRITE(name,'(a,i3.3)') 'dar_Plim_',np
+        CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+#endif
 c iron
-        DO jj = 1,MAX_LEN_FNAM
-           name(jj:jj) = ' '
-        ENDDO
+#ifdef FQUOTA
+        WRITE(name,'(a,i3.3)') 'dar_AP_F_',np
+        CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+        WRITE(name,'(a,i3.3)') 'dar_HP_F_',np
+        CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
+        CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
         WRITE(name,'(a,i3.3)') 'dar_Flim_',np
         CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
         CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
         CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+#endif
 c light
-        DO jj = 1,MAX_LEN_FNAM
-           name(jj:jj) = ' '
-        ENDDO
         WRITE(name,'(a,i3.3)') 'dar_Ilim_',np
         CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
         CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)
         CALL MNC_CW_ADD_VATTR_TEXT(name,'description','', myThid)
+!
       enddo
 c temperature
-      DO jj = 1,MAX_LEN_FNAM
-         name(jj:jj) = ' '
-      ENDDO
       WRITE(name,'(a)') 'dar_Tlim_ave'
       CALL MNC_CW_ADD_VNAME(name,'Cen_xy_Hn__C__t',4,5,myThid)
       CALL MNC_CW_ADD_VATTR_TEXT(name,'units','--', myThid)

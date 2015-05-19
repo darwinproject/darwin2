@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_diags.F,v 1.9 2013/12/27 17:29:00 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/darwin_diags.F,v 1.10 2015/05/19 14:30:15 benw Exp $
 C $Name:  $
 
 #include "DARWIN_OPTIONS.h"
@@ -75,13 +75,41 @@ C      Normalize by integrated time
      &                 bi,bj,myThid)
 #ifdef QUOTA_DIAG_LIMIT
          do np=1,npmax
+! Carbon
+           CALL TIMEAVE_NORMALIZE(AP_C_ave(1-Olx,1-Oly,1,1,1,np),
+     &                           DAR_timeave, nR ,bi,bj,myThid)
+           CALL TIMEAVE_NORMALIZE(HP_C_ave(1-Olx,1-Oly,1,1,1,np),
+     &                           DAR_timeave, nR ,bi,bj,myThid)
+! Nitrogen
+           CALL TIMEAVE_NORMALIZE(AP_N_ave(1-Olx,1-Oly,1,1,1,np),
+     &                           DAR_timeave, nR ,bi,bj,myThid)
+           CALL TIMEAVE_NORMALIZE(HP_N_ave(1-Olx,1-Oly,1,1,1,np),
+     &                           DAR_timeave, nR ,bi,bj,myThid)
            CALL TIMEAVE_NORMALIZE(Nlimave(1-Olx,1-Oly,1,1,1,np),
-     &                          DAR_timeave, nR ,bi,bj,myThid)
+     &                           DAR_timeave, nR ,bi,bj,myThid)
+! Phosphorus
+#ifdef PQUOTA
+           CALL TIMEAVE_NORMALIZE(AP_P_ave(1-Olx,1-Oly,1,1,1,np),
+     &                           DAR_timeave, nR ,bi,bj,myThid)
+           CALL TIMEAVE_NORMALIZE(HP_P_ave(1-Olx,1-Oly,1,1,1,np),
+     &                           DAR_timeave, nR ,bi,bj,myThid)
+           CALL TIMEAVE_NORMALIZE(Plimave(1-Olx,1-Oly,1,1,1,np),
+     &                           DAR_timeave, nR ,bi,bj,myThid)
+#endif
+! Iron
+#ifdef FQUOTA
+           CALL TIMEAVE_NORMALIZE(AP_F_ave(1-Olx,1-Oly,1,1,1,np),
+     &                           DAR_timeave, nR ,bi,bj,myThid)
+           CALL TIMEAVE_NORMALIZE(HP_F_ave(1-Olx,1-Oly,1,1,1,np),
+     &                           DAR_timeave, nR ,bi,bj,myThid)
            CALL TIMEAVE_NORMALIZE(Flimave(1-Olx,1-Oly,1,1,1,np),
-     &                          DAR_timeave, nR ,bi,bj,myThid)
+     &                           DAR_timeave, nR ,bi,bj,myThid)
+#endif
+! Light
            CALL TIMEAVE_NORMALIZE(Ilimave(1-Olx,1-Oly,1,1,1,np),
-     &                          DAR_timeave, nR ,bi,bj,myThid)
+     &                           DAR_timeave, nR ,bi,bj,myThid)
          enddo
+! Temperature
          CALL TIMEAVE_NORMALIZE(Tlimave,DAR_timeave, nR ,
      &                                           bi,bj,myThid)
 #endif
@@ -495,16 +523,53 @@ c
      &        pf,'dar_tave',0,0,'dar_PP_ave',PPave,myThid)
 #ifdef QUOTA_DIAG_LIMIT
          do np=1,npmax
-            WRITE(name,'(a,i3.3)') 'dar_Nlim_',np
-            CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
-     &           Nlimave(1-OLx,1-OLy,1,1,1,np),myThid)
-            WRITE(name,'(a,i3.3)') 'dar_Flim_',np
-            CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
-     &           Flimave(1-OLx,1-OLy,1,1,1,np),myThid)
-            WRITE(name,'(a,i3.3)') 'dar_Ilim_',np
-            CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
-     &           Ilimave(1-OLx,1-OLy,1,1,1,np),myThid)
+! Carbon
+           WRITE(name,'(a,i3.3)') 'dar_AP_C_',np
+           CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &          AP_C_ave(1-OLx,1-OLy,1,1,1,np),myThid)
+           WRITE(name,'(a,i3.3)') 'dar_HP_C_',np
+           CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &          HP_C_ave(1-OLx,1-OLy,1,1,1,np),myThid)
+! Nitrogen
+           WRITE(name,'(a,i3.3)') 'dar_Nlim_',np
+           CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &          Nlimave(1-OLx,1-OLy,1,1,1,np),myThid)
+           WRITE(name,'(a,i3.3)') 'dar_AP_N_',np
+           CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &          AP_N_ave(1-OLx,1-OLy,1,1,1,np),myThid)
+           WRITE(name,'(a,i3.3)') 'dar_HP_N_',np
+           CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &          HP_N_ave(1-OLx,1-OLy,1,1,1,np),myThid)
+! Phosphorus
+#ifdef PQUOTA
+           WRITE(name,'(a,i3.3)') 'dar_Plim_',np
+           CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &          Plimave(1-OLx,1-OLy,1,1,1,np),myThid)
+           WRITE(name,'(a,i3.3)') 'dar_AP_P_',np
+           CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &          AP_P_ave(1-OLx,1-OLy,1,1,1,np),myThid)
+           WRITE(name,'(a,i3.3)') 'dar_HP_P_',np
+           CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &          HP_P_ave(1-OLx,1-OLy,1,1,1,np),myThid)
+#endif
+! Iron
+#ifdef FQUOTA
+           WRITE(name,'(a,i3.3)') 'dar_Flim_',np
+           CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &          Flimave(1-OLx,1-OLy,1,1,1,np),myThid)
+           WRITE(name,'(a,i3.3)') 'dar_AP_F_',np
+           CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &          AP_F_ave(1-OLx,1-OLy,1,1,1,np),myThid)
+           WRITE(name,'(a,i3.3)') 'dar_HP_F_',np
+           CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &          HP_F_ave(1-OLx,1-OLy,1,1,1,np),myThid)
+#endif
+! Light
+          WRITE(name,'(a,i3.3)') 'dar_Ilim_',np
+          CALL MNC_CW_RL_W(pf,'dar_tave',0,0,name,
+     &         Ilimave(1-OLx,1-OLy,1,1,1,np),myThid)
          enddo
+! Temperature
          CALL MNC_CW_RL_W(
      &        pf,'dar_tave',0,0,'dar_Tlim_ave',Tlimave,myThid)
 #endif
@@ -737,8 +802,25 @@ C      Reset averages to zero
          CALL TIMEAVE_RESET(PARave,Nr,bi,bj,myThid)
          CALL TIMEAVE_RESET(PPave,Nr,bi,bj,myThid)
 #ifdef QUOTA_DIAG_LIMIT
-         CALL TIMEAVE_RESET(Nlimave,Nr,bi,bj,myThid)
-         CALL TIMEAVE_RESET(Flimave,Nr,bi,bj,myThid)
+! Carbon
+         CALL TIMEAVE_RESET(AP_C_ave,Nr,bi,bj,myThid)
+         CALL TIMEAVE_RESET(HP_C_ave,Nr,bi,bj,myThid)
+! Nitrogen
+         CALL TIMEAVE_RESET(AP_N_ave,Nr,bi,bj,myThid)
+         CALL TIMEAVE_RESET(HP_N_ave,Nr,bi,bj,myThid)
+         CALL TIMEAVE_RESET(Nlimave ,Nr,bi,bj,myThid)
+! Phosphorus
+#ifdef PQUOTA
+         CALL TIMEAVE_RESET(AP_P_ave,Nr,bi,bj,myThid)
+         CALL TIMEAVE_RESET(HP_P_ave,Nr,bi,bj,myThid)
+         CALL TIMEAVE_RESET(Plimave ,Nr,bi,bj,myThid)
+#endif
+! Iron
+#ifdef FQUOTA
+         CALL TIMEAVE_RESET(AP_F_ave,Nr,bi,bj,myThid)
+         CALL TIMEAVE_RESET(HP_F_ave,Nr,bi,bj,myThid)
+         CALL TIMEAVE_RESET(Flimave ,Nr,bi,bj,myThid)
+#endif
          CALL TIMEAVE_RESET(Ilimave,Nr,bi,bj,myThid)
          CALL TIMEAVE_RESET(Tlimave,Nr,bi,bj,myThid)
 #endif

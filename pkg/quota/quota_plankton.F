@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/quota/quota_plankton.F,v 1.2 2012/07/02 09:55:36 benw Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/quota/quota_plankton.F,v 1.3 2015/05/19 14:32:43 benw Exp $
 C $Name:  $
 #include "CPP_OPTIONS.h"
 #include "PTRACERS_OPTIONS.h"
@@ -36,13 +36,14 @@ c ====================================================================
          SUBROUTINE QUOTA_PLANKTON(
      I                       biomass, orgmat, nutrient,
      O                       PP,
-     I                       bioabove, biobelow,
+     I                       bioabove,
      I                       orgabove,
 #ifdef FQUOTA
      I                       freefelocal, inputFelocal,
 #endif
 #ifdef QUOTA_DIAG_LIMIT
-     O                       Nlim, Flim, Ilim, photo_Tempfunction,
+     O                       AP, HP,
+     O                       Rlim, Ilim, photo_Tempfunction,
 #endif
      I                       PARlocal, Tlocal, Slocal,
      I                       bottom, surface, dzlocal,
@@ -78,14 +79,14 @@ c orgmat   = organic matter biomass (dissolved and particulate)
          _RL quota(iomax-iChl,npmax)
          _RL PP
          _RL bioabove(iomax,npmax)
-         _RL biobelow(iomax,npmax)
          _RL orgabove(iomax-iChl,komax)
 #ifdef FQUOTA
          _RL freefelocal
          _RL inputFelocal
 #endif
 #ifdef QUOTA_DIAG_LIMIT
-         _RL Nlim(npmax),Flim(npmax),Ilim(npmax),Tlim
+         _RL Rlim(iomax-iChl-1,npmax),Ilim(npmax),Tlim
+         _RL AP(iomax,npmax),HP(iomax,npmax)
 #endif
          _RL m_ref(npmax)
          _RL PARlocal
@@ -126,7 +127,7 @@ c variables for plankton growth rate limitation
 #endif
 c plankton specific nutrient limitation terms
          _RL qreg(iomax,npmax)
-         _RL qregmax
+         _RL q_reg(iomax,npmax)
 c photosynthesis light limitation term
          _RL ilimit(npmax)
 c temperature limitation terms
@@ -136,8 +137,7 @@ c uptake of inorganic nutrients
          _RL up_inorg(iimax,npmax)
 c plankton grazing rates
          _RL grazing(iomax,npmax,npmax)
-         _RL food1,food2
-         _RL Psum,Zsum,Jsum
+         _RL food1,food2,refuge(npmax)
          _RL biomass2(npmax)
 c plankton respiration rates (carbon only)
          _RL C_resp(npmax)
@@ -145,16 +145,17 @@ c varible for mimumum phyto
          _RL biomassmin(npmax)
 c variables for remineralization of organic matter
 c
-c variables for sinking/swimming
+c variables for sinking
         _RL bvert(iomax,npmax)
         _RL pomsink(iomax-iChl)
+        _RL fSurf,fBott
 c variables for sums of plankton and organic matter
          _RL totplankton(iomax)
          _RL totorgmat(iomax-iChl)
 c ?
          _RL facpz
          _RL kpar, kinh
-         _RL tmpr,tmpz, tmpgrow, tmp1, tmp2
+         _RL tmp, tmpr,tmpz, tmpgrow, tmp1, tmp2
          integer ITEST
 c
 c *****************************************************************
@@ -168,7 +169,7 @@ c
 c qreg   --> individual nutrient status for uptake regualtion
 c            0 = quota full, 1 = quota empty
 c            linear for all elements (not needed for Si)
-c            qreg(C) = inverse of qreg for most limiting element
+c            qreg(C,jp) = inverse of qreg for most limiting element
 c
       do jp = 1,npmax
 c       set diagnostic to zero
@@ -180,7 +181,7 @@ c quota = nutrient biomass to carbon biomass ratio
           if (biomass(iCarb,jp).gt.0. _d 0) then
             quota(io,jp) = biomass(io,jp) / biomass(iCarb,jp)
           else
-            quota(io,jp) = 0. _d 0
+            quota(io,jp) = qmin(io,jp)
           endif
 c limit ranges from 1 to 0 between qmin and qmax
           if (quota(io,jp).le.qmin(io,jp)) then ! if quota empty...
@@ -201,9 +202,15 @@ c limit ranges from 1 to 0 between qmin and qmax
             qreg(io,jp) = (qmax(io,jp) - quota(io,jp))
      &                  / (qmax(io,jp) - qmin(io,jp) )
           endif
+          
 #ifdef QUOTA_DIAG_LIMIT
-          if (io.eq.iNitr) Nlim(jp) = limit
-          if (io.eq.iIron) Flim(jp) = limit
+          if (io.eq.iNitr) Rlim(iNitr-1,jp) = limit
+#ifdef PQUOTA
+          if (io.eq.iPhos) Rlim(iPhos-1,jp) = limit
+#endif
+#ifdef FQUOTA
+          if (io.eq.iIron) Rlim(iIron-1,jp) = limit
+#endif
 #endif
 #ifdef FQUOTA
           if (io.eq.iIron) then
@@ -218,18 +225,30 @@ c limit ranges from 1 to 0 between qmin and qmax
             qreg(iSili,jp)    = 0. _d 0
             biomass(iSili,jp) = 0. _d 0
             bioabove(iSili,jp)= 0. _d 0
-            biobelow(iSili,jp)= 0. _d 0
             quota(iSili,jp)   = 0. _d 0
           endif
 #endif
           qlimit(jp)     = min(qlimit(jp),limit)
           qreg(iCarb,jp) = min(qreg(iCarb,jp),1. _d 0 - qreg(io,jp))
 c
+          q_reg(io,jp) = qreg(io,jp) ** hill
         enddo ! io
+        q_reg(iCarb,jp) = qreg(iCarb,jp) ** hill
+#ifdef QUOTA_DIAG_LIMIT
+        ! use monod limitation diagnostic where types are extinct
+        if (biomass(iCarb,jp).le.0. _d 0) then
+          Rlim(iNitr-1,jp) = nutrient(iNO3)/(nutrient(iNO3)+kn(iNO3,jp))
+#ifdef PQUOTA
+          Rlim(iPhos-1,jp) = nutrient(iPO4)/(nutrient(iPO4)+kn(iPO4,jp))
+#endif
+#ifdef FQUOTA
+          Rlim(iIron-1,jp) = nutrient(iFeT)/(nutrient(iFeT)+kn(iFeT,jp))
+#endif
+        endif
+#endif
         if (autotrophy(jp).eq. 0. _d 0) then
           biomass(iChlo,jp)  = 0. _d 0 ! pure heterotroph, so chl is zero
           bioabove(iChlo,jp) = 0. _d 0
-          biobelow(iChlo,jp) = 0. _d 0
         endif
       enddo ! jp
 c
@@ -256,7 +275,7 @@ c C-specific nutrient uptake, modulated by quota fullness and temperature
             if (nutrient(ii).gt.0. _d 0) then
               up_inorg(ii,jp) = vmaxi(ii,jp)                          ! maximum uptake rate
      &                        * nutrient(ii)/(nutrient(ii)+kn(ii,jp)) ! ambient nutrients
-     &                        * qreg(io,jp)                           ! quota satiation
+     &                        * q_reg(io,jp)                          ! quota satiation
      &                        * activ_Tempfunction                    ! temperature effects
 #ifdef AMMON
 c             apply ammonium inhibition to NO3 and NO2
@@ -305,62 +324,41 @@ c ****************************************************************
 c PRE-ASSIMILATION grazing of type jpredator by type jprey
       do jpred=1,npmax ! loop predators
         if (autotrophy(jpred).lt.1. _d 0) then ! not for pure autotrophs
-          food1 = 0. _d 0
-#ifdef SWITCH3
-          food2 = 0. _d 0
-#else
-          Psum  = 0. _d 0
-          Zsum  = 0. _d 0
+          food1 = 0.0 _d 0
+          food2 = 0.0 _d 0
+          do jprey=1,npmax ! sum all the prey carbon of predator, weighted by availability (preference)
+            if (graz_pref(jpred,jprey).gt.0.0 _d 0) then
+              food1 = food1
+     &              + graz_pref(jpred,jprey)*biomass(iCarb,jprey)
+#ifdef SWITCHING
+              food2 = food2
+     &              + (graz_pref(jpred,jprey)*biomass(iCarb,jprey))**ns
 #endif
-          do jprey=1,npmax ! sum all the prey carbon of predator, weighted by preference
-            food1 = food1
-     &            + graz_pref(jpred,jprey) * biomass(iCarb,jprey)
-#ifdef SWITCH3
-            food2 = food2
-     &            + graz_pref(jpred,jprey) * biomass(iCarb,jprey)
-     &            * graz_pref(jpred,jprey) * biomass(iCarb,jprey)
-#else
-            if (pft(jprey).ne.6) then
-              Psum  = Psum
-     &              + graz_pref(jpred,jprey)
-     &              * biomass(iCarb,jprey) * biomass(iCarb,jprey)
-            else
-              Zsum  = Zsum
-     &              + graz_pref(jpred,jprey)
-     &              * biomass(iCarb,jprey) * biomass(iCarb,jprey)
             endif
-#endif
           enddo
           ! calculate grazing effort
           if (food1.gt.0. _d 0) then
-            tmp1  = graz(jpred) * activ_Tempfunction ! saturated grazing
-     &            * food1 / (food1+kg(jpred))    ! grazing effort
-     &            * (1.0 _d 0 - exp(-1. _d 0 * food1))
+            refuge(jpred) = (1.0 _d 0 - exp(Lambda * food1))
+            tmp1  = activ_Tempfunction ! saturated grazing
+     &            * food1 / (food1 + kg(jpred))      ! grazing effort
+     &            * refuge(jpred)                    ! grazing refuge
           else
             tmp1  = 0. _d 0
           endif
           do jprey=1,npmax ! loop prey carbon consumption
-#ifdef SWITCH3
             if (food1.gt.0. _d 0) then
-              tmp2=food2
-#else
-            if (food1.gt.0. _d 0 .and.(Psum+Zsum).gt.0) then
-              tmp2=food1
-              if (pft(jprey).ne.6) then
-                Jsum  = Psum
-              else
-                Jsum  = Zsum
-              endif
-#endif
               grazing(iCarb,jpred,jprey)                 ! d^-1
-#ifndef SWITCH3
-     &               = Jsum / (Psum+Zsum)
+     &          = tmp1 ! grazing effort
+!#ifdef ONEGRAZER
+!     &          * graz(jprey) ! prey dependent maximum rate
+!#else
+     &          * graz(jpred) ! predator dependent maximum rate
+!#endif
+#ifdef SWITCHING
+     &          *(graz_pref(jpred,jprey)*biomass(iCarb,jprey))**ns/food2
 #else
-     &               = graz_pref(jpred,jprey) * biomass(iCarb,jprey)
+     &          * graz_pref(jpred,jprey)*biomass(iCarb,jprey)     /food1
 #endif
-     &               * graz_pref(jpred,jprey) * biomass(iCarb,jprey)
-     &               / tmp2
-     &               * tmp1
             else
               grazing(iCarb,jpred,jprey) = 0. _d 0
             endif
@@ -392,42 +390,26 @@ c end evaluate biological process terms
 c -----------------------------------------------------------------
 c
 c -----------------------------------------------------------------
-c evaluate vertical sink and swim terms
+c evaluate vertical sink terms
 c ************************************************************
 c     biosink is +ve downwards
-c     bioswim is -ve upwards
 c     (upstream - downstream) * vertical velocity
 c     bvert is a gain term
+
+!     factors to avoid sinking into surface layer, or out of bottom
+      fSurf=float(1-surface)
+      fBott=float(1-bottom)
+!
       do io=1,iomax
+!       plankton sinking
         do jp=1,npmax
-          if (surface.eq.1) then ! surface
-            bvert(io,jp) =(-biomass(io,jp))
-     &                   *  biosink(jp) / dzlocal           ! - sinking out
-     &                   +(-biobelow(io,jp))
-     &                   *  bioswim(jp) / dzlocal           ! - swimming in (-ve)
-          elseif (bottom.eq.1) then ! bottom
-            bvert(io,jp) =  bioabove(io,jp)
-     &                   *  biosink(jp) / dzlocal           ! + sinking in
-     &                   +  biomass(io,jp)
-     &                   *  bioswim(jp) / dzlocal           ! + swimming out (-ve)
-          else ! in between
-            bvert(io,jp) = (bioabove(io,jp)-biomass(io,jp))
+            bvert(io,jp) = (fSurf*bioabove(io,jp)-fBott*biomass(io,jp))
      &                   *  biosink(jp) / dzlocal           ! + sinking in - sinking out
-     &                   + (biomass(io,jp)-biobelow(io,jp))
-     &                   *  bioswim(jp) / dzlocal           ! + swimming out (-ve) - swimming in (-ve)
-          endif
         enddo
+!       organic matter sinking
         if (io.ne.iChlo) then
-          if (surface.eq.1) then ! surface
-            pomsink(io) =(-orgmat(io,2))
-     &                  *  orgsink(2) / dzlocal
-          elseif (bottom.eq.1) then ! bottom
-            pomsink(io) =  orgabove(io,2)
-     &                  *  orgsink(2) / dzlocal
-          else ! in between
-            pomsink(io) = (orgabove(io,2)-orgmat(io,2))
-     &                  *  orgsink(2) / dzlocal
-          endif
+          pomsink(io) = (fSurf*orgabove(io,2)-fBott*orgmat(io,2))
+     &                *  orgsink(2) / dzlocal
         endif
       enddo
 c ************************************************************
@@ -457,6 +439,11 @@ c inorganic uptake
 #ifdef FQUOTA
         dbiomassdt(iIron,jp) = biomass(iCarb,jp)*up_inorg(iFeT,jp)
 #endif
+#ifdef QUOTA_DIAG_LIMIT
+        do io=1,iomax
+          AP(io,jp) = dbiomassdt(io,jp)
+        enddo
+#endif
 c
         dbiomassdt(iChlo,jp) = dchloro(jp)
 c
@@ -467,16 +454,25 @@ c
 c
 c grazing uptake
         do io=1,iomax
+#ifdef QUOTA_DIAG_LIMIT
+          HP(io,jp) = 0.0 _d 0
+#endif
           if (io.ne.iSili.and.io.ne.iChlo) then ! don't take up silicate or chlorophyll
 c           Grazing uptake of everything but silicate and chlorophyll
             do jprey=1,npmax
               dbiomassdt(io,jp) = dbiomassdt(io,jp)
      &                          + biomass(iCarb,jp)   ! carbon biomass of predator
      &                          * grazing(io,jp,jprey)! * carbon specific rate
-     &                          * assim_graz(jp,jprey) * qreg(io,jp)
+     &                          * assim_graz(jp,jprey) * q_reg(io,jp)
+#ifdef QUOTA_DIAG_LIMIT
+              HP(io,jp)         = HP(io,jp)
+     &                          + biomass(iCarb,jp)   ! carbon biomass of predator
+     &                          * grazing(io,jp,jprey)! * carbon specific rate
+     &                          * assim_graz(jp,jprey) * q_reg(io,jp)
+#endif
             enddo ! jprey
 c           Exudation of elemental reservoirs
-            if (io.eq.iCarb.or.io.eq.iNitr.or.io.eq.iPhos) then
+            if (io.ne.iChl.or.io.ne.iSili) then
               dbiomassdt(io,jp) = dbiomassdt(io,jp)
      &                          - kexc(io,jp) * biomass(io,jp)
             endif
@@ -484,10 +480,12 @@ c           Exudation of elemental reservoirs
 !
 ! calculate temperature adjusted mortality rates
           m_ref(jp) = kmort(jp) !* activ_Tempfunction
+#ifdef ALLOWPFT
           ! Z mortality is t dependent - a la Moore 2002
           if (pft(jp).eq.6) then
             m_ref(jp) = kmort(jp) * activ_Tempfunction
           endif
+#endif
 !
 ! Loss and sinking terms - include silicate and chlorophyll
             dbiomassdt(io,jp) = dbiomassdt(io,jp)
@@ -590,19 +588,19 @@ c organic matter
           dorgmatdt(io,2) = dorgmatdt(io,2)
      &                    + biomass(io,jp)
      &                    * m_ref(jp)
-     &                    * (1. _d 0 - beta_mort(io,jp))
+     &                    *(1. _d 0-beta_mort(io,jp))
           do jprey=1,npmax
 !           unassimilated grazing
             dorgmatdt(io,1) = dorgmatdt(io,1)
      &                      + biomass(iCarb,jp)
      &                      * grazing(io,jp,jprey)
-     &                      * (1. _d 0-assim_graz(jp,jprey)*qreg(io,jp))
+     &                      *(1. _d 0-assim_graz(jp,jprey)*q_reg(io,jp))
      &                      * beta_graz(io,jprey)
             dorgmatdt(io,2) = dorgmatdt(io,2)
      &                      + biomass(iCarb,jp)
      &                      * grazing(io,jp,jprey)
-     &                      * (1. _d 0-assim_graz(jp,jprey)*qreg(io,jp))
-     &                      * (1. _d 0 - beta_graz(io,jprey))
+     &                      *(1. _d 0-assim_graz(jp,jprey)*q_reg(io,jp))
+     &                      *(1. _d 0-beta_graz(io,jprey))
           enddo ! jprey
         enddo ! jp
 !       remineralisation of organic matter

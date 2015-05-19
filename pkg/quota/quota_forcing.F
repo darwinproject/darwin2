@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/quota/quota_forcing.F,v 1.3 2013/12/27 17:29:00 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/quota/quota_forcing.F,v 1.4 2015/05/19 14:32:43 benw Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -51,9 +51,8 @@ c iron partitioning
       _RL freefu
       _RL inputFel
 #endif
-c upstream arrays for sinking/swimming
+c upstream arrays for sinking
       _RL bioabove(iomax,npmax)
-      _RL biobelow(iomax,npmax)
       _RL orgabove(iomax-iChl,komax)
 c some working variables
       _RL sumpy
@@ -71,10 +70,11 @@ COJ for diagnostics
 #endif
 #ifdef ALLOW_TIMEAVE
 #ifdef QUOTA_DIAG_LIMIT
-      _RL Nlim(npmax)
-      _RL Flim(npmax)
+      _RL Rlim(iomax-iChl-1,npmax)
       _RL Ilim(npmax)
       _RL Tlim
+      _RL AP(iomax,npmax)
+      _RL HP(iomax,npmax)
 #endif
 #endif
 c
@@ -94,11 +94,13 @@ c local tendencies
 
       INTEGER bottom
       INTEGER surface
-      INTEGER i,j,k,it,itmp,ktmp
-      INTEGER ii,io,jp,ko, jp2, jpsave
+      INTEGER i,j,k,it,ktmp
+      INTEGER ii,io,jp,ko
       INTEGER place
       INTEGER debug
+#ifdef ALLOW_DIAGNOSTICS
       CHARACTER*8 diagname
+#endif
 
 c
 c--------------------------------------------------
@@ -209,20 +211,12 @@ c *********************************************************************
 c Unicellular biomass (including chlorophyll biomass - for non-grazers)
             do io=1,iomax
               do jp=1,npmax
-                if (io.ne.iChlo.or.pft(jp).ne.6) then ! no grazer chlorophyll
+                if (io.ne.iChlo.or.autotrophy(jp).gt.0. _d 0) then ! no grazer chlorophyll
                   place = place + 1
                   biomass(io,jp)  = max(Ptr(i,j,k,bi,bj,place),0. _d 0)
 ! biomasses above current layer for sinking
                   if (k.eq.1) then
                     bioabove(io,jp)=0. _d 0
-                  endif
-! biomasses below current layer for swimming
-                  if (k.eq.Nr) then
-                   biobelow(io,jp)=0. _d 0
-                  elseif (hFacC(i,j,k+1,bi,bj).eq.0. _d 0) then
-                   biobelow(io,jp)=0. _d 0
-                  else
-                   biobelow(io,jp)=max(Ptr(i,j,k+1,bi,bj,place),0. _d 0)
                   endif
 ! initialise biomass rate of change
                   dbiomass(io,jp) = 0. _d 0
@@ -317,14 +311,15 @@ c ---------------------------------------------------------------------
             CALL QUOTA_PLANKTON(
      I                       biomass, orgmat, nutrient,
      O                       PP,
-     I                       bioabove, biobelow,
+     I                       bioabove,
      I                       orgabove,
 #ifdef FQUOTA
      I                       freefu, inputFel,
 #endif
 #ifdef ALLOW_TIMEAVE
 #ifdef QUOTA_DIAG_LIMIT
-     O                       Nlim, Flim, Ilim, Tlim,
+     O                       AP, HP,
+     O                       Rlim, Ilim, Tlim,
 #endif
 #endif
      I                       PARlocal, Tlocal, Slocal,
@@ -334,6 +329,47 @@ c ---------------------------------------------------------------------
      I                       runtim,
      I                       MyThid)
 c ---------------------------------------------------------------------
+c
+#ifdef RELAX_NUTS
+            if (darwin_relaxscale.gt.0. _d 0) then
+!
+             IF ( darwin_NO3_relaxFile .NE. ' '  ) THEN
+              tmp=(Ptr(i,j,k,bi,bj,iNO3 )-no3_obs(i,j,k,bi,bj))
+              if (tmp.lt.0. _d 0) then
+                dnutrient(iNO3)=dnutrient(iNO3)
+     &                      -(tmp/darwin_relaxscale)
+              endif
+             ENDIF
+#ifdef PQUOTA
+             IF ( darwin_PO4_relaxFile .NE. ' '  ) THEN
+              tmp=(Ptr(i,j,k,bi,bj,iPO4 )-po4_obs(i,j,k,bi,bj))
+              if (tmp.lt.0. _d 0) then
+                dnutrient(iPO4)=dnutrient(iPO4)
+     &                      -(tmp/darwin_relaxscale)
+              endif
+             ENDIF
+#endif
+#ifdef FQOUTA
+             IF ( darwin_Fet_relaxFile .NE. ' '  ) THEN
+              tmp=(Ptr(i,j,k,bi,bj,iFeT )-fet_obs(i,j,k,bi,bj))
+              if (tmp.lt.0. _d 0) then
+                dnutrient(iFeT)=dnutrient(iFeT)
+     &                      -(tmp/darwin_relaxscale)
+              endif
+             ENDIF
+#endif
+#ifdef SQUOTA
+             IF ( darwin_Si_relaxFile .NE. ' '  ) THEN
+              tmp=( Ptr(i,j,k,bi,bj,iSi  )-si_obs(i,j,k,bi,bj))
+              if (tmp.lt.0. _d 0) then
+                dnutrient(iSi)=dnutrient(iSi)
+     &                    -(tmp/darwin_relaxscale)
+              endif
+             ENDIF
+#endif
+            endif
+#endif
+c
 #ifdef FQUOTA
 #ifdef IRON_SED_SOURCE
 c only above minimum depth (continental shelf)
@@ -383,13 +419,10 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccc
 c Biomass
             do io=1,iomax
               do jp=1,npmax
-                if (io.ne.iChlo.or.pft(jp).ne.6) then ! if not a grazer
+                if (io.ne.iChlo.or.autotrophy(jp).gt.0. _d 0) then ! if not a grazer
                   place = place + 1
                   Ptr(i,j,k,bi,bj,place) = Ptr(i,j,k,bi,bj,place)
      &                                   + dtplankton*dbiomass(io,jp)
-                  if (pft(jp).eq.6.and.io.eq.iChlo) then
-                    Ptr(i,j,k,bi,bj,place) = 0. _d 0
-                  endif
                 endif
               enddo ! jp
             enddo ! io
@@ -419,10 +452,37 @@ COJ for diagnostics
 c
 #ifdef QUOTA_DIAG_LIMIT
             do jp=1,npmax
+! carbon
+              AP_C_ave(i,j,k,bi,bj,jp) = AP_C_ave(i,j,k,bi,bj,jp)
+     &                                 + AP(iCarb,jp) * dtplankton
+              HP_C_ave(i,j,k,bi,bj,jp) = HP_C_ave(i,j,k,bi,bj,jp)
+     &                                 + HP(iCarb,jp) * dtplankton
+! nitrogen
+              AP_N_ave(i,j,k,bi,bj,jp) = AP_N_ave(i,j,k,bi,bj,jp)
+     &                                 + AP(iNitr,jp) * dtplankton
+              HP_N_ave(i,j,k,bi,bj,jp) = HP_N_ave(i,j,k,bi,bj,jp)
+     &                                 + HP(iNitr,jp) * dtplankton
               Nlimave(i,j,k,bi,bj,jp) = Nlimave(i,j,k,bi,bj,jp)
-     &                                + Nlim(jp) * dtplankton
+     &                                + Rlim(iNitr-1,jp) * dtplankton
+! phosphorus
+#ifdef PQUOTA
+              AP_P_ave(i,j,k,bi,bj,jp) = AP_P_ave(i,j,k,bi,bj,jp)
+     &                                 + AP(iPhos,jp) * dtplankton
+              HP_P_ave(i,j,k,bi,bj,jp) = HP_P_ave(i,j,k,bi,bj,jp)
+     &                                 + HP(iPhos,jp) * dtplankton
+              Plimave(i,j,k,bi,bj,jp) = Plimave(i,j,k,bi,bj,jp)
+     &                                + Rlim(iPhos-1,jp) * dtplankton
+#endif
+! iron
+#ifdef FQUOTA
+              AP_F_ave(i,j,k,bi,bj,jp) = AP_F_ave(i,j,k,bi,bj,jp)
+     &                                 + AP(iIron,jp) * dtplankton
+              HP_F_ave(i,j,k,bi,bj,jp) = HP_F_ave(i,j,k,bi,bj,jp)
+     &                                 + HP(iIron,jp) * dtplankton
               Flimave(i,j,k,bi,bj,jp) = Flimave(i,j,k,bi,bj,jp)
-     &                                + Flim(jp) * dtplankton
+     &                                + Rlim(iIron-1,jp) * dtplankton
+#endif
+! light
               Ilimave(i,j,k,bi,bj,jp) = Ilimave(i,j,k,bi,bj,jp)
      &                                + Ilim(jp) * dtplankton
             enddo

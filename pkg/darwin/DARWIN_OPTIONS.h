@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/DARWIN_OPTIONS.h,v 1.7 2014/05/01 16:19:32 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/darwin/DARWIN_OPTIONS.h,v 1.8 2015/05/19 14:30:15 benw Exp $
 C $Name:  $
 
 #ifndef DARWIN_OPTIONS_H
@@ -118,7 +118,8 @@ C ======================================================================
 C options for quota package
 C ======================================================================
 #ifdef ALLOW_QUOTA
-
+c PFT or pure trait-based model
+#define ALLOWPFT
 c light & dynamic chlorophyll
 #define  GEIDER
 #define  DYNCHL
@@ -130,6 +131,13 @@ cbenw - turn on quota model
 #undef PQUOTA
 #undef SQUOTA
 #define FQUOTA
+cbenw - mixotrophy
+#define DIFFLIMIT
+#define SWITCHING
+#define ONEGRAZER
+ 
+#define IRON_SED_SOURCE
+#define IRON_SED_SOURCE_VARIABLE
 
 #define QUOTA_DIAG_LIMIT
 #undef  UNCERTAINTY

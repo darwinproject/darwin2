@@ -86,10 +86,10 @@ c write out initial plankton and organic matter characteristics
          open(IniUnit2,file='plankton_ini_char_nohead.dat',
      &        status='unknown')
 c-----------------------------------------------
-         char_str='         pft     bio_vol     qcarbon'
-     &          //'     biosink     bioswim   mortality'
+         char_str='     bio_vol    diameter     qcarbon'
+     &          //'     biosink   mortality'
      &          //' respiration  autotrophy      pp_opt'
-         char_n=108
+         char_n=96
 c loop elements
          do ii=1,iimax
            WRITE(msgBuf,'(I1)'),ii
@@ -122,14 +122,20 @@ c
          char_str=char_str(1:char_n)//'    alphachl'
      &                              //'     maxgraz      k_graz'
          char_n=char_n+36
+#ifdef ALLOWPFT
+           char_str=char_str(1:char_n)//'         PFT'
+           char_n=char_n+12
+#endif
          write(IniUnit1,'(A)'),char_str(1:char_n)
 c-----------------------------------------------
          do jp = 1, npmax
-           write(msgBuf,120)float(pft(jp)),biovol(jp),qcarbon(jp),
-     &       biosink(jp)*pday,bioswim(jp)*pday,kmort(jp)*pday,
+           write(msgBuf,120)biovol(jp),
+     &       2. _d 0 * (0.2387 _d 0 * biovol(jp)) ** 0.3333 _d 0,
+     &       qcarbon(jp),
+     &       biosink(jp)*pday,kmort(jp)*pday,
      &       respiration(jp)*pday,autotrophy(jp),pp_opt(jp)
            char_str=msgBuf
-           char_n=108
+           char_n=96
 c loop elements
            do ii=1,iimax
              write(msgBuf,111)vmaxi(ii,jp)*pday
@@ -161,6 +167,11 @@ c loop quotas
      &                    graz(jp)*pday,kg(jp)
            char_str=char_str(1:char_n)//msgBuf
            char_n=char_n+36
+#ifdef ALLOWPFT
+           write(msgBuf,111),float(pft(jp))
+           char_str=char_str(1:char_n)//msgBuf
+           char_n=char_n+12
+#endif
 c-----------------------------------------------
            write(IniUnit1,'(A)')char_str(1:char_n)
            write(IniUnit2,'(A)')char_str(1:char_n)
