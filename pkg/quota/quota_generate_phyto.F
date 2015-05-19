@@ -79,13 +79,15 @@ c..........................................................
 c Generate plankton volumes and stochastic parameters
 c..........................................................
 #ifdef ALLOWPFT
-        factor = 2. _d 0
+        ESD1   = 0.5 _d 0 ! minimum plankton ESD
+        ni     = 3 ! ni size classes within diameter gaps of * 10
+        factor = 1000. _d 0 ** (1. _d 0 / float(ni))
         tau1=1.0 _d 0
         tau2=1.0 _d 0
 c       Allocate Phytoplankton Taxa
 c Prochloro
         do jp=1,2
-          biovol(jp)    = 0.125 _d 0 * factor**(jp-1)
+          biovol(jp)    = pi*ESD1**3/6. _d 0 *factor**(jp-1)
           autotrophy(jp)= 1.00 _d 0
           use_NO3(jp)   = 1
           use_Si(jp)    = 0
@@ -93,8 +95,8 @@ c Prochloro
           pft(jp)       = 1
         enddo
 c Synnecho
-        do jp=3,5
-          biovol(jp)    = 0.50 _d 0 * factor**(jp-3)
+        do jp=3,4
+          biovol(jp)    = pi*ESD1**3/6. _d 0 *factor**(jp-2)
           autotrophy(jp)= 1.00 _d 0
           use_NO3(jp)   = 1
           use_Si(jp)    = 0
@@ -102,8 +104,8 @@ c Synnecho
           pft(jp)       = 2
         enddo
 c Small Euk
-        do jp=6,9
-          biovol(jp)    = 4.00 _d 0 * factor**(jp-6)
+        do jp=5,9
+          biovol(jp)    = pi*ESD1**3/6. _d 0 *factor**(jp-3)
           autotrophy(jp)= 1.0 _d 0
           use_NO3(jp)   = 1
           use_Si(jp)    = 0
@@ -112,7 +114,7 @@ c Small Euk
         enddo
 c Diatoms
         do jp=10,15
-          biovol(jp)    = 128.0 _d 0 * factor**(jp-10)
+          biovol(jp)    = pi*ESD1**3/6. _d 0 *factor**(jp-7)
           autotrophy(jp)= 1.0 _d 0
           use_NO3(jp)   = 1
           use_Si(jp)    = 0
@@ -121,7 +123,7 @@ c Diatoms
         enddo
 c Specialist grazers
         do jp=16,16
-          biovol(jp)    = 8.0 _d 0 * factor**(jp-16)
+          biovol(jp)    = pi*ESD1**3/6. _d 0 *factor**(jp-10)
           autotrophy(jp)= 0.00 _d 0
           use_NO3(jp)   = 0
           use_Si(jp)    = 0
@@ -207,23 +209,16 @@ c MAXIMUM GRAZING RATE + WIDTH OF GRAZING KERNEL
           call invnormal(a,p,
      &         log10(a_graz),log10(ae_graz)*error)
           call invnormal(b,p,b_graz,be_graz*error)
-!#ifdef ONEGRAZER
-!! if only one grazer, set max grazing by 1 * prey size
-!! only P are grazed
-!          graz(jp) = 10. _d 0**a * (biovol(jp)*pp_opt(jp)) ** b
-!     &             * autotrophy(jp) ** tau2
-!! temp fix to remove size dep.
-!          graz(jp) = 10. _d 0**a * (biovol(npmax)) ** b
-!     &             * autotrophy(jp) ** tau2
-!! temp fix to remove size dep.
-!          pp_sig(jp) = 1. _d 10
-!#else
+#ifdef ONEGRAZER
+! if only one grazer, set max grazing by pp_opt(jp) * prey size
+          graz(jp) = 10. _d 0**a * (biovol(jp)*pp_opt(jp)) ** b
+#else
 ! set grazing rate by grazer size, non-grazers to zero
           graz(jp) = 10. _d 0**a *  biovol(jp)             ** b
      &             * heterotrophy(jp) ** tau2
-          pp_sig(jp)      = 2. _d 0
-!#endif
-c FRACTION GRAZED TAND MORTALITY TO DOM
+#endif
+          pp_sig(jp) = 2. _d 0
+c FRACTION GRAZED AND MORTALITY TO DOM
           do io=1,iomax-iChl
 #ifdef ALLOWPFT
             if (pft(jp).lt.3)  beta_graz(io,jp)=0.8
@@ -337,24 +332,13 @@ c MAXIMUM QUOTA
           qmin(iSili,jp) = qmin(iSili,jp) * float(use_Si(jp))
           qmax(iSili,jp) = qmax(iSili,jp) * float(use_Si(jp))
 #endif
-#ifdef ALLOWPFT
-c Zooplankton have approximately Redfieldian N:C ratio
-          if (pft(jp).eq.6) then
-            qmin(iNitr,jp) = 0.0755 _d 0
-            qmax(iNitr,jp) = 0.1510 _d 0
-          endif
-#endif
 c PREFERENCE FUNCTION
           ! assign grazing preference according to predator/prey radius ratio
           do jp2=1,npmax ! jp2 denotes prey
-#ifdef ALLOWPFT
-            if (heterotrophy(jp).gt.0. _d 0.and.pft(jp2).ne.6) then
-#else
             if (heterotrophy(jp).gt.0. _d 0) then
-#endif
               prd_pry = biovol(jp) / biovol(jp2)
               graz_pref(jp,jp2) =
-#ifdef SWITCHING
+#ifdef ONEGRAZER
      &        1.0 _d 0
 #else
      &        exp(-log(prd_pry/pp_opt(jp))**2 / (2*pp_sig(jp)**2))
