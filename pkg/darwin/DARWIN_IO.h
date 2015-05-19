@@ -141,7 +141,15 @@ c    Nlim,Flim,etc- Quota model average limitation factors
      &      PPave, Nfixave, Zoograzave,
      &      PARave, Chlave, Denitave, 
 #ifdef QUOTA_DIAG_LIMIT 
-     &      Nlimave,Flimave,Ilimave,Tlimave,
+     &      Tlimave,
+     &      Ilimave,AP_C_ave,HP_C_ave,
+     &      Nlimave,AP_N_ave,HP_N_ave,
+#ifdef PQUOTA
+     &      Plimave,AP_P_ave,HP_P_ave,
+#endif
+#ifdef FQUOTA
+     &      Flimave,AP_F_ave,HP_F_ave,
+#endif
 #endif
 c ANNA_TAVE
 #ifdef WAVES_DIAG_PCHL
@@ -179,11 +187,30 @@ c
        _RL  PARave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy)
        _RL  Chlave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy)
        _RL  Denitave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy)
-#ifdef QUOTA_DIAG_LIMIT 
-       _RL  Nlimave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy, npmax)
-       _RL  Flimave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy, npmax)
-       _RL  Ilimave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy, npmax)
-       _RL  Tlimave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx, nSy)
+#ifdef QUOTA_DIAG_LIMIT
+c Carbon
+       _RL  AP_C_ave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,npmax)
+       _RL  HP_C_ave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,npmax)
+c Nitrogen
+       _RL  AP_N_ave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,npmax)
+       _RL  HP_N_ave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,npmax)
+       _RL  Nlimave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,npmax)
+c Phosphorus
+#ifdef PQUOTA
+       _RL  AP_P_ave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,npmax)
+       _RL  HP_P_ave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,npmax)
+       _RL  Plimave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,npmax)
+#endif
+c Iron
+#ifdef FQUOTA
+       _RL  AP_F_ave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,npmax)
+       _RL  HP_F_ave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,npmax)
+       _RL  Flimave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,npmax)
+#endif
+c Light
+       _RL  Ilimave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy,npmax)
+c Temperature
+       _RL  Tlimave(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nR,nSx,nSy)
 #endif
 c ANNA_TAVE
 #ifdef WAVES_DIAG_PCHL

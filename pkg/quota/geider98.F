@@ -47,7 +47,6 @@ c
        _RL felimit(npmax)
        _RL alpha_fe
        _RL up_inorg(iimax,npmax)
-       _RL N_uptake(npmax)
        _RL photo_Tempfunction
 c
        _RL dchldt(npmax)
@@ -55,14 +54,12 @@ c
        _RL E0
        _RL C_biomass
        _RL chl
-       _RL VCref
 c
        _RL Chl2C
        _RL PCmax
        _RL PCPhot(npmax)
        _RL rhochl
        _RL chlsynth(npmax)
-       _RL VCmax
        _RL VCN
        _RL PP
 #ifdef QUOTA_DIAG_LIMIT
@@ -105,12 +102,7 @@ c
 c
              if (PCmax.gt.0. _d 0.and.alpha_fe.gt.0. _d 0) then
                PCPhot(jp) = PCmax                      ! s^-1
-     &          *(1. _d 0-exp(-alpha_fe*Chl2C*E0/PCmax))
-c
-#ifdef QUOTA_DIAG_LIMIT
-               Ilim(jp)=1. _d 0
-     &                 -exp(-alphachl(jp)*Chl2C*E0/vmaxi(iDIC,jp))
-#endif
+     &          *(1. _d 0 - exp(-alpha_fe*Chl2C*E0/PCmax))
 c
                rhochl = Chl2Nmax * PCPhot(jp)          ! mg chl (mmol N)^-1
      &                /(alphachl(jp)*Chl2C*E0)
@@ -134,6 +126,11 @@ c-----------------------------------------------------------------
            dchldt(jp)        = 0. _d 0       ! mg chl m^-3 s^-1
 c-----------------------------------------------------------------
          endif
+#ifdef QUOTA_DIAG_LIMIT
+         Ilim(jp) = 1. _d 0 - exp(-alphachl(jp)*1.59*E0/vmaxi(iDIC,jp))
+#endif
+!      print*,"vmax",PP,PCPhot(jp),biomass(iCarb,jp),
+!     &       E0,vmaxi(iDIC,jp),chl,C_biomass
        enddo
 
        RETURN

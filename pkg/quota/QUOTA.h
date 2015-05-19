@@ -33,7 +33,10 @@ c graz_pref(npmax,npmax)	- size ratio based lognormal grazing preference matrix
 c graz(npmax)			- maximum grazing rate of predator
 c kg(npmax)             	- 1/2 saturation prey biomass for grazing
 c hollingtype                   - exponent of Holling grazing function
+c ns                            - exponent of prey switching function
 c ass_eff                       - maximum assimilation efficiency
+c hill                          - assimilation shape parameter
+c Lambda                        - grazing refuge parameter
 c assim_graz(npmax,npmax) 	- assimilation efficiency of grazing
 c beta_graz(iomax-iChl,npmax)   - fraction of sloppy feeding to DOM
 c kexc(iimax,npmax)		- biomass specific excretion rate
@@ -42,7 +45,7 @@ c beta_mort(iomax-iChl,npmax)   - fraction of nortality to DOM
 c respiration(npmax)            - respiration rate
 c
 c biosink(npmax)		- plankton sinking rate
-c bioswim(npmax)                - plankton swimming rate
+c motility(npmax)               - ability to avoid sinking
 c orgsink(iimax,komax)          - organic matter sinking rate
 c remin(iomax-iChl,komax)       - organic matter remineralisation rate
 c amm2nrite                     - ammonium to nitrite oxidation rate
@@ -53,7 +56,7 @@ c
 c use_NO3(npmax)                - nitrate use on/off
 c use_Si(npmax)                 - silicate use on/off
 c autotrophy(npmax)             - degree of autotrophy (1 = pure auto, 0 = pure hetero)
-c pft(npmax)			- phytoplankton functional type
+c pft(npmax)                    - phytoplankton functional type
 c 1=prochlorococcus, 2=synechococcus, 3=small eukaryotes,
 c 4=diatoms, 5=dinoflagellates, 6=generic grazers
 c
@@ -66,11 +69,12 @@ c
      &          alphachl,chl2nmax,
      &          pp_opt,pp_sig,graz_pref,
      &          graz,kg,
-     &          ass_eff,assim_graz,beta_graz,
+     &          ass_eff,hill,Lambda,
+     &          assim_graz,beta_graz,
      &          kexc,
      &          kmort,beta_mort,
      &          respiration,
-     &          biosink,bioswim,orgsink,
+     &          biosink,orgsink,motility,
      &          remin,
      &          autotrophy,
      &          pft,
@@ -91,7 +95,7 @@ c
 #endif
      &          nsource,ngroups,
      &          use_NO3,use_Si,
-     &          hollingtype
+     &          hollingtype,ns
 
          _RL vmaxi(iimax,npmax)
          _RL kn(iimax,npmax)
@@ -106,7 +110,7 @@ c
          _RL graz_pref(npmax,npmax)
          _RL graz(npmax)
          _RL kg(npmax)
-         _RL ass_eff
+         _RL ass_eff,hill,Lambda
          _RL assim_graz(npmax,npmax)
          _RL beta_graz(iomax-iChl,npmax)
          _RL kexc(iimax,npmax)
@@ -114,7 +118,7 @@ c
          _RL beta_mort(iomax-iChl,npmax)
          _RL respiration(npmax)
          _RL biosink(npmax)
-         _RL bioswim(npmax)
+         _RL motility(npmax)
          _RL orgsink(komax)
          _RL remin(iomax-iChl,komax)
 c
@@ -141,6 +145,7 @@ c
          _RL scav_rat, scav_inter, scav_exp
 #endif
          INTEGER hollingtype
+         INTEGER ns
          INTEGER pft(npmax)
          INTEGER nsource(npmax)
          INTEGER ngroups
@@ -162,7 +167,6 @@ c        Note, while most errors are relative (times-divide), some are absolute 
      &          a_prdpry,    b_prdpry,
      &          a_kexc,      b_kexc,
      &          a_biosink,   b_biosink,
-     &          a_bioswim,   b_bioswim,
      &          a_mort,      b_mort,
      &          a_beta_graz, b_beta_graz,
      &          a_beta_mort, b_beta_mort,
@@ -178,7 +182,6 @@ c        Note, while most errors are relative (times-divide), some are absolute 
      &          ae_prdpry,   be_prdpry,
      &          ae_kexc,     be_kexc,
      &          ae_biosink,  be_biosink,
-     &          ae_bioswim,  be_bioswim,
      &          ae_mort,     be_mort,
      &          ae_beta_graz,be_beta_graz,
      &          ae_beta_mort,be_beta_mort
@@ -196,7 +199,6 @@ c        Note, while most errors are relative (times-divide), some are absolute 
          _RL a_prdpry       ,b_prdpry
          _RL a_kexc(iomax)  ,b_kexc(iomax)
          _RL a_biosink      ,b_biosink
-         _RL a_bioswim      ,b_bioswim
          _RL a_mort         ,b_mort
          _RL a_beta_graz(iomax-iChl)
          _RL b_beta_graz(iomax-iChl)
@@ -214,7 +216,6 @@ c        Note, while most errors are relative (times-divide), some are absolute 
          _RL ae_prdpry      ,be_prdpry
          _RL ae_kexc(iomax) ,be_kexc(iomax)
          _RL ae_biosink     ,be_biosink
-         _RL ae_bioswim     ,be_bioswim
          _RL ae_mort        ,be_mort
          _RL ae_beta_graz(iomax-iChl)
          _RL be_beta_graz(iomax-iChl)

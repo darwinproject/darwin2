@@ -118,7 +118,8 @@ C ======================================================================
 C options for quota package
 C ======================================================================
 #ifdef ALLOW_QUOTA
-
+c PFT or pure trait-based model
+#define ALLOWPFT
 c light & dynamic chlorophyll
 #define  GEIDER
 #define  DYNCHL
@@ -130,6 +131,13 @@ cbenw - turn on quota model
 #undef PQUOTA
 #undef SQUOTA
 #define FQUOTA
+cbenw - mixotrophy
+#define DIFFLIMIT
+#define SWITCHING
+#define ONEGRAZER
+ 
+#define IRON_SED_SOURCE
+#define IRON_SED_SOURCE_VARIABLE
 
 #define QUOTA_DIAG_LIMIT
 #undef  UNCERTAINTY
