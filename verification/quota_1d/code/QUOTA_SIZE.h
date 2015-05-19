@@ -16,7 +16,6 @@ c npmax = no of "functional groups" of plankton
 c komax = no of "functional groups" of organic matter
 c
          INTEGER iimax ! inorganic elements
-         INTEGER nsize ! number of size classes
          INTEGER npmax ! total plankton types
          INTEGER iPhoto ! number of plankton that use chlorophyll
          INTEGER iomax ! biomass elements (includes C, Si & Chl)
@@ -24,7 +23,7 @@ c
          INTEGER iChl  ! switch for dynamic chlorophyll (1 or 0)
          INTEGER komax ! organic matter types (must be 2)
          PARAMETER(iimax=5,iomax=4,komax=2) ! elements, biomasses and organics
-         PARAMETER(npmax=16,iPhoto=15)                ! size and taxonomic classes
+         PARAMETER(npmax=16,iPhoto=15)      ! npmax classes, iPhoto with chl
          PARAMETER(iSil=0,iChl=1)           ! flags
 c
 c inutrient       :: index of first nutrient in Ptracer
@@ -43,10 +42,10 @@ c
       INTEGER iPO4
       INTEGER iFeT
       INTEGER iSi
-      INTEGER iCarb,iNitr,iPhos,iSili,iIron,iChlo 
+      INTEGER iCarb,iNitr,iPhos,iSili,iIron,iChlo
 c
-      PARAMETER (inutrient  = 1 )
-      PARAMETER (ibiomass   = inutrient + iimax )
+      PARAMETER (inutrient=1 )
+      PARAMETER (ibiomass =inutrient + iimax )
       PARAMETER (iorgmat  =ibiomass+npmax*iomax-(npmax-iPhoto)*iChl)
       PARAMETER (nDarwin  =iorgmat   + 2 * (iomax-iChl) - iSil - 1 )
 c
