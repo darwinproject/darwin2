@@ -1,9 +1,10 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.79 2015/05/19 16:11:20 benw Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.80 2015/06/15 15:13:14 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
     
+ctrb_darwin2_ckpt65m_20150615
 o new structure getting rid of some redundancies and adding possibility for no PFTs
 + CHANGES THAT DO NOT MODIFY OUTPUT
 	- new flux diagnostics AP and HP (autotrophy and heterotrophy) added
