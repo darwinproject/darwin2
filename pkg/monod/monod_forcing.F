@@ -422,9 +422,11 @@ C        always fill; this will be the same during PARavPeriod, but this
 C        way it won't blow up for weird diagnostics periods.
 C        we fill before updating, so the diag is the one used in this time
 C        step
-         CALL DIAGNOSTICS_FILL(
+         IF ( useDiagnostics ) THEN
+          CALL DIAGNOSTICS_FILL(
      &         PARday(1-Olx,1-Oly,1,bi,bj,PARiprev),'PARday  ',
      &         0,Nr,2,bi,bj,myThid )
+         ENDIF
 #endif
 #endif /* ALLOW_PAR_DAY */
 
