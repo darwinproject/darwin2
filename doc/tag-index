@@ -4,6 +4,9 @@ $Name$
     Notes on tags used in darwin
     ============================
     
+ctrb_darwin2_ckpt65o_20150914
+o bug fix for useDIAGNOSTICS=.FALSE.
+
 ctrb_darwin2_ckpt65n_20150729
 
 ctrb_darwin2_ckpt65m_20150615
