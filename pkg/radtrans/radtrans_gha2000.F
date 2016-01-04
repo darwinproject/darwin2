@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/radtrans/radtrans_gha2000.F,v 1.1 2011/04/13 18:56:26 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/radtrans/radtrans_gha2000.F,v 1.2 2016/01/04 17:01:29 jahn Exp $
 C $Name:  $
 
 #include "RADTRANS_OPTIONS.h"
@@ -48,8 +48,8 @@ C     !USES: ===========================================================
 
 C     !INPUT PARAMETERS: ===============================================
       INTEGER myThid
-      _RL radeg
-      INTEGER iyr, imon, day
+      _RL radeg, day
+      INTEGER iyr, imon
 
 C     !OUTPUT PARAMETERS: ==============================================
       _RL gha
