@@ -610,10 +610,11 @@ C cos(solz) is average over daylight period
      O                       solz)
 
 #else /* not DAR_RADTRANS_USE_MODEL_CALENDAR */
-C use calendar date for full solar zenith angle computation
-C oj: average light effective at noon?
-         solz = 0.0 _d 0
-         isec = 12*3600       
+C Use calendar date for full solar zenith angle computation.
+C Use local noon zenith angle to avoid problems with zero cosine and
+C non-zero light.  One should really use a zenith angle compatible with
+C the light fields, in particular averaged over the same time period.
+         isec = MOD(36.*3600. - 240.*XC(i,j,bi,bj), 86400.)
          call radtrans_sfcsolz(rad,iyr,imon,iday,isec,
      I                         XC(i,j,bi,bj),YC(i,j,bi,bj),
      O                         solz)
