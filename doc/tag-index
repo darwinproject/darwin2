@@ -3,7 +3,10 @@ $Name$
 
     Notes on tags used in darwin
     ============================
-    
+
+o fix bug in radtrans sun model that broke zenith angle calculations;
+  not relevant if defined DAR_RADTRANS_USE_MODEL_CALENDAR
+
 ctrb_darwin2_ckpt65r_20151221
 
 ctrb_darwin2_ckpt65q_20151118

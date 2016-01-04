@@ -48,8 +48,8 @@ C     !USES: ===========================================================
 
 C     !INPUT PARAMETERS: ===============================================
       INTEGER myThid
-      _RL radeg
-      INTEGER iyr, imon, day
+      _RL radeg, day
+      INTEGER iyr, imon
 
 C     !OUTPUT PARAMETERS: ==============================================
       _RL gha
