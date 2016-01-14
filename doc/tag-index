@@ -4,6 +4,7 @@ $Name$
     Notes on tags used in darwin
     ============================
 
+ctrb_darwin2_ckpt65s_20160114
 o fix bug in radtrans sun model that broke zenith angle calculations;
   not relevant if defined DAR_RADTRANS_USE_MODEL_CALENDAR
 o use local noon for full zenith angle computation
