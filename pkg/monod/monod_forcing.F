@@ -1,4 +1,4 @@
-C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_forcing.F,v 1.19 2016/01/04 17:06:57 jahn Exp $
+C $Header: /u/gcmpack/MITgcm_contrib/darwin2/pkg/monod/monod_forcing.F,v 1.20 2016/04/01 00:02:17 jahn Exp $
 C $Name:  $
 
 #include "CPP_OPTIONS.h"
@@ -599,8 +599,8 @@ c sum wavebands for total PAR at the mid point of the gridcell (PARl)
 #else /* DAR_RADTRANS */
 c ------------ FULL RADIATIVE TRANSFER CODE ----------------------------
          do ilam = 1,tlam
-          Edwsf(ilam) = oasim_ed(i,j,ilam,bi,bj)
-          Eswsf(ilam) = oasim_es(i,j,ilam,bi,bj)
+          Edwsf(ilam)=oasim_ed(i,j,ilam,bi,bj)*(1 _d 0-fice(i,j,bi,bj))
+          Eswsf(ilam)=oasim_es(i,j,ilam,bi,bj)*(1 _d 0-fice(i,j,bi,bj))
          enddo
 
 #ifdef DAR_RADTRANS_USE_MODEL_CALENDAR
