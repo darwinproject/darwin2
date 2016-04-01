@@ -599,8 +599,8 @@ c sum wavebands for total PAR at the mid point of the gridcell (PARl)
 #else /* DAR_RADTRANS */
 c ------------ FULL RADIATIVE TRANSFER CODE ----------------------------
          do ilam = 1,tlam
-          Edwsf(ilam) = oasim_ed(i,j,ilam,bi,bj)
-          Eswsf(ilam) = oasim_es(i,j,ilam,bi,bj)
+          Edwsf(ilam)=oasim_ed(i,j,ilam,bi,bj)*(1 _d 0-fice(i,j,bi,bj))
+          Eswsf(ilam)=oasim_es(i,j,ilam,bi,bj)*(1 _d 0-fice(i,j,bi,bj))
          enddo
 
 #ifdef DAR_RADTRANS_USE_MODEL_CALENDAR
