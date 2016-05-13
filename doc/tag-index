@@ -1,8 +1,10 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.92 2016/04/09 14:30:49 jahn Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.93 2016/05/13 00:42:03 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
+
+ctrb_darwin2_ckpt65w_20160512
 
 ctrb_darwin2_ckpt65v_20160409
 o reduce light under ice also with radtrans
