@@ -1,8 +1,10 @@
-$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.108 2017/10/25 13:56:38 jahn Exp $
+$Header: /u/gcmpack/MITgcm_contrib/darwin2/doc/tag-index,v 1.109 2017/11/28 15:45:22 jahn Exp $
 $Name:  $
 
     Notes on tags used in darwin
     ============================
+
+o fix bug in monod_generate_zoo: ExGrazFracSmall and ExGrazFracBig were swapped
 
 ctrb_darwin2_ckpt66l_20171025
 
