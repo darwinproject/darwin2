@@ -4,6 +4,8 @@ $Name$
     Notes on tags used in darwin
     ============================
 
+ctrb_darwin2_ckpt66n_20180118
+
 ctrb_darwin2_ckpt66m_20171213
 o fix bug in monod_generate_zoo: ExGrazFracSmall and ExGrazFracBig were swapped
 
