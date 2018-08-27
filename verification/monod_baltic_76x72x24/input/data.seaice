@@ -19,6 +19,14 @@
   SEAICE_mcPheeTaper = 0.92,
 #- seaice I/O params:
   SEAICEwriteState   = .TRUE.,
+# revert to old defaults before 2018-08-25
+  SEAICEscaleSurfStress = .FALSE.,
+  SEAICEaddSnowMass     = .FALSE.,
+  SEAICE_useMultDimSnow = .FALSE.,
+  SEAICEetaZmethod = 0,
+  SEAICE_Olx       = 0,
+  SEAICE_Oly       = 0,
+  SEAICE_waterDrag = 0.00535279805352798053,
  &
 
  &SEAICE_PARM03
