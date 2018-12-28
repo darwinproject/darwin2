@@ -349,7 +349,7 @@ c
               endif
              ENDIF
 #endif
-#ifdef FQOUTA
+#ifdef FQUOTA
              IF ( darwin_Fet_relaxFile .NE. ' '  ) THEN
               tmp=(Ptr(i,j,k,bi,bj,iFeT )-fet_obs(i,j,k,bi,bj))
               if (tmp.lt.0. _d 0) then
