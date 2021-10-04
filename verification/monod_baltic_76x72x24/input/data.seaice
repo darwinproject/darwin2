@@ -27,6 +27,7 @@
   SEAICE_Olx       = 0,
   SEAICE_Oly       = 0,
   SEAICE_waterDrag = 0.00535279805352798053,
+  LSR_ERROR = 1E-4,
  &
 
  &SEAICE_PARM03
